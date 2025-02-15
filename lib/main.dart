@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
+import '/src/login.dart';
+import 'dart:async';
 
-void main() {
-  runApp(const MyApp());
-}
+void main() => runApp(MaterialApp(
+  debugShowCheckedModeBanner: false,
+  initialRoute: '/',
+  routes: {'/': (context) => Login()},
+));
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
