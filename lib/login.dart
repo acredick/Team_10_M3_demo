@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 import 'package:form_field_validator/form_field_validator.dart';
+import 'home.dart';
 
 class Login extends StatefulWidget {
   const Login({Key? key}) : super(key: key);
@@ -99,9 +100,13 @@ class _LoginState extends State<Login> {
                                       borderRadius: BorderRadius.circular(30)),
                                 ),
                                 onPressed: () {
-                                  if (_formkey.currentState!.validate()) {
-                                    print('form submiitted');
-                                  }
+                                  //if (_formkey.currentState!.validate()) {
+                                    //print('form submiitted');
+                                  //}
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(builder: (context) => HomeScreen()),
+                                  );
                                 },
                               ),
                             ),

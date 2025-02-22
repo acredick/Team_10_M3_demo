@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import '/src/login.dart';
+import 'login.dart';
 import 'dart:async';
+import 'menu.dart';
 
 void main() => runApp(MaterialApp(
   debugShowCheckedModeBanner: false,
@@ -10,7 +11,6 @@ void main() => runApp(MaterialApp(
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
-
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
@@ -34,7 +34,7 @@ class MyApp extends StatelessWidget {
         // tested with just a hot reload.
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),
-      home: const MyHomePage(title: 'Team 10 Demo Milestone 3'),
+      home: OrderScreen(),
     );
   }
 }
