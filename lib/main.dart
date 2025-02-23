@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'login.dart';
-import 'dart:async';
-import 'menu.dart';
+import 'pages/login-etc/login.dart';
+import 'pages/ordering/menu.dart';
 
 void main() => runApp(MaterialApp(
   debugShowCheckedModeBanner: false,

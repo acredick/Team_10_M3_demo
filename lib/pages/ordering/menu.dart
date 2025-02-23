@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'checkout.dart'; 
+import 'checkout.dart';
 
 class OrderScreen extends StatefulWidget {
   @override

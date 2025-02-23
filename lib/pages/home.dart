@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'menu.dart';
-import 'viewOrders.dart';
+import 'ordering/menu.dart';
+import 'ordering/viewOrders.dart';
 
 class HomeScreen extends StatelessWidget {
   @override
