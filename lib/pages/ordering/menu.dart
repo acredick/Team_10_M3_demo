@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'checkout.dart';
 
 class OrderScreen extends StatefulWidget {
+  const OrderScreen({super.key});
+
   @override
   _OrderScreenState createState() => _OrderScreenState();
 }

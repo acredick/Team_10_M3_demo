@@ -5,7 +5,7 @@ import 'viewOrders.dart'; // Import the Orders screen
 class CheckoutScreen extends StatefulWidget {
   final String foodItem;
 
-  CheckoutScreen({required this.foodItem});
+  const CheckoutScreen({super.key, required this.foodItem});
 
   @override
   _CheckoutScreenState createState() => _CheckoutScreenState();
