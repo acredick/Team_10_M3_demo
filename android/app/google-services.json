@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "576447832285",
+    "project_id": "dormdash-v3",
+    "storage_bucket": "dormdash-v3.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:576447832285:android:803c823240383646643b34",
+        "android_client_info": {
+          "package_name": "com.example.team_10_m3_demo"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBebKH1KEdFBWG9sEFBJrMfJMXtsUmorQY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
