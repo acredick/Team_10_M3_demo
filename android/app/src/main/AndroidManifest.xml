@@ -1,6 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
     <application
-        android:label="team_10_m3_demo"
+        android:label="DormDash"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

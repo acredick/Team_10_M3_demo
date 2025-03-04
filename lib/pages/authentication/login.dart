@@ -1,9 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:form_field_validator/form_field_validator.dart';
 import 'package:firebase_auth_platform_interface/src/providers/oauth.dart';
 import 'package:flutter/material.dart';
-import '../home.dart';
 
 class LoginRoute extends StatelessWidget {
   const LoginRoute({super.key});
@@ -17,21 +15,6 @@ class LoginRoute extends StatelessWidget {
   }
 }
 
-class ConfirmStudentRoute extends StatelessWidget {
-  const ConfirmStudentRoute({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return CupertinoPageScaffold(
-      navigationBar: const CupertinoNavigationBar(middle: Text('Second Route')),
-      child: Center(
-        child: Text('sign up page'),
-        //_launchURL()
-      ),
-    );
-  }
-}
-
 class Login extends StatefulWidget {
   const Login({Key? key}) : super(key: key);
 
@@ -41,7 +24,6 @@ class Login extends StatefulWidget {
 
 class _LoginState extends State<Login> {
   Map userData = {};
-  final _formkey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
