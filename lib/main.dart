@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'pages/login-etc/login.dart';
 import 'pages/ordering/menu.dart';
-import 'pages/welcom.dart';
+import 'pages/welcome.dart';
 import 'pages/home.dart';
 import 'pages/ordering/dashboard.dart';
 
