@@ -1,0 +1,79 @@
+/* Where a user selects "customer" or "deliverer" status */
+
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import '../customer_side/order_selection.dart';
+import '../customer_side/order_storage.dart';
+import '../deliverer_side/deliverer_home.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+
+class UserSelectionRoute extends StatelessWidget {
+  const UserSelectionRoute({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return CupertinoPageScaffold(
+      navigationBar: const CupertinoNavigationBar(middle: Text('UserSelection')),
+      child: Center(child: UserSelection()),
+    );
+  }
+}
+
+class UserSelection extends StatefulWidget {
+  const UserSelection({super.key, this.user});
+  final User? user;
+
+  String fullName() {
+    String displayName = user?.displayName ?? '';
+    List<String> parts = displayName.split(", ");
+    if (parts.length < 2) return displayName; // Return original if format is incorrect
+
+    String lastName = parts[0];
+    String firstAndMiddle = parts[1];
+
+    return "$firstAndMiddle $lastName";
+  }
+
+  @override
+  State<UserSelection> createState() => _UserSelectionState();
+}
+
+class _UserSelectionState extends State<UserSelection> {
+  Map userData = {};
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        body: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text("Hello ${widget.fullName()}!"),
+              Text("Are you here as a customer or a deliverer?"),
+              Center(
+                  child: ElevatedButton.icon(
+                    onPressed: () async {
+                      fillOrderStorage();
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => OrderSelection()),
+                      );
+                    },
+                    label: const Text("Customer"),)
+              ),
+              Center(
+                  child: ElevatedButton.icon(
+                    onPressed: () async {
+                      fillOrderStorage();
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => DelivererHome()),
+                      );
+                    },
+                    label: const Text("Deliverer"),)
+              )
+            ]
+        )
+    );
+  }
+}
+
