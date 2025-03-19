@@ -1,8 +1,7 @@
-/* Pages listed here will have a bottom navigation bar. */
-
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import '/pages/authentication/user_selection.dart';
+import '/widgets/bottom-nav-bar.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key, this.user});
@@ -21,46 +20,22 @@ class _MainScreenState extends State<MainScreen> {
     super.initState();
   }
 
-  // Different navigation bars based on user type
-  Widget _buildBottomNavigationBar() {
-    if (userType == "deliverer") {
-      return BottomNavigationBar(
-        currentIndex: _selectedIndex,
-        onTap: (index) {
-          setState(() {
-            _selectedIndex = index;
-          });
-        },
-        items: [
-          BottomNavigationBarItem(icon: Icon(Icons.dashboard), label: "Dashboard"),
-          BottomNavigationBarItem(icon: Icon(Icons.settings), label: "Settings"),
-        ],
-      );
-    } else if (userType== "customer") {
-      return BottomNavigationBar(
-        currentIndex: _selectedIndex,
-        onTap: (index) {
-          setState(() {
-            _selectedIndex = index;
-          });
-        },
-        items: [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
-          BottomNavigationBarItem(icon: Icon(Icons.shopping_cart), label: "Orders"),
-          BottomNavigationBarItem(icon: Icon(Icons.person), label: "Profile"),
-        ],
-      );
-    }
-    else {
-      return SizedBox.shrink();
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: UserSelection(),
-      bottomNavigationBar: _buildBottomNavigationBar(),
+      body: UserSelection(user: widget.user),
+      bottomNavigationBar: CustomBottomNavigationBar(
+        selectedIndex: _selectedIndex,
+        onItemTapped: (index) {
+          setState(() {
+            _selectedIndex = index;
+          });
+        },
+        userType: userType,
+      ),
     );
   }
 }
+
+
+

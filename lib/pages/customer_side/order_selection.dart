@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import './order_storage.dart';
 import 'package:intl/intl.dart';
 import './status.dart';
+import '/widgets/bottom-nav-bar.dart';
 
 class OrderSelection extends StatefulWidget {
   @override
@@ -42,23 +43,13 @@ class _OrderSelectionState extends State<OrderSelection> {
                   child: ListTile(
                     onTap: () {
                       if (isDeliverable == false) {
-                        showDialog(
-                          context: context,
-                          builder: (BuildContext context) {
-                            return AlertDialog(
-                              title: Text("This order is no longer eligible for delivery."),
-                              actions: [
-                                TextButton(
-                                  onPressed: () {
-                                    Navigator.pop(context); // Close the dialog
-                                  },
-                                  child: Text("Back"),
-                                ),
-                              ],
-                            );
-                          },
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text("This order is no longer eligible for delivery."),
+                          ),
                         );
-                      } else {
+                      }
+                      else {
                         showDialog(
                           context: context,
                           builder: (BuildContext context) {
@@ -86,11 +77,19 @@ class _OrderSelectionState extends State<OrderSelection> {
                                 ),
                                 TextButton(
                                   onPressed: () {
-                                    // Perform action on confirmation
-                                    print("Order selected");
                                     Navigator.push(
                                       context,
-                                      MaterialPageRoute(builder: (context) => Status()),
+                                      MaterialPageRoute(
+                                        builder: (context) => Scaffold(
+                                          body: Status(),
+                                          bottomNavigationBar: CustomBottomNavigationBar(
+                                          selectedIndex: 0,
+                                          onItemTapped: (index) {
+                                          },
+                                          userType: "customer",
+                                        ),
+                                      ),
+                                    ),
                                     );
                                   },
                                   child: Text("Confirm"),
@@ -102,7 +101,7 @@ class _OrderSelectionState extends State<OrderSelection> {
                       }
                     },
                     title: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween, // Adjust spacing
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
                           order["restaurant"]!,

@@ -6,6 +6,7 @@ import '../customer_side/order_selection.dart';
 import '../customer_side/order_storage.dart';
 import '../deliverer_side/deliverer_home.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import '/widgets/bottom-nav-bar.dart';
 
 class UserSelectionRoute extends StatelessWidget {
   const UserSelectionRoute({super.key});
@@ -52,10 +53,20 @@ class _UserSelectionState extends State<UserSelection> {
               Center(
                   child: ElevatedButton.icon(
                     onPressed: () async {
-                      fillOrderStorage();
-                      Navigator.push(
+                      if (orderStorage.orders.isEmpty) {
+                        fillOrderStorage();
+                      }
+                      Navigator.pushReplacement(
                         context,
-                        MaterialPageRoute(builder: (context) => OrderSelection()),
+                        MaterialPageRoute(builder: (context) => Scaffold(
+                          body: OrderSelection(),
+                          bottomNavigationBar: CustomBottomNavigationBar(
+                            selectedIndex: 0,
+                            onItemTapped: (index) {
+                            },
+                            userType: "customer",
+                          ),
+                        )),
                       );
                     },
                     label: const Text("Customer"),)
@@ -63,10 +74,20 @@ class _UserSelectionState extends State<UserSelection> {
               Center(
                   child: ElevatedButton.icon(
                     onPressed: () async {
-                      fillOrderStorage();
-                      Navigator.push(
+                      if (orderStorage.orders.isEmpty) {
+                        fillOrderStorage();
+                      }
+                      Navigator.pushReplacement(
                         context,
-                        MaterialPageRoute(builder: (context) => DelivererHome()),
+                        MaterialPageRoute(builder: (context) => Scaffold(
+                          body: DelivererHome(),
+                          bottomNavigationBar: CustomBottomNavigationBar(
+                            selectedIndex: 0,
+                            onItemTapped: (index) {
+                            },
+                            userType: "deliverer",
+                          ),
+                        )),
                       );
                     },
                     label: const Text("Deliverer"),)

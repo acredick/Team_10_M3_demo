@@ -2,9 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:firebase_auth_platform_interface/src/providers/oauth.dart';
 import 'package:flutter/material.dart';
-import '../customer_side/order_selection.dart';
-import '../customer_side/order_storage.dart';
-import './user_selection.dart';
+import '/widgets/main_screen.dart';
 
 class LoginRoute extends StatelessWidget {
   const LoginRoute({super.key});
@@ -42,19 +40,17 @@ class _LoginState extends State<Login> {
                           {"tenant": "b5d22194-31d5-473f-9e1d-804fdcbd88ac"});
 
                       await FirebaseAuth.instance.signInWithProvider(provider);
-                    },
+                      User? user = FirebaseAuth.instance.currentUser;
+
+                      if (user != null) {
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(builder: (context) => MainScreen(user: user)),
+                        );
+                      }
+                      },
                 label: const Text("Sign in to your institution"),)
               ),
-              Center(
-                  child: ElevatedButton.icon(
-                    onPressed: () async {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => OrderSelection()),
-                      );
-                    },
-                    label: const Text("Bypass login (temporary)"),)
-              )
             ]
         )
     );
