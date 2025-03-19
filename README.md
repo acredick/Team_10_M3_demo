@@ -1,3 +1,9 @@
+# Logging In
+1. Login as normal.
+2. It will not redirect you back to the app. Perform a restart on the app in your IDE.
+3. Once the app has restarted, press "Sign In To Your Institution."
+4. You should now be automatically signed in.  
+
 # Utilizing the Navigation Bar
 ## Adding the Navigation Bar
 1. Import `lib/widgets/bottom-nav-bar.dart` to your file.
