@@ -36,6 +36,14 @@ class MyApp extends StatelessWidget {
         '/home': (context) => const HomeScreen(),
         '/login': (context) => const LoginRoute(),
         '/dashboard': (context) => const DashboardPage(),
+        '/orders': (context) => Scaffold(
+            body: const OrdersPage(),
+            bottomNavigationBar: CustomBottomNavigationBar(
+              selectedIndex: 1,
+              onItemTapped: (index) {},   
+              userType: "deliverer",         
+              ),
+            ),
         "/customer-settings": (context) => Scaffold(
               body: const CustomerSettingsPage(),
               bottomNavigationBar: CustomBottomNavigationBar(
