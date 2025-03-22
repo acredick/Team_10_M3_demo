@@ -1,4 +1,3 @@
-import 'package:DormDash/pages/authentication/user_selection.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -31,10 +30,20 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),
+      initialRoute: '/',
       routes: {
         '/welcome': (context) => WelcomePage(),
         '/login': (context) => const LoginRoute(),
         '/dashboard': (context) => DashboardPage(),
+        '/dashboard': (context) => const DashboardPage(),
+        '/orders': (context) => Scaffold(
+            body: const OrdersPage(),
+            bottomNavigationBar: CustomBottomNavigationBar(
+              selectedIndex: 1,
+              onItemTapped: (index) {},
+              userType: "deliverer",
+              ),
+            ),
         "/customer-settings": (context) => Scaffold(
               body: CustomerSettingsPage(),
               bottomNavigationBar: CustomBottomNavigationBar(
