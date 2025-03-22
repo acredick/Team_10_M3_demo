@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 
 class CustomBottomNavigationBar extends StatelessWidget {
@@ -13,14 +12,16 @@ class CustomBottomNavigationBar extends StatelessWidget {
     required this.userType,
   }) : super(key: key);
 
-  // Define nav-bar navigation. Routes are set up in main.dart
   void _onItemTapped(BuildContext context, int index) {
     if (userType == "deliverer") {
       switch (index) {
         case 0:
           Navigator.pushReplacementNamed(context, "/dashboard");
           break;
-        case 1:
+        case 1: 
+          Navigator.pushReplacement(context, "/orders");
+          break;
+        case 2:
           Navigator.pushReplacementNamed(context, "/settings");
           break;
       }
@@ -41,27 +42,63 @@ class CustomBottomNavigationBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final purple = const Color(0xFF5B3184);
+    final gold = const Color(0xFFDCB347);
+
+    List<BottomNavigationBarItem> items = [];
+
     if (userType == "deliverer") {
-      return BottomNavigationBar(
-        currentIndex: selectedIndex,
-        onTap: (index) => _onItemTapped(context, index),
-        items: [
-          BottomNavigationBarItem(icon: Icon(Icons.dashboard), label: "Dashboard"),
-          BottomNavigationBarItem(icon: Icon(Icons.settings), label: "Settings"),
-        ],
-      );
+      items = [
+        BottomNavigationBarItem(
+          icon: Icon(Icons.dashboard, color: selectedIndex == 0 ? purple : Colors.white),
+          label: "Dashboard",
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.list , color: selectedIndex == 0 ? purple : Colors.white),
+          label: "Orders",
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.settings, color: selectedIndex == 1 ? purple : Colors.white),
+          label: "Settings",
+        ),
+      ];
     } else if (userType == "customer") {
-      return BottomNavigationBar(
-        currentIndex: selectedIndex,
-        onTap: (index) => _onItemTapped(context, index),
-        items: [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
-          BottomNavigationBarItem(icon: Icon(Icons.shopping_cart), label: "Orders"),
-          BottomNavigationBarItem(icon: Icon(Icons.settings), label: "Settings"),
-        ],
-      );
+      items = [
+        BottomNavigationBarItem(
+          icon: Icon(Icons.home, color: selectedIndex == 0 ? purple : Colors.white),
+          label: "Home",
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.list, color: selectedIndex == 1 ? purple : Colors.white),
+          label: "Orders",
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.settings, color: selectedIndex == 2 ? purple : Colors.white),
+          label: "Settings",
+        ),
+      ];
     } else {
-      return SizedBox.shrink();
+      return const SizedBox.shrink();
     }
+
+    return BottomNavigationBar(
+      backgroundColor: gold,
+      currentIndex: selectedIndex,
+      onTap: (index) => _onItemTapped(context, index),
+      selectedItemColor: purple,
+      unselectedItemColor: Colors.white,
+      selectedLabelStyle: const TextStyle(
+        fontSize: 12,
+        fontWeight: FontWeight.bold,
+        color: Color(0xFF5B3184),
+      ),
+      unselectedLabelStyle: const TextStyle(
+        fontSize: 12,
+        fontWeight: FontWeight.bold,
+        color: Colors.white,
+      ),
+      type: BottomNavigationBarType.fixed,
+      items: items,
+    );
   }
 }
