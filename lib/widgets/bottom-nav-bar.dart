@@ -56,11 +56,11 @@ class CustomBottomNavigationBar extends StatelessWidget {
           label: "Dashboard",
         ),
         BottomNavigationBarItem(
-          icon: Icon(Icons.list , color: selectedIndex == 0 ? purple : Colors.white),
+          icon: Icon(Icons.list , color: selectedIndex == 1 ? purple : Colors.white),
           label: "Orders",
         ),
         BottomNavigationBarItem(
-          icon: Icon(Icons.settings, color: selectedIndex == 1 ? purple : Colors.white),
+          icon: Icon(Icons.settings, color: selectedIndex == 2 ? purple : Colors.white),
           label: "Settings",
         ),
       ];
