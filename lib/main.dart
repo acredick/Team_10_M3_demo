@@ -1,3 +1,4 @@
+import 'package:DormDash/pages/authentication/user_selection.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -30,14 +31,12 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),
-      initialRoute: '/',
       routes: {
-        '/': (context) => const WelcomePage(),
-        '/home': (context) => const HomeScreen(),
+        '/welcome': (context) => WelcomePage(),
         '/login': (context) => const LoginRoute(),
-        '/dashboard': (context) => const DashboardPage(),
+        '/dashboard': (context) => DashboardPage(),
         "/customer-settings": (context) => Scaffold(
-              body: const CustomerSettingsPage(),
+              body: CustomerSettingsPage(),
               bottomNavigationBar: CustomBottomNavigationBar(
                 selectedIndex: 0,
                 onItemTapped: (index) {},
@@ -53,7 +52,7 @@ class MyApp extends StatelessWidget {
               ),
             ),
         "/customer-order": (context) => Scaffold(
-              body: const OrderSelection(),
+              body: OrderSelection(),
               bottomNavigationBar: CustomBottomNavigationBar(
                 selectedIndex: 0,
                 onItemTapped: (index) {},
@@ -65,9 +64,9 @@ class MyApp extends StatelessWidget {
         stream: FirebaseAuth.instance.authStateChanges(),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            return HomeScreen();
+            return UserSelection();
           } else {
-            return const LoginRoute();
+            return WelcomePage();
           }
         },
       ),

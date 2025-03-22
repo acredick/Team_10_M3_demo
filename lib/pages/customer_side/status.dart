@@ -2,6 +2,8 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import '/widgets/bottom-nav-bar.dart';
+import '/pages/customer_side/customer_chat.dart';
 
 class Status extends StatefulWidget {
   const Status({Key? key}) : super(key: key);
@@ -12,19 +14,53 @@ class Status extends StatefulWidget {
 
 class _StatusState extends State<Status> {
   Map userData = {};
+  bool isAccepted =
+      false; // represents whether or not a dasher has accepted order
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Center(
-                child: Text("Waiting on a DormDasher to accept...")
-              ),
-            ]
-        )
+      body: Center(
+        child:
+            isAccepted
+                ? ElevatedButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => Scaffold(
+                          body: ChatScreen(),
+                          bottomNavigationBar: CustomBottomNavigationBar(
+                            selectedIndex: 0,
+                            onItemTapped: (index) {
+                            },
+                            userType: "customer",
+                          ),
+                        ),
+                      ),
+                    );
+                  },
+                  child: const Text(
+                    "Press to simulate chatting with a DormDasher",
+                  ),
+                )
+                : Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Text("Waiting on a DormDasher to accept..."),
+                    ElevatedButton(
+                      onPressed: () {
+                        setState(() {
+                          isAccepted = true;
+                        });
+                      },
+                      child: const Text(
+                        "Press to simulate a DormDasher accepting order",
+                      ),
+                    ),
+                  ],
+                ),
+      ),
     );
   }
 }
-

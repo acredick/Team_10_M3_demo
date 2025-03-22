@@ -43,6 +43,7 @@ class CustomBottomNavigationBar extends StatelessWidget {
   Widget build(BuildContext context) {
     if (userType == "deliverer") {
       return BottomNavigationBar(
+        backgroundColor: Color(0xFFDCB347),
         currentIndex: selectedIndex,
         onTap: (index) => _onItemTapped(context, index),
         items: [
@@ -52,6 +53,7 @@ class CustomBottomNavigationBar extends StatelessWidget {
       );
     } else if (userType == "customer") {
       return BottomNavigationBar(
+        backgroundColor: Color(0xFFDCB347),
         currentIndex: selectedIndex,
         onTap: (index) => _onItemTapped(context, index),
         items: [

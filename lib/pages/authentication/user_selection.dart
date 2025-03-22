@@ -14,7 +14,9 @@ class UserSelectionRoute extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CupertinoPageScaffold(
-      navigationBar: const CupertinoNavigationBar(middle: Text('UserSelection')),
+      navigationBar: const CupertinoNavigationBar(
+        middle: Text('UserSelection'),
+      ),
       child: Center(child: UserSelection()),
     );
   }
@@ -22,12 +24,14 @@ class UserSelectionRoute extends StatelessWidget {
 
 class UserSelection extends StatefulWidget {
   const UserSelection({super.key, this.user});
+
   final User? user;
 
   String fullName() {
     String displayName = user?.displayName ?? '';
     List<String> parts = displayName.split(", ");
-    if (parts.length < 2) return displayName; // Return original if format is incorrect
+    if (parts.length < 2)
+      return displayName; // Return original if format is incorrect
 
     String lastName = parts[0];
     String firstAndMiddle = parts[1];
@@ -45,56 +49,51 @@ class _UserSelectionState extends State<UserSelection> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text("Hello ${widget.fullName()}!"),
-              Text("Are you here as a customer or a deliverer?"),
-              Center(
-                  child: ElevatedButton.icon(
-                    onPressed: () async {
-                      if (orderStorage.orders.isEmpty) {
-                        fillOrderStorage();
-                      }
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(builder: (context) => Scaffold(
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text("Hello ${widget.fullName()}!"),
+          Text("Are you here as a customer or a deliverer?"),
+          Center(
+            child: ElevatedButton.icon(
+              onPressed: () async {
+                if (orderStorage.orders.isEmpty) {
+                  fillOrderStorage();
+                }
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder:
+                        (context) => Scaffold(
                           body: OrderSelection(),
                           bottomNavigationBar: CustomBottomNavigationBar(
                             selectedIndex: 0,
-                            onItemTapped: (index) {
-                            },
+                            onItemTapped: (index) {},
                             userType: "customer",
                           ),
-                        )),
-                      );
-                    },
-                    label: const Text("Customer"),)
-              ),
-              Center(
-                  child: ElevatedButton.icon(
-                    onPressed: () async {
-                      if (orderStorage.orders.isEmpty) {
-                        fillOrderStorage();
-                      }
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(builder: (context) => Scaffold(
-                          body: DelivererHome(),
-                          bottomNavigationBar: CustomBottomNavigationBar(
-                            selectedIndex: 0,
-                            onItemTapped: (index) {
-                            },
-                            userType: "deliverer",
-                          ),
-                        )),
-                      );
-                    },
-                    label: const Text("Deliverer"),)
-              )
-            ]
-        )
+                        ),
+                  ),
+                );
+              },
+              label: const Text("Customer"),
+            ),
+          ),
+          Center(
+            child: ElevatedButton.icon(
+              onPressed: () async {
+                if (orderStorage.orders.isEmpty) {
+                  fillOrderStorage();
+                }
+                Navigator.pushNamed(
+                  context,
+                  '/dashboard',
+                );
+              },
+              label: const Text("Deliverer"),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
-

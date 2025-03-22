@@ -29,7 +29,7 @@ class _CustomerSettingsPageState extends State<CustomerSettingsPage> {
                 await FirebaseAuth.instance.signOut(); // sign out
                 // makes sure next user will have to manually login
 
-                Navigator.pushReplacementNamed(context, "/login");
+                Navigator.pushReplacementNamed(context, "/welcome");
               } catch (e) {
                 // Handle errors, if any
                 ScaffoldMessenger.of(context).showSnackBar(

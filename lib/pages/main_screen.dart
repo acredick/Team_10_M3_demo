@@ -16,10 +16,10 @@ class _MainScreenState extends State<MainScreen> {
 
   final List<Widget> _pages = [
     
-    //TODO: make and implement pages
+    /* TODO: make and implement pages
     DashboardPage(), // Home Page
     OrdersPage(),    // Orders Page
-    ProfilePage(),   // Profile Page
+    ProfilePage(),   // Profile Page */
   ];
 
   void _onNavBarTap(int index) {

@@ -1,6 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:firebase_auth_platform_interface/src/providers/oauth.dart';
 import 'package:flutter/material.dart';
 import '/widgets/main_screen.dart';
 
@@ -9,8 +8,8 @@ class LoginRoute extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return CupertinoPageScaffold(
-      navigationBar: const CupertinoNavigationBar(middle: Text('Login')),
+    return const CupertinoPageScaffold(
+      navigationBar: CupertinoNavigationBar(middle: Text('Login')),
       child: Center(child: Login()),
     );
   }
@@ -24,36 +23,38 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
-  Map userData = {};
+  @override
+  void initState() {
+    super.initState();
+    _signIn(); // Start sign-in process as soon as the page loads
+  }
+
+  Future<void> _signIn() async {
+    try {
+      final provider = OAuthProvider("microsoft.com");
+      provider.setCustomParameters(
+          {"tenant": "b5d22194-31d5-473f-9e1d-804fdcbd88ac"});
+
+      await FirebaseAuth.instance.signInWithProvider(provider);
+      User? user = FirebaseAuth.instance.currentUser;
+
+      if (user != null && mounted) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => MainScreen(user: user)),
+        );
+      }
+    } catch (e) {
+      print("Sign-in failed: $e");
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        body: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Center(
-                child: ElevatedButton.icon(
-                    onPressed: () async {
-                      final provider = OAuthProvider("microsoft.com");
-                      provider.setCustomParameters(
-                          {"tenant": "b5d22194-31d5-473f-9e1d-804fdcbd88ac"});
-
-                      await FirebaseAuth.instance.signInWithProvider(provider);
-                      User? user = FirebaseAuth.instance.currentUser;
-
-                      if (user != null) {
-                        Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(builder: (context) => MainScreen(user: user)),
-                        );
-                      }
-                      },
-                label: const Text("Sign in to your institution"),)
-              ),
-            ]
-        )
+    return const Scaffold(
+      body: Center(
+        child: CircularProgressIndicator(),
+      ),
     );
   }
 }
-
