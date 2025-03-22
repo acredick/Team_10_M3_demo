@@ -1,7 +1,6 @@
 // This page controls navigation between pages.
 
 import 'package:flutter/material.dart';
-import '../../components/navbar.dart'; 
 //import 'dashboard.dart'; // Home Page
 //import 'orders_page.dart'; // Orders Page
 //import 'profile_page.dart'; // Profile Page
@@ -30,12 +29,12 @@ class _MainScreenState extends State<MainScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return Scaffold(/*
       body: _pages[_currentIndex], // Dynamically switch between pages
-      bottomNavigationBar: NavBar( 
+       bottomNavigationBar: NavBar(
         currentIndex: _currentIndex,
         onTap: _onNavBarTap,
       ),
-    );
+    */);
   }
 }

@@ -12,6 +12,8 @@ import 'pages/customer_side/order_selection.dart';
 import 'pages/ordering/dashboard.dart';
 import 'pages/home.dart';
 import 'pages/welcome.dart';
+import '/pages/authentication/user_selection.dart';
+import 'pages/ordering/orders.dart';
 
 Future <void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -35,9 +37,9 @@ class MyApp extends StatelessWidget {
         '/welcome': (context) => WelcomePage(),
         '/login': (context) => const LoginRoute(),
         '/dashboard': (context) => DashboardPage(),
-        '/dashboard': (context) => const DashboardPage(),
+        '/dashboard': (context) => DashboardPage(),
         '/orders': (context) => Scaffold(
-            body: const OrdersPage(),
+            body: OrdersPage(),
             bottomNavigationBar: CustomBottomNavigationBar(
               selectedIndex: 1,
               onItemTapped: (index) {},
