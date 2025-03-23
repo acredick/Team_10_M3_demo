@@ -23,7 +23,7 @@ class OrdersPage extends StatelessWidget {
       body: Column(
         children: [
           SizedBox(
-            height: 400,
+            height: 375,
             width: double.infinity,
             child: Image.asset('assets/map_placeholder.png', fit: BoxFit.cover),
           ),
