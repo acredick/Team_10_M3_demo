@@ -30,7 +30,14 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Delivery App',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        colorScheme: 
+          ColorScheme.fromSeed(
+            seedColor: Color (0xFF5B3184),
+            primary: Color(0xFF5B3184),
+            secondary: Color(0xFFEEB111),
+            error: Colors.red,
+            success: Color (0xFF4CAF50),
+            ),
       ),
       initialRoute: '/',
       routes: {
