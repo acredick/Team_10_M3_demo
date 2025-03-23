@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:DormDash/widgets/bottom-nav-bar.dart';
 
 class DashboardPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: const Color.fromARGB(255, 255, 255, 255),
       body: Padding(
         padding: EdgeInsets.all(16.0),
       child: Column(
@@ -125,28 +126,13 @@ class DashboardPage extends StatelessWidget {
       ),
      ),
       // Bottom Navigation Bar
-      bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: Color(0xFFDCB347), // Matching button color
-        selectedItemColor: Colors.white,
-        unselectedItemColor: Colors.white70,
-        showUnselectedLabels: true,
-        items: [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: '',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.list),
-            label: '',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: '',
-          ),
-        ],
-      ),
-    );
-  }
+      bottomNavigationBar: CustomBottomNavigationBar(
+        selectedIndex: 0,          
+        userType: "deliverer",     
+        onItemTapped: (index) {},  
+       ),
+     );
+   }
 }
 
 class OrderCard extends StatelessWidget {
