@@ -13,7 +13,7 @@ import 'pages/ordering/dashboard.dart';
 import 'pages/home.dart';
 import 'pages/welcome.dart';
 import '/pages/authentication/user_selection.dart';
-import 'pages/ordering/orders.dart';
+import 'pages/deliverer_side/orders.dart';
 
 Future <void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
