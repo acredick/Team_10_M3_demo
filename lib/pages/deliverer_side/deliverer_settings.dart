@@ -46,7 +46,8 @@ class _DelivererSettingsPageState extends State<DelivererSettingsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Settings"),
+        title: Text("Deliverer Settings"),
+        automaticallyImplyLeading: false, // prevents back button
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),

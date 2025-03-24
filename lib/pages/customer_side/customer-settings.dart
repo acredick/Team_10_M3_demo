@@ -46,7 +46,8 @@ class _CustomerSettingsPageState extends State<CustomerSettingsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Settings"),
+        title: Text("Customer Settings"),
+        automaticallyImplyLeading: false, // prevents back button
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
