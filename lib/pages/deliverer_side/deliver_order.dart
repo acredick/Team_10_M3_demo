@@ -31,7 +31,7 @@ class DeliverOrder extends StatelessWidget {
             child: DeliveryDetailsCard(
               customerName: "Jeff",
               typeLabel: "Dropoff To",
-              address: "1400 Washington Ave\nState Quad Cooper Hall\nAlbany, NY, 12222",
+              address: "1400 Washington Ave\nUniversity Library\nAlbany, NY, 12222",
               itemCount: 2,
               onCallTap: () {},  //TODO: add later
               onDirectionsTap: () {}, // TODO: add later
