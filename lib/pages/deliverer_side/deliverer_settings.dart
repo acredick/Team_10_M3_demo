@@ -4,13 +4,13 @@ import 'package:flutter/cupertino.dart';
 import '/widgets/main_screen.dart';
 import '/main.dart';
 
-class CustomerSettingsPage extends StatefulWidget {
+class DelivererSettingsPage extends StatefulWidget {
   @override
-  _CustomerSettingsPageState createState() => _CustomerSettingsPageState();
+  _DelivererSettingsPageState createState() => _DelivererSettingsPageState();
 }
 
-class _CustomerSettingsPageState extends State<CustomerSettingsPage> {
-  bool isDeliverer = false;
+class _DelivererSettingsPageState extends State<DelivererSettingsPage> {
+  bool isDeliverer = true;
 
   void _logout() async {
     showDialog(
@@ -27,7 +27,7 @@ class _CustomerSettingsPageState extends State<CustomerSettingsPage> {
             onPressed: () async {
               Navigator.pop(context);
               try {
-                await FirebaseAuth.instance.signOut(); // Sign out
+                await FirebaseAuth.instance.signOut();
                 Navigator.pushReplacementNamed(context, "/welcome");
               } catch (e) {
                 ScaffoldMessenger.of(context).showSnackBar(

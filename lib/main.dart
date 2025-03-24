@@ -16,6 +16,7 @@ import 'pages/welcome.dart';
 import '/pages/authentication/user_selection.dart';
 import 'pages/deliverer_side/pickup_order.dart';
 import 'pages/deliverer_side/deliver_order.dart';
+import 'pages/deliverer_side/deliverer_settings.dart';
 
 Future <void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -45,7 +46,6 @@ class MyApp extends StatelessWidget {
       routes: {
         '/welcome': (context) => WelcomePage(),
         '/login': (context) => const LoginRoute(),
-        '/dashboard': (context) => DashboardPage(),
         '/dashboard': (context) => DashboardPage(),
         '/orders': (context) => Scaffold(
             body: OrdersPage(),
@@ -95,6 +95,14 @@ class MyApp extends StatelessWidget {
                 userType: "customer",
               ),
             ),
+        "/deliverer-settings": (context) => Scaffold(
+          body: DelivererSettingsPage(),
+          bottomNavigationBar: CustomBottomNavigationBar(
+            selectedIndex: 0,
+            onItemTapped: (index) {},
+            userType: "deliverer",
+          ),
+        ),
       },
       home: StreamBuilder<User?>(
         stream: FirebaseAuth.instance.authStateChanges(),

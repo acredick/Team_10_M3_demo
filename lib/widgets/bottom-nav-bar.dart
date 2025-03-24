@@ -24,7 +24,7 @@ class CustomBottomNavigationBar extends StatelessWidget {
           Navigator.pushReplacementNamed(context, "/orders");
           break;
         case 2:
-          Navigator.pushReplacementNamed(context, "/settings");
+          Navigator.pushReplacementNamed(context, "/deliverer-settings");
           break;
       }
     } else if (userType == "customer") {
