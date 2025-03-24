@@ -1,3 +1,4 @@
+import 'package:DormDash/pages/deliverer_side/dropoff-confirmaton.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -13,7 +14,8 @@ import 'pages/ordering/dashboard.dart';
 import 'pages/home.dart';
 import 'pages/welcome.dart';
 import '/pages/authentication/user_selection.dart';
-import 'pages/deliverer_side/orders.dart';
+import 'pages/deliverer_side/pickup_order.dart';
+import 'pages/deliverer_side/deliver_order.dart';
 
 Future <void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -53,6 +55,22 @@ class MyApp extends StatelessWidget {
               userType: "deliverer",
               ),
             ),
+        '/deliver-order' : (context) => Scaffold(
+            body: DeliverOrder(),
+            bottomNavigationBar: CustomBottomNavigationBar (
+              selectedIndex: 1,
+              onItemTapped: (index) {},
+              userType: "deliverer",
+            ),
+          ),
+          '/dropoff-confirmation' : (context) => Scaffold(
+            body: DropoffConfirmation(),
+            bottomNavigationBar: CustomBottomNavigationBar (
+              selectedIndex: 1,
+              onItemTapped: (index) {},
+              userType: "deliverer",
+            ),
+          ),
         "/customer-settings": (context) => Scaffold(
               body: CustomerSettingsPage(),
               bottomNavigationBar: CustomBottomNavigationBar(

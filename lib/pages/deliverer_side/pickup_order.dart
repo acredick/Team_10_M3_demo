@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:DormDash/widgets/delivery_details_template.dart';
+import 'package:DormDash/widgets/pickup_delivery_details_template.dart';
 
 class OrdersPage extends StatelessWidget {
   const OrdersPage({super.key});
@@ -12,7 +12,7 @@ class OrdersPage extends StatelessWidget {
         centerTitle: true,
         backgroundColor: Colors.white,
         elevation: 0,
-        leading: const Icon(Icons.arrow_back, color: Colors.black),
+        leading: const BackButton(color: Colors.black),
         actions: const [
           Padding(
             padding: EdgeInsets.only(right: 16),
@@ -23,7 +23,7 @@ class OrdersPage extends StatelessWidget {
       body: Column(
         children: [
           SizedBox(
-            height: 375,
+            height: 350,
             width: double.infinity,
             child: Image.asset('assets/map_placeholder.png', fit: BoxFit.cover),
           ),
@@ -36,6 +36,9 @@ class OrdersPage extends StatelessWidget {
               itemCount: 2,
               onCallTap: () {},  //TODO: add later
               onDirectionsTap: () {}, // TODO: add later
+              onSlideComplete: () async {
+                Navigator.pushNamed(context, "/deliver-order");
+              },
             ),
           )
         ],
