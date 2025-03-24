@@ -1,5 +1,6 @@
 /* Where a user selects "customer" or "deliverer" status */
 
+import 'package:DormDash/pages/deliverer_side/dashboard.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import '../customer_side/order_selection.dart';
@@ -24,7 +25,6 @@ class UserSelectionRoute extends StatelessWidget {
 
 class UserSelection extends StatefulWidget {
   const UserSelection({super.key, this.user});
-
   final User? user;
 
   String fullName() {
@@ -81,12 +81,14 @@ class _UserSelectionState extends State<UserSelection> {
           Center(
             child: ElevatedButton.icon(
               onPressed: () async {
-                if (orderStorage.orders.isEmpty) {
-                  fillOrderStorage();
-                }
-                Navigator.pushNamed(
+                Navigator.pushReplacement(
                   context,
-                  '/dashboard',
+                  MaterialPageRoute(
+                    builder:
+                        (context) => Scaffold(
+                      body: DashboardPage(user: widget.user),
+                    ),
+                  ),
                 );
               },
               label: const Text("Deliverer"),

@@ -1,12 +1,19 @@
+import 'package:firebase_auth/firebase_auth.dart';
+
+import '/pages/authentication/user_selection.dart';
 import 'package:flutter/material.dart';
 import 'package:DormDash/widgets/bottom-nav-bar.dart';
 
 class DashboardPage extends StatefulWidget {
+  const DashboardPage({super.key, this.user});
+  final User? user;
+
   @override
   _DashboardPageState createState() => _DashboardPageState();
 }
 
 class _DashboardPageState extends State<DashboardPage> {
+
   bool isOrderAccepted = false; // Track if an order has been accepted
 
   @override
@@ -48,11 +55,18 @@ class _DashboardPageState extends State<DashboardPage> {
                           ),
                         ),
                         SizedBox(height: 5),
-                        Text(
-                          "STUDENT NAME",
-                          style: TextStyle(
-                            color: Colors.white70,
-                            fontSize: 25,
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(0, 0, 10.0, 0), // Adjust the padding value as needed
+                          child: FittedBox(
+                            fit: BoxFit.scaleDown, // Scales the text down to fit the container
+                            child: Text(
+                              "${UserSelection(user: widget.user).fullName().toUpperCase()}",
+                              style: TextStyle(
+                                color: Colors.white70,
+                                fontSize: 25,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
                           ),
                         ),
                         SizedBox(height: 40),

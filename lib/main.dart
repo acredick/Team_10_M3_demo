@@ -42,7 +42,7 @@ class MyApp extends StatelessWidget {
             tertiary: Color (0xFF4CAF50), // previously "success"
             ),
       ),
-      initialRoute: '/',
+      initialRoute: '/welcome',
       routes: {
         '/welcome': (context) => WelcomePage(),
         '/login': (context) => const LoginRoute(),

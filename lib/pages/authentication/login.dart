@@ -26,7 +26,7 @@ class _LoginState extends State<Login> {
   @override
   void initState() {
     super.initState();
-    _signIn(); // Start sign-in process as soon as the page loads
+    _signIn();
   }
 
   Future<void> _signIn() async {
