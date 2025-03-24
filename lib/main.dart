@@ -1,20 +1,28 @@
+import 'package:DormDash/pages/deliverer_side/dropoff-confirmaton.dart';
 import 'package:flutter/material.dart';
-import 'pages/login-etc/login.dart';
-import 'pages/ordering/menu.dart';
-import 'pages/welcome.dart';
-import 'pages/home.dart';
-import 'pages/ordering/dashboard.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'services/firebase_options.dart';
 
-void main() => runApp(MaterialApp(
-  debugShowCheckedModeBanner: false,
-  initialRoute: '/',
-  routes: {
-    '/': (context) => WelcomePage(),
-    '/home': (context) => HomeScreen(),
-    '/login': (context) => LoginRoute(),
-    '/dashboard': (context) => DashboardPage(),
-  },
-));
+// Import pages
+import 'pages/authentication/login.dart';
+import 'pages/customer_side/customer-settings.dart';
+import 'pages/customer_side/status.dart';
+import 'widgets/bottom-nav-bar.dart';
+import 'pages/customer_side/order_selection.dart';
+import 'pages/deliverer_side/dashboard.dart';
+import 'pages/home.dart';
+import 'pages/welcome.dart';
+import '/pages/authentication/user_selection.dart';
+import 'pages/deliverer_side/pickup_order.dart';
+import 'pages/deliverer_side/deliver_order.dart';
+import 'pages/deliverer_side/deliverer_settings.dart';
+
+Future <void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  runApp(const MyApp());
+}
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -22,47 +30,89 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Team 10 Demo',
+      debugShowCheckedModeBanner: false,
+      title: 'Delivery App',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        colorScheme: 
+          ColorScheme.fromSeed(
+            seedColor: Color (0xFF5B3184),
+            primary: Color(0xFF5B3184),
+            secondary: Color(0xFFEEB111),
+            error: Colors.red,
+            tertiary: Color (0xFF4CAF50), // previously "success"
+            ),
       ),
-      home: OrderScreen(),
-    );
-  }
-}
-
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
-
-  final String title;
-
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: Text(widget.title),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text('Hello World'),
-          ],
+      initialRoute: '/welcome',
+      routes: {
+        '/welcome': (context) => WelcomePage(),
+        '/login': (context) => const LoginRoute(),
+        '/dashboard': (context) => DashboardPage(),
+        '/orders': (context) => Scaffold(
+            body: OrdersPage(),
+            bottomNavigationBar: CustomBottomNavigationBar(
+              selectedIndex: 1,
+              onItemTapped: (index) {},
+              userType: "deliverer",
+              ),
+            ),
+        '/deliver-order' : (context) => Scaffold(
+            body: DeliverOrder(),
+            bottomNavigationBar: CustomBottomNavigationBar (
+              selectedIndex: 1,
+              onItemTapped: (index) {},
+              userType: "deliverer",
+            ),
+          ),
+          '/dropoff-confirmation' : (context) => Scaffold(
+            body: DropoffConfirmation(),
+            bottomNavigationBar: CustomBottomNavigationBar (
+              selectedIndex: 1,
+              onItemTapped: (index) {},
+              userType: "deliverer",
+            ),
+          ),
+        "/customer-settings": (context) => Scaffold(
+              body: CustomerSettingsPage(),
+              bottomNavigationBar: CustomBottomNavigationBar(
+                selectedIndex: 0,
+                onItemTapped: (index) {},
+                userType: "customer",
+              ),
+            ),
+        "/customer-home": (context) => Scaffold(
+              body: const Status(),
+              bottomNavigationBar: CustomBottomNavigationBar(
+                selectedIndex: 0,
+                onItemTapped: (index) {},
+                userType: "customer",
+              ),
+            ),
+        "/customer-order": (context) => Scaffold(
+              body: OrderSelection(),
+              bottomNavigationBar: CustomBottomNavigationBar(
+                selectedIndex: 0,
+                onItemTapped: (index) {},
+                userType: "customer",
+              ),
+            ),
+        "/deliverer-settings": (context) => Scaffold(
+          body: DelivererSettingsPage(),
+          bottomNavigationBar: CustomBottomNavigationBar(
+            selectedIndex: 0,
+            onItemTapped: (index) {},
+            userType: "deliverer",
+          ),
         ),
+      },
+      home: StreamBuilder<User?>(
+        stream: FirebaseAuth.instance.authStateChanges(),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            return UserSelection();
+          } else {
+            return WelcomePage();
+          }
+        },
       ),
     );
   }

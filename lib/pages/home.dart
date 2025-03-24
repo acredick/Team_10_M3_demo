@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'ordering/menu.dart';
-import 'ordering/viewOrders.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -20,20 +18,14 @@ class HomeScreen extends StatelessWidget {
             SizedBox(height: 20), 
             ElevatedButton(
               onPressed: () {
-                Navigator.push(
-                  context, 
-                  MaterialPageRoute(builder: (context) => OrderScreen()),
-                );
+
               },
               child: Text('Go to Menu'),
             ),
             SizedBox(height: 20),
             ElevatedButton(
               onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => OrdersScreen()),
-                );
+
               },
               child: Text("View Available Orders"),
             )
