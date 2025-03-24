@@ -36,7 +36,7 @@ class MyApp extends StatelessWidget {
             primary: Color(0xFF5B3184),
             secondary: Color(0xFFEEB111),
             error: Colors.red,
-            success: Color (0xFF4CAF50),
+            tertiary: Color (0xFF4CAF50), // previously "success"
             ),
       ),
       initialRoute: '/',
