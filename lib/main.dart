@@ -10,7 +10,7 @@ import 'pages/customer_side/customer-settings.dart';
 import 'pages/customer_side/status.dart';
 import 'widgets/bottom-nav-bar.dart';
 import 'pages/customer_side/order_selection.dart';
-import 'pages/ordering/dashboard.dart';
+import 'pages/deliverer_side/dashboard.dart';
 import 'pages/home.dart';
 import 'pages/welcome.dart';
 import '/pages/authentication/user_selection.dart';
