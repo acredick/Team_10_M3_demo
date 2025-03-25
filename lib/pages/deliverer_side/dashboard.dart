@@ -13,8 +13,8 @@ class DashboardPage extends StatefulWidget {
 }
 
 class _DashboardPageState extends State<DashboardPage> {
-
-  bool isOrderAccepted = false; // Track if an order has been accepted
+  List<bool> isOrderAccepted = [false, false, false]; // Track acceptance for each order
+ // Track if an order has been accepted
 
   @override
   Widget build(BuildContext context) {
@@ -115,7 +115,7 @@ class _DashboardPageState extends State<DashboardPage> {
                 ),
               ),
             ),
-            // Order List Section
+      // Order List Section
             Expanded(
               child: ListView(
                 children: [
@@ -124,43 +124,46 @@ class _DashboardPageState extends State<DashboardPage> {
                     pickup: 'Campus Center',
                     dropoff: 'University Library',
                     price: 5,
-                    isOrderAccepted: isOrderAccepted,
+                    isOrderAccepted: isOrderAccepted[0],
                     onAccept: () {
-                      if (!isOrderAccepted) {
-                        setState(() {
-                          isOrderAccepted = true;
-                        });
-                      }
-                    },
-                  ),
+                      setState(() {
+            // Want to accept  order and mark others as not accepted
+            for (int i = 0; i < isOrderAccepted.length; i++) {
+              isOrderAccepted[i] = (i == 0); // Only one at a time? is accepted
+            }
+          });
+        },
+      ),
                   OrderCard(
                     image: 'assets/images/food2.png',
                     pickup: 'Campus Center',
                     dropoff: 'University Library',
                     price: 5,
-                    isOrderAccepted: isOrderAccepted,
+                    isOrderAccepted: isOrderAccepted[1],
                     onAccept: () {
-                      if (!isOrderAccepted) {
-                        setState(() {
-                          isOrderAccepted = true;
-                        });
-                      }
-                    },
-                  ),
+                      setState(() {
+            
+            for (int i = 0; i < isOrderAccepted.length; i++) {
+              isOrderAccepted[i] = (i == 1); 
+            }
+          });
+        },
+      ),
                   OrderCard(
                     image: 'assets/images/food3.png',
                     pickup: 'Campus Center',
                     dropoff: 'University Library',
                     price: 5,
-                    isOrderAccepted: isOrderAccepted,
+                    isOrderAccepted: isOrderAccepted[2],
                     onAccept: () {
-                      if (!isOrderAccepted) {
-                        setState(() {
-                          isOrderAccepted = true;
-                        });
-                      }
-                    },
-                  ),
+                      setState(() {
+            
+            for (int i = 0; i < isOrderAccepted.length; i++) {
+              isOrderAccepted[i] = (i == 2); 
+            }
+          });
+        },
+      ),
                 ],
               ),
             ),
