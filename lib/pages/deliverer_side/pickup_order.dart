@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:DormDash/widgets/pickup_delivery_details_template.dart';
 
-class OrdersPage extends StatelessWidget {
-  const OrdersPage({super.key});
+class PickupOrder extends StatelessWidget {
+  const PickupOrder({super.key});
 
   @override
   Widget build(BuildContext context) {

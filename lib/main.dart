@@ -46,18 +46,10 @@ class MyApp extends StatelessWidget {
       routes: {
         '/welcome': (context) => WelcomePage(),
         '/login': (context) => const LoginRoute(),
-        '/dashboard': 
-            (context) => Scaffold(
-              body: DashboardPage(),
-              bottomNavigationBar: CustomBottomNavigationBar(
-                selectedIndex: 0,
-                onItemTapped: (index) {},
-                userType: "deliverer",
-              ),
-            ),
+        '/dashboard': (context) => DashboardPage (),
         '/orders':
             (context) => Scaffold(
-              body: OrdersPage(),
+              body: PickupOrder(),
               bottomNavigationBar: CustomBottomNavigationBar(
                 selectedIndex: 1,
                 onItemTapped: (index) {},
