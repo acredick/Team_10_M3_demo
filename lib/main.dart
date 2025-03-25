@@ -18,7 +18,7 @@ import 'pages/deliverer_side/pickup_order.dart';
 import 'pages/deliverer_side/deliver_order.dart';
 import 'pages/deliverer_side/deliverer_settings.dart';
 
-Future <void> main() async {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   runApp(const MyApp());
@@ -36,42 +36,54 @@ class MyApp extends StatelessWidget {
         colorScheme: 
           ColorScheme.fromSeed(
             seedColor: Color (0xFF5B3184),
-            primary: Color(0xFF5B3184),
-            secondary: Color(0xFFEEB111),
-            error: Colors.red,
-            tertiary: Color (0xFF4CAF50), // previously "success"
-            ),
+          primary: Color(0xFF5B3184),
+          secondary: Color(0xFFEEB111),
+          error: Colors.red,
+          tertiary: Color(0xFF4CAF50), // previously "success"
+        ),
       ),
       initialRoute: '/welcome',
       routes: {
         '/welcome': (context) => WelcomePage(),
         '/login': (context) => const LoginRoute(),
-        '/dashboard': (context) => DashboardPage(),
-        '/orders': (context) => Scaffold(
-            body: OrdersPage(),
-            bottomNavigationBar: CustomBottomNavigationBar(
-              selectedIndex: 1,
-              onItemTapped: (index) {},
-              userType: "deliverer",
+        '/dashboard': 
+            (context) => Scaffold(
+              body: DashboardPage(),
+              bottomNavigationBar: CustomBottomNavigationBar(
+                selectedIndex: 0,
+                onItemTapped: (index) {},
+                userType: "deliverer",
               ),
             ),
-        '/deliver-order' : (context) => Scaffold(
-            body: DeliverOrder(),
-            bottomNavigationBar: CustomBottomNavigationBar (
-              selectedIndex: 1,
-              onItemTapped: (index) {},
-              userType: "deliverer",
+        '/orders':
+            (context) => Scaffold(
+              body: OrdersPage(),
+              bottomNavigationBar: CustomBottomNavigationBar(
+                selectedIndex: 1,
+                onItemTapped: (index) {},
+                userType: "deliverer",
+              ),
             ),
-          ),
-          '/dropoff-confirmation' : (context) => Scaffold(
-            body: DropoffConfirmation(),
-            bottomNavigationBar: CustomBottomNavigationBar (
-              selectedIndex: 1,
-              onItemTapped: (index) {},
-              userType: "deliverer",
+        '/deliver-order':
+            (context) => Scaffold(
+              body: DeliverOrder(),
+              bottomNavigationBar: CustomBottomNavigationBar(
+                selectedIndex: 1,
+                onItemTapped: (index) {},
+                userType: "deliverer",
+              ),
             ),
-          ),
-        "/customer-settings": (context) => Scaffold(
+        '/dropoff-confirmation':
+            (context) => Scaffold(
+              body: DropoffConfirmation(),
+              bottomNavigationBar: CustomBottomNavigationBar(
+                selectedIndex: 1,
+                onItemTapped: (index) {},
+                userType: "deliverer",
+              ),
+            ),
+        "/customer-settings":
+            (context) => Scaffold(
               body: CustomerSettingsPage(),
               bottomNavigationBar: CustomBottomNavigationBar(
                 selectedIndex: 0,
@@ -79,7 +91,8 @@ class MyApp extends StatelessWidget {
                 userType: "customer",
               ),
             ),
-        "/customer-home": (context) => Scaffold(
+        "/customer-home":
+            (context) => Scaffold(
               body: const Status(),
               bottomNavigationBar: CustomBottomNavigationBar(
                 selectedIndex: 0,
@@ -87,7 +100,8 @@ class MyApp extends StatelessWidget {
                 userType: "customer",
               ),
             ),
-        "/customer-order": (context) => Scaffold(
+        "/customer-order":
+            (context) => Scaffold(
               body: OrderSelection(),
               bottomNavigationBar: CustomBottomNavigationBar(
                 selectedIndex: 0,
@@ -95,14 +109,15 @@ class MyApp extends StatelessWidget {
                 userType: "customer",
               ),
             ),
-        "/deliverer-settings": (context) => Scaffold(
-          body: DelivererSettingsPage(),
-          bottomNavigationBar: CustomBottomNavigationBar(
-            selectedIndex: 0,
-            onItemTapped: (index) {},
-            userType: "deliverer",
-          ),
-        ),
+        "/deliverer-settings":
+            (context) => Scaffold(
+              body: DelivererSettingsPage(),
+              bottomNavigationBar: CustomBottomNavigationBar(
+                selectedIndex: 0,
+                onItemTapped: (index) {},
+                userType: "deliverer",
+              ),
+            ),
       },
       home: StreamBuilder<User?>(
         stream: FirebaseAuth.instance.authStateChanges(),

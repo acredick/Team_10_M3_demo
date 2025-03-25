@@ -167,13 +167,8 @@ class _DashboardPageState extends State<DashboardPage> {
           ],
         ),
       ),
-      // Bottom Navigation Bar
-      bottomNavigationBar: CustomBottomNavigationBar(
-        selectedIndex: 0,
-        userType: "deliverer",
-        onItemTapped: (index) {},
-      ),
-    );
+    )
+  );
   }
 }
 
