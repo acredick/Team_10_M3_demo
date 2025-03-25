@@ -40,8 +40,8 @@ class _ChatScreenState extends State<ChatScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Chat UI'),
-        backgroundColor: Colors.blueAccent,
+        title: const Text('Chat with Dasher'),
+        backgroundColor: Color(0xFFDCB347),
       ),
       body: Column(
         children: [
@@ -56,7 +56,7 @@ class _ChatScreenState extends State<ChatScreen> {
                     margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
                     padding: const EdgeInsets.all(10),
                     decoration: BoxDecoration(
-                      color: Colors.blueAccent,
+                      color: Colors.purple[700],
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: Text(
@@ -82,7 +82,7 @@ class _ChatScreenState extends State<ChatScreen> {
                   ),
                 ),
                 IconButton(
-                  icon: const Icon(Icons.send, color: Colors.blueAccent),
+                  icon: Icon(Icons.send, color: Colors.purple[700]),
                   onPressed: _sendMessage,
                 ),
               ],

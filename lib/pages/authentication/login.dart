@@ -1,3 +1,4 @@
+import 'package:DormDash/pages/authentication/user_selection.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -38,15 +39,19 @@ class _LoginState extends State<Login> {
       await FirebaseAuth.instance.signInWithProvider(provider);
       User? user = FirebaseAuth.instance.currentUser;
 
-      if (user != null && mounted) {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => MainScreen(user: user)),
-        );
+      if (user != null) {
+        await redirect(user: user);
       }
     } catch (e) {
       print("Sign-in failed: $e");
     }
+  }
+
+  Future<void> redirect({required User user}) async {
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => UserSelection(user: user)),
+    );
   }
 
   @override
