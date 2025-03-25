@@ -16,45 +16,42 @@ class _DashboardPageState extends State<DashboardPage> {
   List<bool> isOrderAccepted = [false, false, false]; // Track acceptance for each order
  // Track if an order has been accepted
 
-  @override
+@override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 255, 255, 255),
-      body: Padding(
-        padding: EdgeInsets.all(16.0),
-        child: Column(
-          children: [
-            // Header Section
-            Container(
-              padding: EdgeInsets.all(16),
-              width: MediaQuery.of(context).size.width * 0.98,
-              height: 200,
-              decoration: BoxDecoration(
-                color: Color(0xFF5B3184),
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(20),
-                  topRight: Radius.circular(20),
-                  bottomLeft: Radius.circular(20),
-                  bottomRight: Radius.circular(20),
+      body: SingleChildScrollView( // Allow scrolling
+        child: Padding(
+          padding: EdgeInsets.only(top: 90, left: 7, right: 7), // Container padding
+          child: Column(
+            children: [
+              // Header Section
+              Container(
+                padding: EdgeInsets.all(10),
+                width: MediaQuery.of(context).size.width * 0.95, // Adjusted width
+                height: 295, // Height of the purple container
+                decoration: BoxDecoration(
+                  color: Color(0xFF5B3184),
+                  borderRadius: BorderRadius.circular(20),
                 ),
-              ),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // Text Section
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          "HELLO",
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 28,
-                            fontWeight: FontWeight.bold,
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // Text Section
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          SizedBox(height: 40),
+                          Text(
+                            "HELLO",
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 24, 
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
-                        ),
-                        SizedBox(height: 5),
+                        SizedBox(height: 10),
                         Padding(
                           padding: const EdgeInsets.fromLTRB(0, 0, 10.0, 0), // Adjust the padding value as needed
                           child: FittedBox(
