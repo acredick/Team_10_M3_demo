@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'services/firebase_options.dart';
+import 'package:DormDash/pages/customer_side/status.dart'; 
+
 
 // Import pages
 import 'pages/authentication/login.dart';
@@ -79,14 +81,16 @@ class MyApp extends StatelessWidget {
                 userType: "customer",
               ),
             ),
-        "/customer-home": (context) => Scaffold(
-              body: const Status(),
+        "/customer-home": (context){
+          return Scaffold(
+              body: Status(orderID: 'order1'),
               bottomNavigationBar: CustomBottomNavigationBar(
                 selectedIndex: 0,
                 onItemTapped: (index) {},
                 userType: "customer",
               ),
-            ),
+            );
+        },
         "/customer-order": (context) => Scaffold(
               body: OrderSelection(),
               bottomNavigationBar: CustomBottomNavigationBar(
@@ -95,6 +99,7 @@ class MyApp extends StatelessWidget {
                 userType: "customer",
               ),
             ),
+          
         "/deliverer-settings": (context) => Scaffold(
           body: DelivererSettingsPage(),
           bottomNavigationBar: CustomBottomNavigationBar(
