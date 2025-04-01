@@ -1,11 +1,6 @@
-/* Where a customer picks what order they want to be delivered. */
-
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import './order_storage.dart';
-import 'package:intl/intl.dart';
-import './status.dart';
-import '/widgets/bottom-nav-bar.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'customer_address.dart';
 
 class OrderSelection extends StatefulWidget {
   @override
@@ -13,128 +8,60 @@ class OrderSelection extends StatefulWidget {
 }
 
 class _OrderSelectionState extends State<OrderSelection> {
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text("Order Selection")),
-      body: orderStorage.orders.isEmpty
-          ? Center(child: Text("No orders yet!", style: TextStyle(fontSize: 20)))
-          : SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Padding(
-              padding: EdgeInsets.all(12),
-              child: Text(
-                "Select an order for delivery.",
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
-              ),
-            ),
-            ListView.builder(
-              shrinkWrap: true, // Ensures it takes only needed space
-              physics: NeverScrollableScrollPhysics(), // Prevents double scrolling
-              itemCount: orderStorage.orders.length,
-              itemBuilder: (context, index) {
-                final order = orderStorage.orders[index];
-                bool isDeliverable = order["isDeliverable"] == "true";
-                return Card(
-                  margin: EdgeInsets.fromLTRB(20, 5, 20, 5),
-                  color: isDeliverable ? null : Colors.grey,
-                  child: ListTile(
-                    onTap: () {
-                      if (isDeliverable == false) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: Text("This order is no longer eligible for delivery."),
-                          ),
-                        );
-                      }
-                      else {
-                        showDialog(
-                          context: context,
-                          builder: (BuildContext context) {
-                            return AlertDialog(
-                              title: Text("Confirm Selection"),
-                              content: Column(
-                                mainAxisSize: MainAxisSize.min, // Prevents unnecessary space
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text("Are you sure you want to select this order?"),
-                                  SizedBox(height: 10),
-                                  Text(
-                                    order["restaurant"]!,
-                                    style: TextStyle(fontWeight: FontWeight.bold),
-                                  ),
-                                  Text("${order["foodItems"]}"),
-                                ],
-                              ),
-                              actions: [
-                                TextButton(
-                                  onPressed: () {
-                                    Navigator.pop(context); // Close the dialog
-                                  },
-                                  child: Text("Cancel"),
-                                ),
-                                TextButton(
-                                  onPressed: () {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) => Scaffold(
-                                          body: Status(),
-                                          bottomNavigationBar: CustomBottomNavigationBar(
-                                          selectedIndex: 0,
-                                          onItemTapped: (index) {
-                                          },
-                                          userType: "customer",
-                                        ),
-                                      ),
-                                    ),
-                                    );
-                                  },
-                                  child: Text("Confirm"),
-                                ),
-                              ],
-                            );
-                          },
-                        );
-                      }
-                    },
-                    title: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          order["restaurant"]!,
-                          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                        ),
-                        Text(
-                          order["orderTime"]!,
-                          style: TextStyle(
-                            fontSize: 16,
-                            color: order["isDeliverable"] == "true" ? Colors.grey : Colors.grey[700],),
-                        ),
-                      ],
-                    ),
-                    subtitle: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          "${NumberFormat.currency(locale: 'en_US', symbol: '\$').format(double.tryParse(order["price"] ?? "0") ?? 0)} • ${order["foodItems"]?.split(" • ").length ?? 0} Items",
-                          style: TextStyle(fontSize: 16),
-                        ),
+      body: StreamBuilder<QuerySnapshot>(
+        stream: _firestore.collection('orders').snapshots(),
+        builder: (context, snapshot) {
+          if (!snapshot.hasData) {
+            return Center(child: CircularProgressIndicator());
+          }
 
-                        Text("${order["foodItems"]}"),
+          var orders = snapshot.data!.docs;
 
-                      ],
-                    ),
+          if (orders.isEmpty) {
+            return Center(child: Text("No orders available!", style: TextStyle(fontSize: 20)));
+          }
+
+          return ListView.builder(
+            itemCount: orders.length,
+            itemBuilder: (context, index) {
+              var order = orders[index];
+              bool isDeliverable = order["isDeliverable"] == true;
+
+              return Card(
+                margin: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+                color: isDeliverable ? null : Colors.grey,
+                child: ListTile(
+                  onTap: isDeliverable
+                      ? () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => EnterAddressPage(orderID: order.id),
+                            ),
+                          );
+                        }
+                      : null,
+                  title: Text(
+                    order["restaurantName"],
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                   ),
-                );
-              },
-            ),
-          ],
-        )
-      )
+                  subtitle: Text(
+                    "Items: ${order["Items"]} \nPrice: \$${order["price"]}",
+                    style: TextStyle(fontSize: 16),
+                  ),
+                  trailing: Icon(Icons.arrow_forward, color: isDeliverable ? Colors.blue : Colors.grey),
+                ),
+              );
+            },
+          );
+        },
+      ),
     );
   }
 }
-
