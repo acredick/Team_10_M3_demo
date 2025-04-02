@@ -50,7 +50,7 @@ class MyApp extends StatelessWidget {
         '/login': (context) => const LoginRoute(),
         '/dashboard': (context) => DashboardPage(),
         '/orders': (context) => Scaffold(
-            body: OrdersPage(),
+            body: OrdersPage(orderId: ''),
             bottomNavigationBar: CustomBottomNavigationBar(
               selectedIndex: 1,
               onItemTapped: (index) {},

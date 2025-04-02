@@ -43,7 +43,7 @@ class _StatusState extends State<Status> {
 
           var order = snapshot.data!;
           String status = order['status'] ?? 'Unknown';
-          String address = order['address'] ?? 'Unknown';
+          String address = order['customerAddress'] ?? 'Unknown';
           double price = order['price'] ?? 'Unknown';
           String restaurantName = order['restaurantName'] ?? 'Unknown';
 
@@ -80,4 +80,5 @@ class _StatusState extends State<Status> {
       ),
     );
   }
+
 }

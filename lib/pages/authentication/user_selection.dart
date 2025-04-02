@@ -4,7 +4,6 @@ import 'package:DormDash/pages/deliverer_side/dashboard.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import '../customer_side/order_selection.dart';
-import '../customer_side/order_storage.dart';
 import '../deliverer_side/deliverer_home.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import '/widgets/bottom-nav-bar.dart';
@@ -57,9 +56,7 @@ class _UserSelectionState extends State<UserSelection> {
           Center(
             child: ElevatedButton.icon(
               onPressed: () async {
-                if (orderStorage.orders.isEmpty) {
-                  fillOrderStorage();
-                }
+              
                 Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
