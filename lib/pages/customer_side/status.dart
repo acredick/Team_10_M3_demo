@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import '/pages/customer_side/order_manager.dart';
+import '/pages/customer_side/customer_chat.dart';
+import '/widgets/bottom-nav-bar.dart';
 
 class Status extends StatefulWidget {
   final String? orderID;
@@ -81,6 +83,32 @@ class _StatusState extends State<Status> {
                 ] else if (status == 'Delivered') ...[
                   Text("Your order has been delivered!"),
                 ],
+                ElevatedButton.icon(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => Scaffold(
+                          body: ChatScreen(),
+                          bottomNavigationBar: CustomBottomNavigationBar(
+                            selectedIndex: 0,
+                            onItemTapped: (index) {
+                            },
+                            userType: "customer",
+                          ),
+                        ),
+                      ),
+                    );
+                  },
+                  label: Text('Chat with Dasher'),
+                  style: ElevatedButton.styleFrom(
+                    foregroundColor: Colors.white,
+                    backgroundColor: Colors.purple[700],
+                    padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                    shape: StadiumBorder(), // Fully rounded corners
+                    elevation: 3,
+                  ),
+                )
               ],
             ),
           );
