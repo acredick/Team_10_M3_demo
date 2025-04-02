@@ -16,7 +16,7 @@ class _EnterAddressPageState extends State<EnterAddressPage> {
   final TextEditingController _addressController = TextEditingController();
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-  void _submitAddress() async {
+  Future<void> _submitAddress() async {
     // create unique order ID
     var uuid = Uuid();
     String orderID = uuid.v4();
@@ -51,7 +51,10 @@ class _EnterAddressPageState extends State<EnterAddressPage> {
             ),
             SizedBox(height: 20),
             ElevatedButton(
-              onPressed: _submitAddress,
+              onPressed: () async {
+                await _submitAddress();
+                if (mounted) Navigator.pushNamed(context, "/customer-home"); // Go back after submission
+              },
               child: Text("Submit"),
             ),
           ],

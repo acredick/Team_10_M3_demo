@@ -9,9 +9,7 @@ class OrderManager {
   OrderManager._internal();
 
   static void setOrderID(String orderID) {
-    // _orderID = orderID;
-    // todo: remove once firebase functionality is confirmed
-    _orderID = "6e98badc-ee01-4bc5-aa32-294fd3a99dc0"; // sets order ID to an order already in database
+    _orderID = orderID;
   }
 
   static String? getOrderID() {
