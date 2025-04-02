@@ -13,7 +13,10 @@ class _OrderSelectionState extends State<OrderSelection> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Order Selection")),
+      appBar: AppBar(
+        title: Text("Order Selection"),
+        automaticallyImplyLeading: false, // prevents back button
+      ),
       body: StreamBuilder<QuerySnapshot>(
         stream: _firestore.collection('orders').snapshots(),
         builder: (context, snapshot) {
@@ -24,7 +27,12 @@ class _OrderSelectionState extends State<OrderSelection> {
           var orders = snapshot.data!.docs;
 
           if (orders.isEmpty) {
-            return Center(child: Text("No orders available!", style: TextStyle(fontSize: 20)));
+            return Center(
+              child: Text(
+                "No orders available!",
+                style: TextStyle(fontSize: 20),
+              ),
+            );
           }
 
           return ListView.builder(
@@ -37,16 +45,19 @@ class _OrderSelectionState extends State<OrderSelection> {
                 margin: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
                 color: isDeliverable ? null : Colors.grey,
                 child: ListTile(
-                  onTap: isDeliverable
-                      ? () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => EnterAddressPage(orderID: order.id),
-                            ),
-                          );
-                        }
-                      : null,
+                  onTap:
+                      isDeliverable
+                          ? () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder:
+                                    (context) =>
+                                        EnterAddressPage(orderID: order.id),
+                              ),
+                            );
+                          }
+                          : null,
                   title: Text(
                     order["restaurantName"],
                     style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
@@ -55,7 +66,10 @@ class _OrderSelectionState extends State<OrderSelection> {
                     "Items: ${order["Items"]} \nPrice: \$${order["price"]}",
                     style: TextStyle(fontSize: 16),
                   ),
-                  trailing: Icon(Icons.arrow_forward, color: isDeliverable ? Colors.blue : Colors.grey),
+                  trailing: Icon(
+                    Icons.arrow_forward,
+                    color: isDeliverable ? Colors.blue : Colors.grey,
+                  ),
                 ),
               );
             },

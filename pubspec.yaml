@@ -39,6 +39,9 @@ dependencies:
   firebase_auth_platform_interface: ^7.6.1
   firebase_auth: ^5.5.1
   intl: ^0.18.0
+  url_launcher: ^6.0.10
+  cloud_firestore: ^5.6.5
+
 
   slide_to_act: ^2.0.1
 

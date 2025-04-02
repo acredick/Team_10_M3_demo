@@ -19,6 +19,7 @@ import '/pages/authentication/user_selection.dart';
 import 'pages/deliverer_side/pickup_order.dart';
 import 'pages/deliverer_side/deliver_order.dart';
 import 'pages/deliverer_side/deliverer_settings.dart';
+import 'pages/customer_side/order_manager.dart';
 
 Future <void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -83,7 +84,7 @@ class MyApp extends StatelessWidget {
             ),
         "/customer-home": (context){
           return Scaffold(
-              body: Status(orderID: ''),
+              body: Status(orderID: OrderManager().getOrderID()),
               bottomNavigationBar: CustomBottomNavigationBar(
                 selectedIndex: 0,
                 onItemTapped: (index) {},
