@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import '/pages/customer_side/order_manager.dart';
+import 'package:uuid/uuid.dart';
 
 class EnterAddressPage extends StatefulWidget {
   final String orderID;
@@ -15,6 +17,10 @@ class _EnterAddressPageState extends State<EnterAddressPage> {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   void _submitAddress() async {
+    // create unique order ID
+    var uuid = Uuid();
+    String orderID = uuid.v4();
+
     if (_addressController.text.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Address cannot be empty")));
       return;
@@ -23,8 +29,10 @@ class _EnterAddressPageState extends State<EnterAddressPage> {
     await _firestore.collection('orders').doc(widget.orderID).update({
       "address": _addressController.text,
       "status": "Processing",
+      "orderID": orderID,
     });
 
+    OrderManager.setOrderID(orderID);
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Order updated for delivery!")));
     Navigator.pop(context);
   }

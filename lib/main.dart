@@ -84,7 +84,7 @@ class MyApp extends StatelessWidget {
             ),
         "/customer-home": (context){
           return Scaffold(
-              body: Status(orderID: OrderManager().getOrderID()),
+              body: Status(orderID: OrderManager.getOrderID()),
               bottomNavigationBar: CustomBottomNavigationBar(
                 selectedIndex: 0,
                 onItemTapped: (index) {},

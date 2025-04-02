@@ -29,10 +29,13 @@ class _StatusState extends State<Status> {
     return Scaffold(
       appBar: AppBar(
         title: Text("Order Status"),
-        automaticallyImplyLeading: false, // prevents back button
+        automaticallyImplyLeading: false,
       ),
-      body: StreamBuilder<DocumentSnapshot>(
-        stream: _orderStream,
+      body: StreamBuilder<QuerySnapshot>(
+        stream: FirebaseFirestore.instance
+            .collection('orders')
+            .where('orderID', isEqualTo: OrderManager.getOrderID())
+            .snapshots(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(child: CircularProgressIndicator());
@@ -42,29 +45,11 @@ class _StatusState extends State<Status> {
             return Center(child: Text("Error loading order status"));
           }
 
-          if (!snapshot.hasData || snapshot.data == null) {
-            return Center(child: Text("Error loading order status"));
+          if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+            return Center(child: Text("No order found with that ID"));
           }
 
-          var order = snapshot.data!;
-          String? orderID = OrderManager().getOrderID();
-
-          // Case when no order is selected
-          if (orderID == "-1") {
-            return Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    "Please select an order to deliver.",
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                    textAlign: TextAlign.center,
-                  ),
-                ],
-              ),
-            );
-          }
-
+          var order = snapshot.data!.docs.first;
           String status = order['status'] ?? 'Unknown';
           String address = order['address'] ?? 'Unknown';
           double price = order['price'] ?? 0.0;
@@ -87,7 +72,6 @@ class _StatusState extends State<Status> {
                   'Total Price: \$${price.toStringAsFixed(2)}',
                   style: TextStyle(fontSize: 18),
                 ),
-
                 if (status == 'Placed') ...[
                   Text("Your order is being processed."),
                 ] else if (status == 'Processing') ...[
@@ -104,4 +88,6 @@ class _StatusState extends State<Status> {
       ),
     );
   }
+
+
 }
