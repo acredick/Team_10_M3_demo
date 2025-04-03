@@ -11,12 +11,11 @@ class ChatPage extends StatefulWidget {
 
 class _ChatPageState extends State<ChatPage> {
   late Stream<QuerySnapshot> chatStream;
-  String currentUserID = UserUtils.getEmail(); // Assuming this method returns the current user's ID
+  String currentUserID = UserUtils.getEmail();
 
   @override
   void initState() {
     super.initState();
-    // Set up the chat stream to get all active chats involving the current user
     chatStream = FirebaseFirestore.instance
         .collection('chats')
         .where('customerID', isEqualTo: currentUserID)
@@ -24,22 +23,19 @@ class _ChatPageState extends State<ChatPage> {
   }
 
   Future<String> getLastMessage(String chatID) async {
-    // Reference to the messages collection for this specific chat
     CollectionReference messagesRef = FirebaseFirestore.instance
         .collection('chats')
         .doc(chatID)
         .collection('messages');
 
     try {
-      // Query the messages ordered by timestamp in descending order
       QuerySnapshot querySnapshot = await messagesRef
-          .orderBy('timestamp', descending: true)  // Assuming 'timestamp' is in each message document
-          .limit(1)  // Only get the most recent message
+          .orderBy('timestamp', descending: true)
+          .limit(1)
           .get();
 
       if (querySnapshot.docs.isNotEmpty) {
-        // Get the message content from the most recent message
-        return querySnapshot.docs.first['message'] ?? 'No message available';
+        return querySnapshot.docs.first['text'] ?? 'No message available';
       } else {
         return 'No messages yet';
       }
@@ -47,6 +43,7 @@ class _ChatPageState extends State<ChatPage> {
       return 'Error retrieving message';
     }
   }
+
 
   @override
   Widget build(BuildContext context) {

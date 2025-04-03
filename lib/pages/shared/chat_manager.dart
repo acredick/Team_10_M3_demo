@@ -79,6 +79,7 @@ class ChatManager {
   static Future<void> addMessage(
       String chatID,
     String senderID,
+    String senderType,
     String messageText,
   ) async {
     try {
@@ -91,6 +92,7 @@ class ChatManager {
             'senderID': senderID,
             'text': messageText,
             'timestamp': FieldValue.serverTimestamp(), // Store the time sent
+            'senderType': senderType
           });
 
       print("Message added successfully!");
