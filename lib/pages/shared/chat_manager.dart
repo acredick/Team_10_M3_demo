@@ -68,7 +68,6 @@ class ChatManager {
   }
 
   static Future<void> addMessage(
-    String chatID,
     String senderID,
     String messageText,
   ) async {

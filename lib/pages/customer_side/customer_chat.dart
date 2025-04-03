@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import '/pages/shared/chat_manager.dart';
+import '../shared/user_util.dart';
 
 void main() {
   runApp(const MyApp());
@@ -27,13 +29,22 @@ class _CustomerChatScreenState extends State<CustomerChatScreen> {
   final TextEditingController _controller = TextEditingController();
   final List<String> _messages = [];
 
-  void _sendMessage() {
-    if (_controller.text.isNotEmpty) {
+  void _sendMessage(String messageText) {
+    if (messageText.isNotEmpty) {
       setState(() {
-        _messages.insert(0, _controller.text);
+        _messages.insert(0, messageText);
         _controller.clear();
       });
     }
+  }
+
+  void _onSendTap() {
+    String messageText = _controller.text.trim();
+    if (messageText.isNotEmpty) {
+      ChatManager.addMessage(UserUtils.getEmail(), messageText);
+      _sendMessage(messageText);
+    }
+    FocusScope.of(context).unfocus();
   }
 
   @override
@@ -83,7 +94,7 @@ class _CustomerChatScreenState extends State<CustomerChatScreen> {
                 ),
                 IconButton(
                   icon: Icon(Icons.send, color: Colors.purple[700]),
-                  onPressed: _sendMessage,
+                  onPressed: _onSendTap,
                 ),
               ],
             ),
