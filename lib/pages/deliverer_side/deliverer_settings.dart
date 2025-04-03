@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import '/widgets/main_screen.dart';
 import '/main.dart';
+import '../shared/user_util.dart';
 
 class DelivererSettingsPage extends StatefulWidget {
   @override
@@ -71,11 +72,13 @@ class _DelivererSettingsPageState extends State<DelivererSettingsPage> {
                       setState(() {
                         isDeliverer = value;
                         Navigator.pushNamed(context, "/customer-settings");
+                        UserUtils.setUserType("customer");
                       });
                     } else {
                       setState(() {
                         isDeliverer = value;
                         Navigator.pushNamed(context, "/deliverer-settings");
+                        UserUtils.setUserType("deliverer");
                       });
                     }
                   },

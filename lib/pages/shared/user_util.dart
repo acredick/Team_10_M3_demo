@@ -8,6 +8,7 @@ class UserUtils {
   static late final lastName;
   static late final email;
   static late final userSnapshot;
+  static var userType = "";
 
   static void saveSnapshot(User? user) {
     userSnapshot = user;
@@ -26,6 +27,10 @@ class UserUtils {
 
   }
 
+  static void setUserType(String type) {
+    userType = type;
+  }
+
   static String getFullName() {
     return fullName;
   }
@@ -41,5 +46,9 @@ class UserUtils {
 
   static String getEmail() {
     return email;
+  }
+
+  static String getUserType() {
+    return userType;
   }
 }

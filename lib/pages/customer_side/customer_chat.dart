@@ -13,13 +13,15 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return const MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: CustomerChatScreen(),
+      home: CustomerChatScreen(chatID: 'sample-chat-id'),
     );
   }
 }
 
 class CustomerChatScreen extends StatefulWidget {
-  const CustomerChatScreen({super.key});
+  final String chatID;
+
+  const CustomerChatScreen({super.key, required this.chatID});
 
   @override
   State<CustomerChatScreen> createState() => _CustomerChatScreenState();
@@ -41,7 +43,7 @@ class _CustomerChatScreenState extends State<CustomerChatScreen> {
   void _onSendTap() {
     String messageText = _controller.text.trim();
     if (messageText.isNotEmpty) {
-      ChatManager.addMessage(UserUtils.getEmail(), messageText);
+      ChatManager.addMessage(widget.chatID, UserUtils.getEmail(), messageText);
       _sendMessage(messageText);
     }
     FocusScope.of(context).unfocus();

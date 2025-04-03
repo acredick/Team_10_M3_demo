@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:DormDash/widgets/pickup_delivery_details_template.dart';
 import 'package:DormDash/widgets/bottom-nav-bar.dart';
 import '/pages/deliverer_side/deliverer-chat.dart';
+import '/pages/shared/chat_manager.dart';
 
 class OrdersPage extends StatefulWidget {
   final String orderId;
@@ -86,7 +87,7 @@ class _OrdersPageState extends State<OrdersPage> {
                   MaterialPageRoute(
                     builder:
                         (context) => Scaffold(
-                      body: DelivererChatScreen(),
+                      body: DelivererChatScreen(chatID: ChatManager.getRecentChatID()),
                       bottomNavigationBar: CustomBottomNavigationBar(
                         selectedIndex: 0,
                         onItemTapped: (index) {},
@@ -95,7 +96,6 @@ class _OrdersPageState extends State<OrdersPage> {
                     ),
                   ),
                 );
-
               }
             ),
           )

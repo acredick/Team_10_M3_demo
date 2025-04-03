@@ -124,7 +124,7 @@ class _DashboardPageState extends State<DashboardPage> {
                             style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                           ),
                           subtitle: Text(
-                            "Pickup: ${doc['restaurantAddress']}\nDropoff: ${doc['customerAddress']}\nPrice: \$${doc['price']}",
+                            "Pickup: ${doc['restaurantAddress']}\nDropoff: ${doc['address']}\nPrice: \$${doc['price']}",
                             style: TextStyle(fontSize: 16),
                           ),
                           trailing: ElevatedButton(

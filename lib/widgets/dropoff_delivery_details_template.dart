@@ -23,7 +23,7 @@ class DeliveryDetailsCard extends StatelessWidget {
     this.primaryActionIcon = Icons.phone,
     this.onCallTap,
     this.onDirectionsTap,
-    this.onChatTap,
+    required this.onChatTap,
   });
 
   @override

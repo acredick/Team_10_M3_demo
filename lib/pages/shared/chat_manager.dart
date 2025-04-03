@@ -67,14 +67,24 @@ class ChatManager {
     }
   }
 
+  static String getRecentChatID() {
+    if (_chatID == null) {
+      return "";
+    }
+    else {
+      return _chatID!;
+    }
+  }
+
   static Future<void> addMessage(
+      String chatID,
     String senderID,
     String messageText,
   ) async {
     try {
       await _staticFirestore
           .collection('chats')
-          .doc(_chatID)
+          .doc(chatID)
           .collection('messages')
           .add({
             // Add a new message

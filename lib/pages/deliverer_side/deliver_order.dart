@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:DormDash/widgets/dropoff_delivery_details_template.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
+import '/pages/deliverer_side/deliverer-chat.dart';
+import 'package:DormDash/widgets/bottom-nav-bar.dart';
+import '/pages/shared/chat_manager.dart';
 
 class DeliverOrder extends StatelessWidget {
   const DeliverOrder({super.key});
@@ -37,6 +40,22 @@ class DeliverOrder extends StatelessWidget {
               itemCount: 2,
               onCallTap: () {}, //TODO: add later
               onDirectionsTap: () {}, // TODO: add later
+              onChatTap:  () {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder:
+                        (context) => Scaffold(
+                      body: DelivererChatScreen(chatID: ChatManager.getRecentChatID()),
+                      bottomNavigationBar: CustomBottomNavigationBar(
+                        selectedIndex: 0,
+                        onItemTapped: (index) {},
+                        userType: "deliverer",
+                      ),
+                    ),
+                  ),
+                );
+              },
               onSlideComplete: () async {
                 Navigator.pushNamed(context, "/dropoff-confirmation");
               },

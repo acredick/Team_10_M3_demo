@@ -20,6 +20,7 @@ import 'pages/deliverer_side/pickup_order.dart';
 import 'pages/deliverer_side/deliver_order.dart';
 import 'pages/deliverer_side/deliverer_settings.dart';
 import 'pages/shared/order_manager.dart';
+import '/pages/shared/ChatPage.dart';
 
 Future <void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -58,6 +59,22 @@ class MyApp extends StatelessWidget {
               userType: "deliverer",
               ),
             ),
+        '/deliverer-chat-page': (context) => Scaffold(
+          body: ChatPage(),
+          bottomNavigationBar: CustomBottomNavigationBar(
+            selectedIndex: 1,
+            onItemTapped: (index) {},
+            userType: "deliverer",
+          ),
+        ),
+        '/customer-chat-page': (context) => Scaffold(
+          body: ChatPage(),
+          bottomNavigationBar: CustomBottomNavigationBar(
+            selectedIndex: 1,
+            onItemTapped: (index) {},
+            userType: "customer",
+          ),
+        ),
         '/deliver-order' : (context) => Scaffold(
             body: DeliverOrder(),
             bottomNavigationBar: CustomBottomNavigationBar (

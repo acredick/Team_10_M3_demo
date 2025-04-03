@@ -45,6 +45,7 @@ class _UserSelectionState extends State<UserSelection> {
           Center(
             child: ElevatedButton.icon(
               onPressed: () async {
+                UserUtils.setUserType("customer");
                 Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
@@ -66,6 +67,7 @@ class _UserSelectionState extends State<UserSelection> {
           Center(
             child: ElevatedButton.icon(
               onPressed: () async {
+                UserUtils.setUserType("deliverer");
                 Navigator.pushNamed(context, '/dashboard');
               },
               label: const Text("Deliverer"),

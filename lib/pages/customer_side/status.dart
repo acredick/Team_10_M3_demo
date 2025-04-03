@@ -1,6 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import '/widgets/customer_page.dart';
+import '/pages/customer_side/customer_chat.dart';
+import 'package:DormDash/widgets/bottom-nav-bar.dart';
+import '/pages/shared/chat_manager.dart';
 
 class Status extends StatefulWidget {
   final String? orderID;
@@ -63,9 +66,9 @@ class _StatusState extends State<Status> {
           double price = order['price'] ?? 0.0;
           String restaurantName = order['restaurantName'] ?? 'Unknown';
           String customerName = order['customerFirstName'] ?? 'Jeff'; // Use dynamic customer name
-          String dasher = order['delivererFirstName'] != ""
-              ? "${order['delivererFirstName']}"
-              : "Waiting on a dasher...";
+          String dasher = order['delivererFirstName'] == ""
+              ? "Waiting on a dasher..."
+              : "${order['delivererFirstName']}";
           //int itemCount = order['itemCount'] ?? 2; // Use dynamic item count
 
           return Column(
@@ -82,11 +85,36 @@ class _StatusState extends State<Status> {
                   address: address,
                   //itemCount: itemCount,
                   onCallTap: () {},  // TODO: add later
-                  onDirectionsTap: () {}, 
+                  onDirectionsTap: () {},
+                  onChatTap: () {
+                    print("Onchattap called");
+                    if (dasher == "Waiting on a dasher...") {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text("Chat not available yet."),
+                          duration: Duration(seconds: 2),
+                        ),
+                      );
+                    } else {
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => Scaffold(
+                            body: CustomerChatScreen(chatID: ChatManager.getRecentChatID()),
+                            bottomNavigationBar: CustomBottomNavigationBar(
+                              selectedIndex: 0,
+                              onItemTapped: (index) {},
+                              userType: "customer",
+                            ),
+                          ),
+                        ),
+                      );
+                    }
+                  },
                   title: restaurantName, 
                   status: status,
-                   price: price, itemCount: 1, // TODO: add later
-                  
+                  price: price, itemCount: 1, // TODO: add later
+
                 ),
               ),
             ],

@@ -24,6 +24,9 @@ class CustomBottomNavigationBar extends StatelessWidget {
           Navigator.pushReplacementNamed(context, "/orders");
           break;
         case 2:
+          Navigator.pushReplacementNamed(context, "/deliverer-chat-page");
+          break;
+        case 3:
           Navigator.pushReplacementNamed(context, "/deliverer-settings");
           break;
       }
@@ -36,6 +39,9 @@ class CustomBottomNavigationBar extends StatelessWidget {
           Navigator.pushReplacementNamed(context, "/customer-order");
           break;
         case 2:
+          Navigator.pushReplacementNamed(context, "/customer-chat-page");
+          break;
+        case 3:
           Navigator.pushReplacementNamed(context, "/customer-settings");
           break;
       }
@@ -60,7 +66,11 @@ class CustomBottomNavigationBar extends StatelessWidget {
           label: "Orders",
         ),
         BottomNavigationBarItem(
-          icon: Icon(Icons.settings, color: selectedIndex == 2 ? purple : Colors.white),
+          icon: Icon(Icons.message, color: selectedIndex == 2 ? purple : Colors.white),
+          label: "Messages",
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.settings, color: selectedIndex == 3 ? purple : Colors.white),
           label: "Settings",
         ),
       ];
@@ -75,7 +85,11 @@ class CustomBottomNavigationBar extends StatelessWidget {
           label: "Orders",
         ),
         BottomNavigationBarItem(
-          icon: Icon(Icons.settings, color: selectedIndex == 2 ? purple : Colors.white),
+          icon: Icon(Icons.message, color: selectedIndex == 2 ? purple : Colors.white),
+          label: "Messages",
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.settings, color: selectedIndex == 3 ? purple : Colors.white),
           label: "Settings",
         ),
       ];
