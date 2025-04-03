@@ -31,17 +31,16 @@ class _StatusState extends State<Status> {
           "Order Status",
           style: TextStyle(color: Colors.black),
         ),
+        automaticallyImplyLeading: false, // prevents back button
         centerTitle: true,
         backgroundColor: Colors.white,
         elevation: 0,
-        leading: const BackButton(color: Colors.black),
         actions: const [
           Padding(
             padding: EdgeInsets.only(right: 16),
             child: Icon(Icons.help_outline, color: Colors.black),
           )
         ],
-        automaticallyImplyLeading: false,
       ),
       body: StreamBuilder<DocumentSnapshot>(
         stream: orderStream,
@@ -63,7 +62,10 @@ class _StatusState extends State<Status> {
           String address = order['address'] ?? 'Unknown';
           double price = order['price'] ?? 0.0;
           String restaurantName = order['restaurantName'] ?? 'Unknown';
-          String customerName = order['customerID'] ?? 'Jeff'; // Use dynamic customer name
+          String customerName = order['customerFirstName'] ?? 'Jeff'; // Use dynamic customer name
+          String dasher = order['delivererFirstName'] != ""
+              ? "${order['delivererFirstName']}"
+              : "Waiting on a dasher...";
           //int itemCount = order['itemCount'] ?? 2; // Use dynamic item count
 
           return Column(
@@ -75,15 +77,15 @@ class _StatusState extends State<Status> {
               ),
               Expanded(
                 child: DeliveryDetailsCard(
-                  customerName: customerName,
-                  typeLabel: "Dropoff To",
+                  customerName: dasher,
+                  typeLabel: "Your dasher",
                   address: address,
                   //itemCount: itemCount,
                   onCallTap: () {},  // TODO: add later
                   onDirectionsTap: () {}, 
                   title: restaurantName, 
                   status: status,
-                   price: price, // TODO: add later
+                   price: price, itemCount: 1, // TODO: add later
                   
                 ),
               ),
