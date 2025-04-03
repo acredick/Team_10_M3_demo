@@ -141,6 +141,7 @@ class _DashboardPageState extends State<DashboardPage> {
                               // Update Firestore when the order is accepted
                               OrderManager.updateOrder(orderId, "delivererID", UserUtils.getEmail());
                               OrderManager.updateOrder(orderId, "status", "Accepted");
+                              OrderManager.updateOrder(orderId, "delivererFirstName", UserUtils.getFirstName());
                             },
                             child: Text("Accept"),
                           ),

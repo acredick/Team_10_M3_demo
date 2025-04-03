@@ -73,7 +73,7 @@ class _OrdersPageState extends State<OrdersPage> {
               typeLabel: "Pickup From",
               title: orderData!['restaurantName'] ?? "Unknown Restaurant",
               address: orderData!['restaurantAddress'] ?? "Unknown Address",
-              customerName: orderData!['customerName'] ?? "Unknown Customer",
+              customerName: orderData!['customerFirstName'] ?? "Unknown Customer",
               itemCount: orderData!['itemCount'] ?? 1,
               onCallTap: () {},  //TODO: Add call functionality
               onDirectionsTap: () {}, // TODO: Add navigation functionality

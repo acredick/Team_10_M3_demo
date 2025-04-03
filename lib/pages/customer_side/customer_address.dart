@@ -25,6 +25,7 @@ class _EnterAddressPageState extends State<EnterAddressPage> {
       return;
     }
 
+    OrderManager.clearDelivererInfo(widget.orderID); // used for testing purposes
     OrderManager.updateOrder(widget.orderID, "orderID", widget.orderID);
     OrderManager.updateOrder(widget.orderID, "address", _addressController.text);
     OrderManager.updateOrder(widget.orderID, "status", "Processing");

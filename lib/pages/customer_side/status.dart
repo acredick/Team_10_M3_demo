@@ -56,11 +56,17 @@ class _StatusState extends State<Status> {
           String address = order['address'] ?? 'Unknown';
           double price = order['price'] ?? 0.0;
           String restaurantName = order['restaurantName'] ?? 'Unknown';
+          String dasher = order['delivererFirstName'] ?? null;
 
           return Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
+                Text(
+                  dasher != '' ? 'Your dasher: $dasher' : 'Waiting on a dasher...',
+                  style: TextStyle(fontSize: 20),
+                ),
+
                 Text('Order Status: $status', style: TextStyle(fontSize: 20)),
                 SizedBox(height: 20),
                 Text(

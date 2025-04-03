@@ -43,4 +43,10 @@ class OrderManager {
     });
   }
 
+  static void clearDelivererInfo(String orderID) {
+    updateOrder(orderID, "delivererFirstName", "");
+    updateOrder(orderID, "delivererID", "");
+    updateOrder(orderID, "status", "Processing");
+  }
+
 }
