@@ -128,14 +128,20 @@ class _DashboardPageState extends State<DashboardPage> {
                             style: TextStyle(fontSize: 16),
                           ),
                           trailing: ElevatedButton(
-                            onPressed: () {
+                            onPressed: () async {
                               String orderId = doc.id;  // Get the orderId
                               // Update Firestore when the order is accepted
                               OrderManager.updateOrder(orderId, "delivererID", UserUtils.getEmail());
                               OrderManager.updateOrder(orderId, "status", "Accepted");
                               OrderManager.updateOrder(orderId, "delivererFirstName", UserUtils.getFirstName());
-                              ChatManager.setDelivererInfo();
-                              
+                              String? chatid = await OrderManager.getChatIDFromOrder(orderId);
+
+                              if (chatid != null) {
+                                ChatManager.setDelivererInfo();
+                              } else {
+                                print("Failed to retrieve chatID, skipping setDelivererInfo()");
+                              }
+
                               // Navigate to OrdersPage and pass the orderId
                               Navigator.push(
                                 context,

@@ -23,8 +23,9 @@ class ChatManager {
     _chatID = _uuid.v4();
   }
 
-  static void setChatID(String id) {
+  static Future<void> setChatID(String id) async {
     _chatID = id;
+    print("Chat id set: $_chatID");
   }
 
   static Future<void> openChat() async {
@@ -60,6 +61,7 @@ class ChatManager {
   }
 
   static Future<void> setDelivererInfo() async {
+
     try {
       if (_chatID == null) {
         print("Error: _chatID is null. Cannot set deliverer info.");
