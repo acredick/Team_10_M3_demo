@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 
 class CustomBottomNavigationBar extends StatelessWidget {
@@ -53,54 +52,82 @@ class CustomBottomNavigationBar extends StatelessWidget {
     final purple = const Color(0xFF5B3184);
     final gold = const Color(0xFFDCB347);
 
+    // Dynamically adjust the items list based on userType
     List<BottomNavigationBarItem> items = [];
 
     if (userType == "deliverer") {
       items = [
         BottomNavigationBarItem(
-          icon: Icon(Icons.dashboard, color: selectedIndex == 0 ? purple : Colors.white),
+          icon: Icon(
+            Icons.dashboard,
+            color: selectedIndex == 0 ? purple : Colors.white,
+          ),
           label: "Dashboard",
         ),
         BottomNavigationBarItem(
-          icon: Icon(Icons.list , color: selectedIndex == 1 ? purple : Colors.white),
+          icon: Icon(
+            Icons.list,
+            color: selectedIndex == 1 ? purple : Colors.white,
+          ),
           label: "Orders",
         ),
         BottomNavigationBarItem(
-          icon: Icon(Icons.message, color: selectedIndex == 2 ? purple : Colors.white),
+          icon: Icon(
+            Icons.message,
+            color: selectedIndex == 2 ? purple : Colors.white,
+          ),
           label: "Messages",
         ),
         BottomNavigationBarItem(
-          icon: Icon(Icons.settings, color: selectedIndex == 3 ? purple : Colors.white),
+          icon: Icon(
+            Icons.settings,
+            color: selectedIndex == 3 ? purple : Colors.white,
+          ),
           label: "Settings",
         ),
       ];
     } else if (userType == "customer") {
       items = [
         BottomNavigationBarItem(
-          icon: Icon(Icons.home, color: selectedIndex == 0 ? purple : Colors.white),
+          icon: Icon(
+            Icons.home,
+            color: selectedIndex == 0 ? purple : Colors.white,
+          ),
           label: "Home",
         ),
         BottomNavigationBarItem(
-          icon: Icon(Icons.list, color: selectedIndex == 1 ? purple : Colors.white),
+          icon: Icon(
+            Icons.list,
+            color: selectedIndex == 1 ? purple : Colors.white,
+          ),
           label: "Orders",
         ),
         BottomNavigationBarItem(
-          icon: Icon(Icons.message, color: selectedIndex == 2 ? purple : Colors.white),
+          icon: Icon(
+            Icons.message,
+            color: selectedIndex == 2 ? purple : Colors.white,
+          ),
           label: "Messages",
         ),
         BottomNavigationBarItem(
-          icon: Icon(Icons.settings, color: selectedIndex == 3 ? purple : Colors.white),
+          icon: Icon(
+            Icons.settings,
+            color: selectedIndex == 3 ? purple : Colors.white,
+          ),
           label: "Settings",
         ),
       ];
     } else {
-      return const SizedBox.shrink();
+      return const SizedBox.shrink(); // Return an empty widget if userType is invalid
     }
 
     return BottomNavigationBar(
       backgroundColor: gold,
       currentIndex: selectedIndex,
-      onTap: (index) => _onItemTapped(context, index),
+      onTap: (index) {
+        onItemTapped(index); // Update selected index when an item is tapped
+        _onItemTapped(context, index); // Navigate to the appropriate page
+      },
       selectedItemColor: purple,
       unselectedItemColor: Colors.white,
       selectedLabelStyle: const TextStyle(

@@ -62,7 +62,7 @@ class MyApp extends StatelessWidget {
         '/deliverer-chat-page': (context) => Scaffold(
           body: ChatPage(),
           bottomNavigationBar: CustomBottomNavigationBar(
-            selectedIndex: 1,
+            selectedIndex: 2,
             onItemTapped: (index) {},
             userType: "deliverer",
           ),
@@ -70,7 +70,7 @@ class MyApp extends StatelessWidget {
         '/customer-chat-page': (context) => Scaffold(
           body: ChatPage(),
           bottomNavigationBar: CustomBottomNavigationBar(
-            selectedIndex: 1,
+            selectedIndex: 2,
             onItemTapped: (index) {},
             userType: "customer",
           ),
@@ -86,7 +86,7 @@ class MyApp extends StatelessWidget {
           '/dropoff-confirmation' : (context) => Scaffold(
             body: DropoffConfirmation(),
             bottomNavigationBar: CustomBottomNavigationBar (
-              selectedIndex: 1,
+              selectedIndex: 0,
               onItemTapped: (index) {},
               userType: "deliverer",
             ),
@@ -94,7 +94,7 @@ class MyApp extends StatelessWidget {
         "/customer-settings": (context) => Scaffold(
               body: CustomerSettingsPage(),
               bottomNavigationBar: CustomBottomNavigationBar(
-                selectedIndex: 0,
+                selectedIndex: 3,
                 onItemTapped: (index) {},
                 userType: "customer",
               ),
@@ -112,7 +112,7 @@ class MyApp extends StatelessWidget {
         "/customer-order": (context) => Scaffold(
               body: OrderSelection(),
               bottomNavigationBar: CustomBottomNavigationBar(
-                selectedIndex: 0,
+                selectedIndex: 1,
                 onItemTapped: (index) {},
                 userType: "customer",
               ),
@@ -121,7 +121,7 @@ class MyApp extends StatelessWidget {
         "/deliverer-settings": (context) => Scaffold(
           body: DelivererSettingsPage(),
           bottomNavigationBar: CustomBottomNavigationBar(
-            selectedIndex: 0,
+            selectedIndex: 3,
             onItemTapped: (index) {},
             userType: "deliverer",
           ),
