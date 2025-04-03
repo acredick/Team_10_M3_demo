@@ -1,5 +1,6 @@
 import 'package:DormDash/pages/shared/user_util.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import '/pages/shared/chat_manager.dart';
 
 class OrderManager {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
@@ -29,6 +30,25 @@ class OrderManager {
     }
   }
 
+  static Future<String?> getChatIDFromOrder(String orderID) async {
+    try {
+      DocumentSnapshot docSnapshot = await _staticFirestore.collection('orders').doc(orderID).get();
+
+      if (docSnapshot.exists) {
+        String? chatID = docSnapshot.get('chatID');
+        print("chatID: $chatID");
+        ChatManager.setChatID(chatID!);
+        return chatID;
+      } else {
+        print("Order document does not exist.");
+        return null;
+      }
+    } catch (e) {
+      print("Failed to get chatID: $e");
+      return null;
+    }
+  }
+
   static void setDelivererID() { // use email as ID
     delivererID = UserUtils.getEmail();
   }
@@ -43,6 +63,7 @@ class OrderManager {
     });
   }
 
+  // used for local testing on one machine
   static void clearDelivererInfo(String orderID) {
     updateOrder(orderID, "delivererFirstName", "");
     updateOrder(orderID, "delivererID", "");

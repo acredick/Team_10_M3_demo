@@ -2,6 +2,7 @@ import 'package:DormDash/pages/shared/user_util.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:uuid/uuid.dart';
 import '../shared/user_util.dart';
+import '/pages/shared/order_manager.dart';
 
 class ChatManager {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
@@ -20,6 +21,10 @@ class ChatManager {
   static void generateChatID() {
     final Uuid _uuid = Uuid();
     _chatID = _uuid.v4();
+  }
+
+  static void setChatID(String id) {
+    _chatID = id;
   }
 
   static Future<void> openChat() async {
@@ -41,10 +46,14 @@ class ChatManager {
       await _staticFirestore
           .collection('chats')
           .doc(_chatID)
+          .update({'chatID': UserUtils.getFirstName()});
+
+      await _staticFirestore
+          .collection('chats')
+          .doc(_chatID)
           .collection('messages')
           .doc("Begin of conversation.")
           .set({'message': "Begin of conversation."});
-
     } catch (e) {
       print("Error opening new chat: ${e}");
     }
@@ -52,18 +61,22 @@ class ChatManager {
 
   static Future<void> setDelivererInfo() async {
     try {
-      print("Setting deliver info");
-      await _staticFirestore
-          .collection('chats')
-          .doc(_chatID)
-          .set({'delivererID': UserUtils.getEmail()}, SetOptions(merge: true));
+      if (_chatID == null) {
+        print("Error: _chatID is null. Cannot set deliverer info.");
+        return;
+      }
 
-      await _staticFirestore
-          .collection('chats')
-          .doc(_chatID)
-          .set({'delivererFirstName': UserUtils.getFirstName()}, SetOptions(merge: true));
+      print("Setting deliverer info for chatID: $_chatID");
+
+      // Use _chatID as the document ID
+      await _staticFirestore.collection('chats').doc(_chatID).set({
+        'delivererID': UserUtils.getEmail(),
+        'delivererFirstName': UserUtils.getFirstName(),
+      }, SetOptions(merge: true)); // Merge to prevent overwriting other fields
+
+      print("Deliverer info set successfully for chat ID: $_chatID");
     } catch (e) {
-      print("Failed to set user1: $e");
+      print("Failed to set deliverer info: $e");
     }
   }
 

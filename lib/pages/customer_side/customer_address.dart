@@ -37,6 +37,7 @@ class _EnterAddressPageState extends State<EnterAddressPage> {
 
     ChatManager.generateChatID();
     ChatManager.openChat();
+    OrderManager.updateOrder(widget.orderID, "chatID", ChatManager.getRecentChatID());
 
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Order updated for delivery!")));
     Navigator.pop(context);
