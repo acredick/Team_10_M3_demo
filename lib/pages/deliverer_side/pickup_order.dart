@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:DormDash/widgets/pickup_delivery_details_template.dart';
+import 'package:DormDash/widgets/bottom-nav-bar.dart';
 
 class OrdersPage extends StatefulWidget {
   final String orderId;
@@ -81,6 +82,12 @@ class _OrdersPageState extends State<OrdersPage> {
             ),
           )
         ],
+      ),
+      bottomNavigationBar: CustomBottomNavigationBar(
+        selectedIndex: 1,
+        onItemTapped: (index) {
+      },
+        userType: "deliverer",
       ),
     );
   }
