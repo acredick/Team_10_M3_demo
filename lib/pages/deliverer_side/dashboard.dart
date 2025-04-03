@@ -99,7 +99,7 @@ class _DashboardPageState extends State<DashboardPage> {
               child: StreamBuilder(
                 stream: FirebaseFirestore.instance
                     .collection('orders')
-                    .where('status', isEqualTo: 'Processing') // Get only processing orders
+                    .where('status', isEqualTo: 0) // Get only processing orders
                     .snapshots(),
                 builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
@@ -130,10 +130,11 @@ class _DashboardPageState extends State<DashboardPage> {
                           trailing: ElevatedButton(
                             onPressed: () async {
                               String orderId = doc.id;  // Get the orderId
+
                               // Update Firestore when the order is accepted
                               OrderManager.updateOrder(orderId, "delivererID", UserUtils.getEmail());
-                              OrderManager.updateOrder(orderId, "status", "Accepted");
                               OrderManager.updateOrder(orderId, "delivererFirstName", UserUtils.getFirstName());
+                              OrderManager.advanceStatus();
                               String? chatid = await OrderManager.getChatIDFromOrder(orderId);
 
                               if (chatid != null) {

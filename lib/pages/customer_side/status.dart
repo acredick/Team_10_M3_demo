@@ -1,3 +1,4 @@
+import 'package:DormDash/pages/shared/order_manager.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import '/widgets/customer_page.dart';
@@ -47,7 +48,7 @@ class _StatusState extends State<Status> {
       ),
       body: StreamBuilder<DocumentSnapshot>(
         stream: orderStream,
-        builder: (context, snapshot) {
+        builder: (context, snapshot)  {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(child: CircularProgressIndicator());
           }
@@ -61,7 +62,6 @@ class _StatusState extends State<Status> {
           }
 
           var order = snapshot.data!;
-          String status = order['status'] ?? 'Unknown';
           String address = order['address'] ?? 'Unknown';
           double price = order['price'] ?? 0.0;
           String restaurantName = order['restaurantName'] ?? 'Unknown';
@@ -112,9 +112,8 @@ class _StatusState extends State<Status> {
                     }
                   },
                   title: restaurantName, 
-                  status: status,
+                  status: OrderManager.printStatus(),
                   price: price, itemCount: 1, // TODO: add later
-
                 ),
               ),
             ],

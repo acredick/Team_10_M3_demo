@@ -29,11 +29,11 @@ class _EnterAddressPageState extends State<EnterAddressPage> {
     OrderManager.clearDelivererInfo(widget.orderID); // used for testing purposes
     OrderManager.updateOrder(widget.orderID, "orderID", widget.orderID);
     OrderManager.updateOrder(widget.orderID, "address", _addressController.text);
-    OrderManager.updateOrder(widget.orderID, "status", "Processing");
     OrderManager.updateOrder(widget.orderID, "customerID", UserUtils.getEmail());
     OrderManager.updateOrder(widget.orderID, "customerFirstName", UserUtils.getFirstName());
     OrderManager.updateOrder(widget.orderID, "customerLastName", UserUtils.getLastName());
     OrderManager.setOrderID(widget.orderID);
+    OrderManager.initializeStatus();
 
     ChatManager.generateChatID();
     ChatManager.openChat();

@@ -1,3 +1,4 @@
+import 'package:DormDash/pages/shared/order_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:DormDash/widgets/pickup_delivery_details_template.dart';
@@ -79,6 +80,7 @@ class _OrdersPageState extends State<OrdersPage> {
               onCallTap: () {},  //TODO: Add call functionality
               onDirectionsTap: () {}, // TODO: Add navigation functionality
               onSlideComplete: () async {
+                OrderManager.advanceStatus();
                 Navigator.pushNamed(context, "/deliver-order");
               },
               onChatTap:  () {
