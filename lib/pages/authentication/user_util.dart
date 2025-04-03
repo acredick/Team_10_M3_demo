@@ -4,6 +4,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 
 class UserUtils {
   static late final fullName;
+  static late final firstName;
+  static late final lastName;
   static late final email;
   static late final userSnapshot;
 
@@ -12,8 +14,11 @@ class UserUtils {
     String displayName = user?.displayName ?? '';
     List<String> parts = displayName.split(", ");
 
-    String lastName = parts[0];
+    lastName = parts[0];
     String firstAndMiddle = parts[1];
+
+    List<String> nameParts = firstAndMiddle.split(" ");
+    firstName = nameParts.isNotEmpty ? nameParts[0] : '';
 
     fullName = "$firstAndMiddle $lastName";
 
@@ -23,6 +28,15 @@ class UserUtils {
 
   static String getFullName() {
     return fullName;
+  }
+
+  static String getFirstName() {
+    return firstName;
+
+  }
+
+  static String getLastName() {
+    return lastName;
   }
 
   static String getEmail() {

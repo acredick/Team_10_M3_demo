@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:DormDash/widgets/bottom-nav-bar.dart';
 import 'package:DormDash/pages/deliverer_side/pickup_order.dart';
 import '/pages/authentication/user_util.dart';
+import '/pages/customer_side/order_manager.dart';
 
 class DashboardPage extends StatefulWidget {
   const DashboardPage({super.key, this.user});
@@ -138,9 +139,8 @@ class _DashboardPageState extends State<DashboardPage> {
                               );
 
                               // Update Firestore when the order is accepted
-                              FirebaseFirestore.instance.collection('orders').doc(orderId).update({
-                                'status': 'Accepted'
-                              });
+                              OrderManager.updateOrder(orderId, "delivererID", UserUtils.getEmail());
+                              OrderManager.updateOrder(orderId, "status", "Accepted");
                             },
                             child: Text("Accept"),
                           ),

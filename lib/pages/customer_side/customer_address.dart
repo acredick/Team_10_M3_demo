@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '/pages/customer_side/order_manager.dart';
 import 'package:uuid/uuid.dart';
+import '/pages/authentication/user_util.dart';
 
 class EnterAddressPage extends StatefulWidget {
   final String orderID;
+
 
   EnterAddressPage({required this.orderID});
 
@@ -14,25 +16,23 @@ class EnterAddressPage extends StatefulWidget {
 
 class _EnterAddressPageState extends State<EnterAddressPage> {
   final TextEditingController _addressController = TextEditingController();
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  static final Uuid _uuid = Uuid();
+  String orderID = _uuid.v4();  // Generate a random order ID
 
   Future<void> _submitAddress() async {
-    // create unique order ID
-    var uuid = Uuid();
-    String orderID = uuid.v4();
-
     if (_addressController.text.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Address cannot be empty")));
       return;
     }
 
-    await _firestore.collection('orders').doc(widget.orderID).update({
-      "address": _addressController.text,
-      "status": "Processing",
-      "orderID": orderID,
-    });
+    OrderManager.updateOrder(widget.orderID, "orderID", widget.orderID);
+    OrderManager.updateOrder(widget.orderID, "address", _addressController.text);
+    OrderManager.updateOrder(widget.orderID, "status", "Processing");
+    OrderManager.updateOrder(widget.orderID, "customerID", UserUtils.getEmail());
+    OrderManager.updateOrder(widget.orderID, "customerFirstName", UserUtils.getFirstName());
+    OrderManager.updateOrder(widget.orderID, "customerLastName", UserUtils.getLastName());
+    OrderManager.setOrderID(widget.orderID);
 
-    OrderManager.setOrderID(orderID);
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Order updated for delivery!")));
     Navigator.pop(context);
   }
