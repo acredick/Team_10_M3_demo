@@ -39,7 +39,7 @@ class _LoginState extends State<Login> {
 
       await FirebaseAuth.instance.signInWithProvider(provider);
       User? user = FirebaseAuth.instance.currentUser;
-      UserUtils.setName(user);
+      UserUtils.saveSnapshot(user);
 
       if (user != null) {
         await redirect(user: user);
