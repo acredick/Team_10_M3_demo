@@ -1,4 +1,4 @@
-import 'package:DormDash/pages/authentication/user_util.dart';
+import 'package:DormDash/pages/shared/user_util.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class OrderManager {

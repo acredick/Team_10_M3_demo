@@ -19,7 +19,7 @@ import '/pages/authentication/user_selection.dart';
 import 'pages/deliverer_side/pickup_order.dart';
 import 'pages/deliverer_side/deliver_order.dart';
 import 'pages/deliverer_side/deliverer_settings.dart';
-import 'pages/customer_side/order_manager.dart';
+import 'pages/shared/order_manager.dart';
 
 Future <void> main() async {
   WidgetsFlutterBinding.ensureInitialized();

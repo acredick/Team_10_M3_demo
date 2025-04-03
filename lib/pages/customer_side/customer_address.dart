@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import '/pages/customer_side/order_manager.dart';
+import '../shared/order_manager.dart';
 import 'package:uuid/uuid.dart';
-import '/pages/authentication/user_util.dart';
+import '../shared/user_util.dart';
+import '/pages/shared/chat_manager.dart';
 
 class EnterAddressPage extends StatefulWidget {
   final String orderID;
@@ -33,6 +34,9 @@ class _EnterAddressPageState extends State<EnterAddressPage> {
     OrderManager.updateOrder(widget.orderID, "customerFirstName", UserUtils.getFirstName());
     OrderManager.updateOrder(widget.orderID, "customerLastName", UserUtils.getLastName());
     OrderManager.setOrderID(widget.orderID);
+
+    ChatManager.generateChatID();
+    ChatManager.openChat();
 
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Order updated for delivery!")));
     Navigator.pop(context);

@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import '/pages/customer_side/order_manager.dart';
+import '../shared/order_manager.dart';
 import '/pages/customer_side/customer_chat.dart';
 import '/widgets/bottom-nav-bar.dart';
 

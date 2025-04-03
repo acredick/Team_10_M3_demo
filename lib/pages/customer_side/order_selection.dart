@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'customer_address.dart';
-import '/pages/customer_side/order_manager.dart';
+import '../shared/order_manager.dart';
 
 class OrderSelection extends StatefulWidget {
   @override

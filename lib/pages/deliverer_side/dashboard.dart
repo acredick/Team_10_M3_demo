@@ -4,8 +4,9 @@ import '/pages/authentication/user_selection.dart';
 import 'package:flutter/material.dart';
 import 'package:DormDash/widgets/bottom-nav-bar.dart';
 import 'package:DormDash/pages/deliverer_side/pickup_order.dart';
-import '/pages/authentication/user_util.dart';
-import '/pages/customer_side/order_manager.dart';
+import '../shared/user_util.dart';
+import '../shared/order_manager.dart';
+import '/pages/shared/chat_manager.dart';
 
 class DashboardPage extends StatefulWidget {
   const DashboardPage({super.key, this.user});
@@ -142,7 +143,8 @@ class _DashboardPageState extends State<DashboardPage> {
                               OrderManager.updateOrder(orderId, "delivererID", UserUtils.getEmail());
                               OrderManager.updateOrder(orderId, "status", "Accepted");
                               OrderManager.updateOrder(orderId, "delivererFirstName", UserUtils.getFirstName());
-                            },
+                              ChatManager.setDelivererInfo();
+                              },
                             child: Text("Accept"),
                           ),
                         ),

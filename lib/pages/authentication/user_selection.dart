@@ -7,7 +7,7 @@ import '../customer_side/order_selection.dart';
 import './login.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import '/widgets/bottom-nav-bar.dart';
-import '/pages/authentication/user_util.dart';
+import '../shared/user_util.dart';
 
 class UserSelectionRoute extends StatelessWidget {
   const UserSelectionRoute({super.key});
