@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import '/widgets/main_screen.dart';
+import '/pages/authentication/user_util.dart';
 
 class LoginRoute extends StatelessWidget {
   const LoginRoute({super.key});
@@ -38,6 +39,7 @@ class _LoginState extends State<Login> {
 
       await FirebaseAuth.instance.signInWithProvider(provider);
       User? user = FirebaseAuth.instance.currentUser;
+      UserUtils.setName(user);
 
       if (user != null) {
         await redirect(user: user);

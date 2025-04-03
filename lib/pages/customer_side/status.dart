@@ -76,6 +76,18 @@ class _StatusState extends State<Status> {
                 ),
                 if (status == 'Placed') ...[
                   Text("Your order is being processed."),
+                  ElevatedButton.icon(
+                    onPressed: null, // Disabled button
+                    icon: Icon(Icons.hourglass_empty),
+                    label: Text('Waiting on a dasher to accept.'),
+                    style: ElevatedButton.styleFrom(
+                      foregroundColor: Colors.white,
+                      backgroundColor: Colors.grey, // Greyed out since it's disabled
+                      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                      shape: StadiumBorder(),
+                      elevation: 0, // No elevation to indicate it's inactive
+                    ),
+                  ),
                 ] else if (status == 'Processing') ...[
                   Text("Your order is being prepared."),
                 ] else if (status == 'Delivery') ...[
@@ -83,32 +95,34 @@ class _StatusState extends State<Status> {
                 ] else if (status == 'Delivered') ...[
                   Text("Your order has been delivered!"),
                 ],
-                ElevatedButton.icon(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => Scaffold(
-                          body: CustomerChatScreen(),
-                          bottomNavigationBar: CustomBottomNavigationBar(
-                            selectedIndex: 0,
-                            onItemTapped: (index) {
-                            },
-                            userType: "customer",
+
+                if (status != 'Placed') // Show chat button only for other statuses
+                  ElevatedButton.icon(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => Scaffold(
+                            body: CustomerChatScreen(),
+                            bottomNavigationBar: CustomBottomNavigationBar(
+                              selectedIndex: 0,
+                              onItemTapped: (index) {},
+                              userType: "customer",
+                            ),
                           ),
                         ),
-                      ),
-                    );
-                  },
-                  label: Text('Chat with Dasher'),
-                  style: ElevatedButton.styleFrom(
-                    foregroundColor: Colors.white,
-                    backgroundColor: Colors.purple[700],
-                    padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                    shape: StadiumBorder(), // Fully rounded corners
-                    elevation: 3,
+                      );
+                    },
+                    icon: Icon(Icons.chat),
+                    label: Text('Chat with Dasher'),
+                    style: ElevatedButton.styleFrom(
+                      foregroundColor: Colors.white,
+                      backgroundColor: Colors.purple[700],
+                      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                      shape: StadiumBorder(),
+                      elevation: 3,
+                    ),
                   ),
-                )
               ],
             ),
           );
