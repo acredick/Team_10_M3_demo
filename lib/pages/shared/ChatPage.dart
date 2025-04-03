@@ -16,11 +16,14 @@ class _ChatPageState extends State<ChatPage> {
   @override
   void initState() {
     super.initState();
+    String field = UserUtils.getUserType() == 'deliverer' ? 'delivererID' : 'customerID';
+
     chatStream = FirebaseFirestore.instance
         .collection('chats')
-        .where('customerID', isEqualTo: currentUserID)
+        .where(field, isEqualTo: currentUserID)
         .snapshots();
   }
+
 
   Future<String> getLastMessage(String chatID) async {
     CollectionReference messagesRef = FirebaseFirestore.instance

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart'; // Import for date formatting
 import '/pages/shared/chat_manager.dart';
 import '../shared/user_util.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -45,16 +46,20 @@ class _DelivererChatScreenState extends State<DelivererChatScreen> {
         .doc(widget.chatID)
         .collection('messages');
 
-    QuerySnapshot querySnapshot = await messagesRef
-        .orderBy('timestamp')
-        .get();
+    QuerySnapshot querySnapshot = await messagesRef.orderBy('timestamp').get();
 
     setState(() {
       _messages.clear();
       for (var doc in querySnapshot.docs) {
+        Timestamp? timestamp = doc['timestamp'] as Timestamp?;
+        String formattedTime = timestamp != null
+            ? DateFormat('h:mm a').format(timestamp.toDate()) // Format time
+            : 'Unknown Time';
+
         _messages.add({
           'text': doc['text'],
           'senderType': doc['senderType'],
+          'time': formattedTime, // Store formatted time
         });
       }
     });
@@ -64,14 +69,19 @@ class _DelivererChatScreenState extends State<DelivererChatScreen> {
 
   void _sendMessage(String messageText) {
     if (messageText.isNotEmpty) {
+      Timestamp timestamp = Timestamp.now();
+
       setState(() {
         _messages.add({
           'text': messageText,
-          'senderType': 'deliverer', // Sender type is "deliverer"
+          'senderType': 'deliverer',
+          'time': DateFormat('h:mm a').format(timestamp.toDate()),
         });
         _controller.clear();
       });
-      ChatManager.addMessage(widget.chatID, UserUtils.getEmail(), "deliverer", messageText);
+
+      ChatManager.addMessage(
+          widget.chatID, UserUtils.getEmail(), "deliverer", messageText);
     }
     FocusScope.of(context).unfocus();
     _scrollToBottom();
@@ -107,20 +117,34 @@ class _DelivererChatScreenState extends State<DelivererChatScreen> {
               itemCount: _messages.length,
               itemBuilder: (context, index) {
                 var message = _messages[index];
-                bool isSenderDeliverer = message['senderType'] == 'deliverer'; // Check if sender is the deliverer
+                bool isSenderDeliverer = message['senderType'] == 'deliverer';
 
                 return Align(
-                  alignment: isSenderDeliverer ? Alignment.centerRight : Alignment.centerLeft,
+                  alignment:
+                  isSenderDeliverer ? Alignment.centerRight : Alignment.centerLeft,
                   child: Container(
                     margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
-                    padding: const EdgeInsets.all(10),
+                    padding: const EdgeInsets.fromLTRB(7,5,7,5),
                     decoration: BoxDecoration(
-                      color: isSenderDeliverer ? Color(0xFFDCB347) : Colors.purple[700], // Deliverer has gold color
+                      color: isSenderDeliverer
+                          ? const Color(0xFFDCB347)
+                          : Colors.purple[700],
                       borderRadius: BorderRadius.circular(12),
                     ),
-                    child: Text(
-                      message['text'],
-                      style: const TextStyle(color: Colors.white),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          message['text'],
+                          style: const TextStyle(color: Colors.white),
+                        ),
+                        const SizedBox(height: 2),
+                        Text(
+                          message['time'], // Display formatted time
+                          style: const TextStyle(
+                              color: Colors.white70, fontSize: 12),
+                        ),
+                      ],
                     ),
                   ),
                 );
