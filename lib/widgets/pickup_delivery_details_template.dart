@@ -11,6 +11,7 @@ class DeliveryDetailsCard extends StatelessWidget {
   final VoidCallback? onCallTap;
   final VoidCallback? onDirectionsTap;
   final Future<void> Function()? onSlideComplete;
+  final VoidCallback? onChatTap;
 
   const DeliveryDetailsCard({
     super.key,
@@ -23,6 +24,7 @@ class DeliveryDetailsCard extends StatelessWidget {
     this.primaryActionIcon = Icons.phone,
     this.onCallTap,
     this.onDirectionsTap,
+    this.onChatTap,
   });
 
   @override
@@ -53,7 +55,10 @@ class DeliveryDetailsCard extends StatelessWidget {
           const Divider(color: Colors.white24, thickness: 1),
 
           const SizedBox(height: 5),
-          _iconTextRow(Icons.person, customerName, Icons.phone, trailing2: Icons.message),
+          GestureDetector(
+            onTap: onChatTap,
+            child: _infoRow(typeLabel, customerName, Icons.message),
+          ),
           const Divider(color: Colors.white24, thickness: 1),
 
           const SizedBox(height: 15),

@@ -11,19 +11,19 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return const MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: CustomerChatScreen(),
+      home: DelivererChatScreen(),
     );
   }
 }
 
-class CustomerChatScreen extends StatefulWidget {
-  const CustomerChatScreen({super.key});
+class DelivererChatScreen extends StatefulWidget {
+  const DelivererChatScreen({super.key});
 
   @override
-  State<CustomerChatScreen> createState() => _CustomerChatScreenState();
+  State<DelivererChatScreen> createState() => _DelivererChatScreenState();
 }
 
-class _CustomerChatScreenState extends State<CustomerChatScreen> {
+class _DelivererChatScreenState extends State<DelivererChatScreen> {
   final TextEditingController _controller = TextEditingController();
   final List<String> _messages = [];
 

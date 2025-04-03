@@ -89,7 +89,7 @@ class _StatusState extends State<Status> {
                       context,
                       MaterialPageRoute(
                         builder: (context) => Scaffold(
-                          body: ChatScreen(),
+                          body: CustomerChatScreen(),
                           bottomNavigationBar: CustomBottomNavigationBar(
                             selectedIndex: 0,
                             onItemTapped: (index) {

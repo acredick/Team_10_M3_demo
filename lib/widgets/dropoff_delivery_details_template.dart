@@ -10,6 +10,8 @@ class DeliveryDetailsCard extends StatelessWidget {
   final VoidCallback? onCallTap;
   final VoidCallback? onDirectionsTap;
   final Future<void> Function()? onSlideComplete;
+  final VoidCallback? onChatTap;
+
 
   const DeliveryDetailsCard({
     super.key,
@@ -21,6 +23,7 @@ class DeliveryDetailsCard extends StatelessWidget {
     this.primaryActionIcon = Icons.phone,
     this.onCallTap,
     this.onDirectionsTap,
+    this.onChatTap,
   });
 
   @override

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:DormDash/widgets/pickup_delivery_details_template.dart';
 import 'package:DormDash/widgets/bottom-nav-bar.dart';
+import '/pages/deliverer_side/deliverer-chat.dart';
 
 class OrdersPage extends StatefulWidget {
   final String orderId;
@@ -79,6 +80,23 @@ class _OrdersPageState extends State<OrdersPage> {
               onSlideComplete: () async {
                 Navigator.pushNamed(context, "/deliver-order");
               },
+              onChatTap:  () {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder:
+                        (context) => Scaffold(
+                      body: DelivererChatScreen(),
+                      bottomNavigationBar: CustomBottomNavigationBar(
+                        selectedIndex: 0,
+                        onItemTapped: (index) {},
+                        userType: "deliverer",
+                      ),
+                    ),
+                  ),
+                );
+
+              }
             ),
           )
         ],
