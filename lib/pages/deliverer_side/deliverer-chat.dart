@@ -30,7 +30,8 @@ class DelivererChatScreen extends StatefulWidget {
 
 class _DelivererChatScreenState extends State<DelivererChatScreen> {
   final TextEditingController _controller = TextEditingController();
-  final List<String> _messages = [];
+  final List<Map<String, dynamic>> _messages = [];
+  final ScrollController _scrollController = ScrollController();
 
   @override
   void initState() {
@@ -39,35 +40,49 @@ class _DelivererChatScreenState extends State<DelivererChatScreen> {
   }
 
   void _loadMessages() async {
-    // Fetch messages from the Firestore collection for the given chatID
     CollectionReference messagesRef = FirebaseFirestore.instance
         .collection('chats')
         .doc(widget.chatID)
         .collection('messages');
 
-    // Get the messages ordered by timestamp in ascending order
     QuerySnapshot querySnapshot = await messagesRef
-        .orderBy('timestamp')  // Implicitly sorts by ascending order
+        .orderBy('timestamp')
         .get();
 
     setState(() {
-      // Populate the _messages list with the fetched message text
-      _messages.clear(); // Clear existing messages (in case of a chat reload)
+      _messages.clear();
       for (var doc in querySnapshot.docs) {
-        _messages.add(doc['text']);
+        _messages.add({
+          'text': doc['text'],
+          'senderType': doc['senderType'],
+        });
       }
     });
+
+    _scrollToBottom();
   }
 
   void _sendMessage(String messageText) {
     if (messageText.isNotEmpty) {
       setState(() {
-        _messages.insert(0, messageText);
+        _messages.add({
+          'text': messageText,
+          'senderType': 'deliverer', // Sender type is "deliverer"
+        });
         _controller.clear();
       });
       ChatManager.addMessage(widget.chatID, UserUtils.getEmail(), "deliverer", messageText);
     }
     FocusScope.of(context).unfocus();
+    _scrollToBottom();
+  }
+
+  void _scrollToBottom() {
+    _scrollController.animateTo(
+      _scrollController.position.maxScrollExtent,
+      duration: const Duration(milliseconds: 300),
+      curve: Curves.easeOut,
+    );
   }
 
   void _onSendTap() {
@@ -82,26 +97,29 @@ class _DelivererChatScreenState extends State<DelivererChatScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Chat with Customer'),
-        backgroundColor: const Color(0xFFDCB347),
+        backgroundColor: const Color(0xFFDCB347), // Gold color
       ),
       body: Column(
         children: [
           Expanded(
             child: ListView.builder(
-              reverse: true,
+              controller: _scrollController,
               itemCount: _messages.length,
               itemBuilder: (context, index) {
+                var message = _messages[index];
+                bool isSenderDeliverer = message['senderType'] == 'deliverer'; // Check if sender is the deliverer
+
                 return Align(
-                  alignment: Alignment.centerRight,
+                  alignment: isSenderDeliverer ? Alignment.centerRight : Alignment.centerLeft,
                   child: Container(
                     margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
                     padding: const EdgeInsets.all(10),
                     decoration: BoxDecoration(
-                      color: Colors.purple[700],
+                      color: isSenderDeliverer ? Color(0xFFDCB347) : Colors.purple[700], // Deliverer has gold color
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: Text(
-                      _messages[index],
+                      message['text'],
                       style: const TextStyle(color: Colors.white),
                     ),
                   ),
