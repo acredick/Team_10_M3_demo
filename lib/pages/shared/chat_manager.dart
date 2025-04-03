@@ -52,16 +52,16 @@ class ChatManager {
 
   static Future<void> setDelivererInfo() async {
     try {
+      print("Setting deliver info");
       await _staticFirestore
           .collection('chats')
           .doc(_chatID)
-          .update({'delivererID': UserUtils.getEmail()});
+          .set({'delivererID': UserUtils.getEmail()}, SetOptions(merge: true));
 
       await _staticFirestore
           .collection('chats')
           .doc(_chatID)
-          .update({'delivererFirstName': UserUtils.getFirstName()});
-
+          .set({'delivererFirstName': UserUtils.getFirstName()}, SetOptions(merge: true));
     } catch (e) {
       print("Failed to set user1: $e");
     }

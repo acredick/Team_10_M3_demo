@@ -130,6 +130,11 @@ class _DashboardPageState extends State<DashboardPage> {
                           trailing: ElevatedButton(
                             onPressed: () {
                               String orderId = doc.id;  // Get the orderId
+                              // Update Firestore when the order is accepted
+                              OrderManager.updateOrder(orderId, "delivererID", UserUtils.getEmail());
+                              OrderManager.updateOrder(orderId, "status", "Accepted");
+                              OrderManager.updateOrder(orderId, "delivererFirstName", UserUtils.getFirstName());
+                              ChatManager.setDelivererInfo();
                               
                               // Navigate to OrdersPage and pass the orderId
                               Navigator.push(
@@ -138,12 +143,6 @@ class _DashboardPageState extends State<DashboardPage> {
                                   builder: (context) => OrdersPage(orderId: orderId), // Pass orderId
                                 ),
                               );
-
-                              // Update Firestore when the order is accepted
-                              OrderManager.updateOrder(orderId, "delivererID", UserUtils.getEmail());
-                              OrderManager.updateOrder(orderId, "status", "Accepted");
-                              OrderManager.updateOrder(orderId, "delivererFirstName", UserUtils.getFirstName());
-                              ChatManager.setDelivererInfo();
                               },
                             child: Text("Accept"),
                           ),
