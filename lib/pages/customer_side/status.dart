@@ -5,6 +5,7 @@ import '/widgets/customer_page.dart';
 import '/pages/customer_side/customer_chat.dart';
 import 'package:DormDash/widgets/bottom-nav-bar.dart';
 import '/pages/shared/chat_manager.dart';
+import '/pages/customer_side/rate_deliverer.dart';
 
 class Status extends StatefulWidget {
   final String? orderID;
@@ -25,6 +26,27 @@ class _StatusState extends State<Status> {
         .collection('orders')
         .doc(widget.orderID)
         .snapshots();
+  }
+
+  // Helper function to map Firestore status to string
+  String _getOrderStatus(dynamic status) {
+    // Check if status is a String or int, and convert to int if necessary
+    int statusInt = (status is String) ? int.tryParse(status) ?? -1 : status;
+
+    switch (statusInt) {
+      case 0:
+        return 'Placed';
+      case 1:
+        return 'Waiting for pickup';
+      case 2:
+        return 'Out for delivery';
+      case 3:
+        return 'Delivered';
+      case 4:
+        return 'Complete';
+      default:
+        return 'Unknown Status';
+    }
   }
 
   @override
@@ -69,7 +91,29 @@ class _StatusState extends State<Status> {
           String dasher = order['delivererFirstName'] == ""
               ? "Waiting on a dasher..."
               : "${order['delivererFirstName']}";
-          //int itemCount = order['itemCount'] ?? 2; // Use dynamic item count
+          // int itemCount = order['itemCount'] ?? 2; // Use dynamic item count
+
+          String orderStatus = _getOrderStatus(order['status']);
+          int statusInt = (order['status'] is String) ? int.tryParse(order['status']) ?? -1 : order['status'];
+
+          if (statusInt == 3 || orderStatus == 'Delivered') {
+            // Navigate to another page when the order is delivered
+            Future.delayed(Duration.zero, () {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => Scaffold(
+                    body: RateDeliverer(),
+                    bottomNavigationBar: CustomBottomNavigationBar(
+                      selectedIndex: 0,
+                      onItemTapped: (index) {},
+                      userType: "customer",
+                    ),
+                  ),
+                ),
+              );
+            });
+          }
 
           return Column(
             children: [
@@ -83,11 +127,9 @@ class _StatusState extends State<Status> {
                   customerName: dasher,
                   typeLabel: "Your dasher",
                   address: address,
-                  //itemCount: itemCount,
                   onCallTap: () {},  // TODO: add later
                   onDirectionsTap: () {},
                   onChatTap: () {
-                    print("Onchattap called");
                     if (dasher == "Waiting on a dasher...") {
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
@@ -111,8 +153,8 @@ class _StatusState extends State<Status> {
                       );
                     }
                   },
-                  title: restaurantName, 
-                  status: OrderManager.printStatus(),
+                  title: restaurantName,
+                  status: orderStatus,
                   price: price, itemCount: 1, // TODO: add later
                 ),
               ),

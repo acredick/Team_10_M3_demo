@@ -153,20 +153,34 @@ class OrderManager {
     return -1;
   }
 
-  static String printStatus() {
-    switch (currentStatus) {
-      case 0:
-        return 'Placed';
-      case 1:
-        return 'Waiting for pickup';
-      case 2:
-        return 'Out for delivery';
-      case 3:
-        return 'Delivered';
-      case 4:
-        return 'Complete';
-      default:
-        return 'Unknown Status';
+  static Stream<String> printStatus() {
+    if (_orderID == null) {
+      return Stream.value("Order ID is null.");
     }
+
+    return _staticFirestore
+        .collection('orders')
+        .doc(_orderID)
+        .snapshots()
+        .map((docSnapshot) {
+      if (!docSnapshot.exists) {
+        return 'Order not found';
+      }
+
+      int status = docSnapshot.get('status');
+      switch (status) {
+        case 1:
+          return 'Waiting for pickup';
+        case 2:
+          return 'Out for delivery';
+        case 3:
+          return 'Delivered';
+        case 4:
+          return 'Complete';
+        default:
+          return 'Placed';
+      }
+    });
   }
+
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:DormDash/pages/shared/order_manager.dart';
 
 class DeliveryDetailsCard extends StatelessWidget {
   final String typeLabel;
@@ -6,7 +7,7 @@ class DeliveryDetailsCard extends StatelessWidget {
   final String address;
   final String customerName;
   final int itemCount;
-    final String status; // Add status
+  final String status;
   final double price; // Add price
   final IconData primaryActionIcon;
   final VoidCallback? onCallTap;
@@ -44,6 +45,11 @@ class DeliveryDetailsCard extends StatelessWidget {
         children: [
           const SizedBox(height: 5),
           _infoRow(typeLabel, customerName, Icons.phone, Icons.message),
+          const Divider(color: Colors.white24, thickness: 1),
+
+          const SizedBox(height: 5),
+          _iconTextRow(Icons.delivery_dining, status, Icons.expand_more),
+          const SizedBox(height: 5),
           const Divider(color: Colors.white24, thickness: 1),
 
           const SizedBox(height: 5),
