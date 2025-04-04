@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:DormDash/widgets/feedback_buttons.dart';
+import 'package:DormDash/widgets/star_rating.dart';
 
 class DropoffConfirmation extends StatefulWidget {
   const DropoffConfirmation({super.key});
@@ -9,6 +11,10 @@ class DropoffConfirmation extends StatefulWidget {
 
 class _DropoffConfirmationState extends State<DropoffConfirmation> {
   int _rating = 0;
+  Set<String> selectedFeedback = {};
+  final List<String> feedbackOptions = [
+    "On Time", "Friendly", "Respectful", "Unresponsive", "Clear Communication", "Rude"
+  ];
 
 
   @override
@@ -47,33 +53,43 @@ class _DropoffConfirmationState extends State<DropoffConfirmation> {
             ),
           ],
          ),
-         const SizedBox(height: 30),
+         const SizedBox(height: 20),
             const Text("Earnings breakdown", style: TextStyle(fontSize: 18)),
             const SizedBox(height: 10),
             _earningsRow("Base", "\$3.00"),
             _earningsRow("Tip", "\$1.50"),
             _earningsRow("Total", "\$4.50", color: Colors.black),
-            const SizedBox(height: 30),
+            const SizedBox(height: 20),
             const Text("How was your drop off with Josh?", style: TextStyle(fontSize: 18)),
             const SizedBox(height: 10),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: List.generate(5, (index) {
-                return GestureDetector(
-                  onTap: () {
+              children: [
+                StarRating(
+                  rating: _rating,
+                  onChanged: (newRating) {
                     setState(() {
-                      _rating = index + 1;
+                      _rating = newRating;
                     });
                   },
-                  child: Icon(
-                    index < _rating ? Icons.star : Icons.star_border,
-                    color: Colors.amber,
-                    size: 30,
-                  ),
-                );
-              }),
+                ),
+              ],
             ),
-            //TODO: Feedback & delivered button
+            const SizedBox(height: 20),
+            FeedbackButtons(
+              options: feedbackOptions,
+              selected: selectedFeedback,
+              onToggle: (label, selected) {
+                setState(() {
+                  if (selected) {
+                    selectedFeedback.add(label);
+                  } else {
+                    selectedFeedback.remove(label);
+                  }
+                });
+              },
+            ),
+
           ],
         ),
         ),
