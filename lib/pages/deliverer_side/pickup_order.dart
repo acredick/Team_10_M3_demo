@@ -6,10 +6,10 @@ import 'package:DormDash/widgets/bottom-nav-bar.dart';
 import '/pages/deliverer_side/deliverer-chat.dart';
 import '/pages/shared/chat_manager.dart';
 import '/pages/shared/status_manager.dart';
+import '/pages/deliverer_side/deliver_order.dart';
 
 class OrdersPage extends StatefulWidget {
   final String orderId;
-
   const OrdersPage({super.key, required this.orderId});
 
   @override
@@ -80,12 +80,24 @@ class _OrdersPageState extends State<OrdersPage> {
             title: orderData!['restaurantName'] ?? "Unknown Restaurant",
             address: orderData!['restaurantAddress'] ?? "Unknown Address",
             customerName: orderData!['customerFirstName'] ?? "Unknown Customer",
-            itemCount: orderData!['itemCount'] ?? 1,
+            itemCount: (orderData!['Items'] as List).length,
             onCallTap: () {}, //TODO: Add call functionality
             onDirectionsTap: () {}, // TODO: Add navigation functionality
             onSlideComplete: () async {
               StatusManager.advanceStatus();
-              Navigator.pushNamed(context, "/deliver-order");
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => Scaffold(
+                    body: DeliverOrder(orderId: widget.orderId),
+                    bottomNavigationBar: CustomBottomNavigationBar(
+                      selectedIndex: 0,
+                      onItemTapped: (index) {},
+                      userType: "deliverer",
+                    ),
+                  ),
+                ),
+              );
             },
             onChatTap: () {
               Navigator.pushReplacement(

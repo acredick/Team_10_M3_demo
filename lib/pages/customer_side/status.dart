@@ -83,6 +83,7 @@ class _StatusState extends State<Status> {
 
           var order = snapshot.data!;
           String address = order['address'] ?? 'Unknown';
+          int itemCount = (order['Items'] as List).length;
           double price = order['price'] ?? 0.0;
           String restaurantName = order['restaurantName'] ?? 'Unknown';
           String customerName = order['customerFirstName'] ?? 'Jeff';
@@ -165,7 +166,7 @@ class _StatusState extends State<Status> {
                 title: restaurantName,
                 status: orderStatus,
                 price: price,
-                itemCount: 1, // TODO: add later
+                itemCount: itemCount, // TODO: add later
               ),
             ],
           );

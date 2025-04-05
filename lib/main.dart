@@ -75,14 +75,6 @@ class MyApp extends StatelessWidget {
             userType: "customer",
           ),
         ),
-        '/deliver-order' : (context) => Scaffold(
-            body: DeliverOrder(),
-            bottomNavigationBar: CustomBottomNavigationBar (
-              selectedIndex: 1,
-              onItemTapped: (index) {},
-              userType: "deliverer",
-            ),
-          ),
           '/dropoff-confirmation' : (context) => Scaffold(
             body: DropoffConfirmation(),
             bottomNavigationBar: CustomBottomNavigationBar (

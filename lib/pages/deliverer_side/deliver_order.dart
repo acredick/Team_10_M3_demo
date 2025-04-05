@@ -7,17 +7,67 @@ import 'package:DormDash/widgets/bottom-nav-bar.dart';
 import '/pages/shared/chat_manager.dart';
 import 'package:DormDash/pages/shared/order_manager.dart';
 import '/pages/shared/status_manager.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
-class DeliverOrder extends StatelessWidget {
-  const DeliverOrder({super.key});
+class DeliverOrder extends StatefulWidget {
+  final String orderId;
+  const DeliverOrder({super.key, required this.orderId});
+
+  @override
+  _DeliverOrderState createState() => _DeliverOrderState();
+}
+
+class _DeliverOrderState extends State<DeliverOrder> {
+  Map<String, dynamic>? orderData;
+
+  @override
+  void initState() {
+    super.initState();
+    fetchOrderDetails();
+  }
+
+  void fetchOrderDetails() async {
+    DocumentSnapshot orderSnapshot = await FirebaseFirestore.instance
+        .collection('orders')
+        .doc(widget.orderId)
+        .get();
+
+    if (orderSnapshot.exists) {
+      setState(() {
+        orderData = orderSnapshot.data() as Map<String, dynamic>;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
+    if (orderData == null) {
+      return Scaffold(
+        appBar: AppBar(
+          title: const Text(
+            'Loading...',
+            style: TextStyle(color: Colors.black),
+          ),
+          centerTitle: true,
+          backgroundColor: Colors.white,
+          elevation: 0,
+          leading: const BackButton(color: Colors.black),
+          actions: const [
+            Padding(
+              padding: EdgeInsets.only(right: 16),
+              child: Icon(Icons.help_outline, color: Colors.black),
+            ),
+          ],
+        ),
+        body: const Center(child: CircularProgressIndicator()),
+      );
+    }
+
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
+        title: Text(
           'Deliver by 11:08 PM',
-          style: TextStyle(color: Colors.black),
+          style: const TextStyle(color: Colors.black),
         ),
         centerTitle: true,
         backgroundColor: Colors.white,
@@ -35,19 +85,17 @@ class DeliverOrder extends StatelessWidget {
           SizedBox(height: 380, width: double.infinity, child: MapSection()),
           Expanded(
             child: DeliveryDetailsCard(
-              customerName: "Jeff",
-              typeLabel: "Dropoff To",
-              address:
-                  "1400 Washington Ave\nUniversity Library\nAlbany, NY, 12222",
-              itemCount: 2,
+              typeLabel: "Dropoff to",
+              address: orderData!['restaurantAddress'] ?? "Unknown Address",
+              customerName: orderData!['customerFirstName'] ?? "Unknown Customer",
+              itemCount: (orderData!['Items'] as List).length,
               onCallTap: () {}, //TODO: add later
               onDirectionsTap: () {}, // TODO: add later
-              onChatTap:  () {
+              onChatTap: () {
                 Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
-                    builder:
-                        (context) => Scaffold(
+                    builder: (context) => Scaffold(
                       body: DelivererChatScreen(chatID: ChatManager.getRecentChatID()),
                       bottomNavigationBar: CustomBottomNavigationBar(
                         selectedIndex: 0,
@@ -70,11 +118,7 @@ class DeliverOrder extends StatelessWidget {
   }
 }
 
-// map widget using google maps API.
-// is currently hardcoded to the default order location
-// should display users current location as well the intended location
-// you have to set your location in the emulator manually, or a route to see it moving.
-// to do so, click the elipses in the bottom right, go to location, and set a location, or a route.
+// Map widget using google maps API
 class MapSection extends StatefulWidget {
   @override
   State<MapSection> createState() => _MapSectionState();
@@ -84,10 +128,7 @@ class _MapSectionState extends State<MapSection> {
   Location _location = Location();
   LatLng? _currentLocation;
 
-  final LatLng _dropoffLocation = LatLng(
-    42.6864,
-    -73.8236,
-  ); // University Library
+  final LatLng _dropoffLocation = const LatLng(42.6864, -73.8236); // University Library
 
   @override
   void initState() {
