@@ -75,21 +75,38 @@ class _DropoffConfirmationState extends State<DropoffConfirmation> {
                 ),
               ],
             ),
-            const SizedBox(height: 20),
-            FeedbackButtons(
-              options: feedbackOptions,
-              selected: selectedFeedback,
-              onToggle: (label, selected) {
-                setState(() {
-                  if (selected) {
-                    selectedFeedback.add(label);
-                  } else {
-                    selectedFeedback.remove(label);
-                  }
-                });
-              },
+          const SizedBox(height: 20),
+          FeedbackButtons(
+            options: feedbackOptions,
+            selected: selectedFeedback,
+            onToggle: (label, selected) {
+              setState(() {                  
+                if (selected) {
+                  selectedFeedback.add(label);
+                } else {
+                  selectedFeedback.remove(label);
+                }
+              });
+            },
+          ),
+          const SizedBox(height: 20),
+          SizedBox(
+            width: double.infinity,
+            child: TextButton(
+              style: ButtonStyle(
+                foregroundColor: WidgetStatePropertyAll<Color>(Colors.white),
+                backgroundColor: WidgetStatePropertyAll<Color>(Theme.of(context).colorScheme.primary),
+                padding: WidgetStatePropertyAll<EdgeInsets>(EdgeInsets.symmetric(vertical: 12)),
+                shape: WidgetStatePropertyAll<RoundedRectangleBorder>(
+                  RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                ),
+              ),
+              onPressed: () {}, // TODO: link to page
+              child: Text('Delivered'),
             ),
-
+          )
           ],
         ),
         ),
