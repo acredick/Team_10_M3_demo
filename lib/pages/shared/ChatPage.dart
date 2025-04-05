@@ -4,6 +4,8 @@ import '../shared/user_util.dart';
 import '/pages/customer_side/customer_chat.dart';
 import '/pages/deliverer_side/deliverer-chat.dart';
 import '/pages/shared/status_manager.dart';
+import '/pages/customer_side/disabled_customer_chat.dart';
+import '/pages/deliverer_side/disabled_deliverer_chat.dart';
 
 class ChatPage extends StatefulWidget {
   @override
@@ -129,45 +131,49 @@ class _ChatPageState extends State<ChatPage> {
                   String lastMessage = messageSnapshot.data ?? 'No messages yet';
                   String status = chatStatuses[chatID] ?? 'Unknown status';
 
-                  return ListTile(
-                    title: RichText(
-                      text: TextSpan(
-                        text: 'Chat with $partner ',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black
-                        ),
-                        children: <TextSpan>[
-                          TextSpan(
-                            text: "  $status",
-                            style: TextStyle(
-                              color: Colors.grey,
+                  return Container(
+                    color: status == "Completed" ? Colors.grey[300] : null,
+                    child: ListTile(
+                      title: RichText(
+                        text: TextSpan(
+                          text: 'Chat with $partner ',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black,
+                          ),
+                          children: <TextSpan>[
+                            TextSpan(
+                              text: "  $status",
+                              style: TextStyle(
+                                color: Colors.grey,
+                              ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
+                      subtitle: Text(lastMessage),
+                      onTap: () {
+                        if (UserUtils.getUserType() == "deliverer") {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => DisabledDelivererChatScreen(chatID: chatID),
+                            ),
+                          );
+                        } else {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => DisabledCustomerChatScreen(chatID: chatID),
+                            ),
+                          );
+                        }
+                      },
                     ),
-                    subtitle: Text(lastMessage),
-                    onTap: () {
-                      if (UserUtils.getUserType() == "deliverer") {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => DelivererChatScreen(chatID: chatID),
-                          ),
-                        );
-                      } else {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => CustomerChatScreen(chatID: chatID),
-                          ),
-                        );
-                      }
-                    },
                   );
                 },
               );
+
             },
           );
         },
