@@ -132,7 +132,7 @@ class _ChatPageState extends State<ChatPage> {
                   String status = chatStatuses[chatID] ?? 'Unknown status';
 
                   return Container(
-                    color: status == "Completed" ? Colors.grey[300] : null,
+                    color: status == "Complete" ? Colors.grey[300] : null,
                     child: ListTile(
                       title: RichText(
                         text: TextSpan(

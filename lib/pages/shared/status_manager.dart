@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '/pages/shared/order_manager.dart';
 
@@ -18,18 +19,15 @@ class StatusManager {
 
         if (!chatDocSnapshot.exists) {
           print("Chat document not found.");
-          return -1; // Return -1 if the document doesn't exist
+          return -1;
         }
 
-
         orderID = chatDocSnapshot.get('orderID');
-        print("Found orderID: $orderID");
       } catch (e) {
         print("Error retrieving status from chatID: $e");
-        return -1; // Return -1 in case of an error
+        return -1;
       }
-    }
-    else {
+    } else {
       orderID = id;
     }
 
@@ -45,7 +43,7 @@ class StatusManager {
       return status;
     } catch (e) {
       print("Error retrieving order status: $e");
-      return -1; // Return -1 in case of an error
+      return -1;
     }
   }
 
@@ -91,7 +89,7 @@ class StatusManager {
       currentStatus = 0;
       print("Order status initialized.");
     } catch (e) {
-      print("Error advancing order status: $e");
+      print("Error initializing order status: $e");
     }
   }
 
@@ -112,23 +110,50 @@ class StatusManager {
         return;
       }
 
-      int currentStatus = docSnapshot.get('status'); // Get current status
-
+      int currentStatus = docSnapshot.get('status');
       int nextStatus = currentStatus + 1;
-
-      if (nextStatus > 4) {
-        print("Order is already at the final status.");
-        return;
-      }
 
       await _staticFirestore.collection('orders').doc(_orderID).update({
         "status": nextStatus,
       });
 
-      currentStatus = nextStatus;
+      StatusManager.currentStatus = nextStatus;
       print("Order status advanced to: $nextStatus");
+
+      if (nextStatus == 3) {
+        watchForDeliveryCompletion(_orderID);
+      }
     } catch (e) {
       print("Error advancing order status: $e");
+    }
+  }
+
+  static void watchForDeliveryCompletion(String orderID) async {
+    try {
+      DocumentSnapshot docSnapshot =
+      await _staticFirestore.collection('orders').doc(orderID).get();
+
+      int currentStatus = docSnapshot.get('status');
+      if (currentStatus == 3) {
+        print("Status is 'Delivered'. Starting 1-minute timer...");
+
+        Timer(const Duration(minutes: 1), () async {
+          DocumentSnapshot updatedSnapshot =
+          await _staticFirestore.collection('orders').doc(orderID).get();
+
+          int latestStatus = updatedSnapshot.get('status');
+          if (latestStatus == 3) {
+            await _staticFirestore.collection('orders').doc(orderID).update({
+              'status': 4,
+            });
+            print("Status automatically updated to 'Complete'.");
+          } else {
+            print("Status changed manually before timer completed.");
+          }
+        });
+      }
+    } catch (e) {
+      print("Error in delivery completion timer: $e");
     }
   }
 }
