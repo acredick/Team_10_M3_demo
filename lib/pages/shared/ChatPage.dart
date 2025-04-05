@@ -44,7 +44,6 @@ class _ChatPageState extends State<ChatPage> {
         .collection('messages');
 
     try {
-      // First attempt to fetch the most recent message from the 'messages' subcollection
       QuerySnapshot querySnapshot = await messagesRef
           .orderBy('timestamp', descending: true)
           .limit(1)
@@ -52,21 +51,20 @@ class _ChatPageState extends State<ChatPage> {
 
       if (querySnapshot.docs.isNotEmpty) {
         var doc = querySnapshot.docs.first;
-        lastMessages[chatID] = doc['text'] ?? 'No message available';  // Store message text
-        lastMessageTimestamps[chatID] = doc['timestamp'];  // Store message timestamp
+        lastMessages[chatID] = doc['text'] ?? 'No message available';
+        lastMessageTimestamps[chatID] = doc['timestamp'];
       } else {
-        // If no messages are found, fallback to the 'createdAt' timestamp in the chat document
         DocumentSnapshot chatDoc = await FirebaseFirestore.instance
             .collection('chats')
             .doc(chatID)
             .get();
 
         if (chatDoc.exists) {
-          lastMessages[chatID] = 'No messages yet';  // Default message when no messages exist
-          lastMessageTimestamps[chatID] = chatDoc['createdAt'] ?? Timestamp(0, 0);  // Use 'createdAt' if available
+          lastMessages[chatID] = 'No messages yet';
+          lastMessageTimestamps[chatID] = chatDoc['createdAt'] ?? Timestamp(0, 0);
         } else {
           lastMessages[chatID] = 'Error retrieving chat data';
-          lastMessageTimestamps[chatID] = Timestamp(0, 0);  // Default fallback timestamp
+          lastMessageTimestamps[chatID] = Timestamp(0, 0);
         }
       }
 

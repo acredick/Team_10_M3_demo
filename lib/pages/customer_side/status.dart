@@ -1,6 +1,6 @@
+import 'package:flutter/material.dart';
 import 'package:DormDash/pages/shared/order_manager.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/material.dart';
 import '/widgets/customer_page.dart';
 import '/pages/customer_side/customer_chat.dart';
 import 'package:DormDash/widgets/bottom-nav-bar.dart';
@@ -28,9 +28,7 @@ class _StatusState extends State<Status> {
         .snapshots();
   }
 
-  // Helper function to map Firestore status to string
   String _getOrderStatus(dynamic status) {
-    // Check if status is a String or int, and convert to int if necessary
     int statusInt = (status is String) ? int.tryParse(status) ?? -1 : status;
 
     switch (statusInt) {
@@ -70,7 +68,7 @@ class _StatusState extends State<Status> {
       ),
       body: StreamBuilder<DocumentSnapshot>(
         stream: orderStream,
-        builder: (context, snapshot)  {
+        builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(child: CircularProgressIndicator());
           }
@@ -87,17 +85,16 @@ class _StatusState extends State<Status> {
           String address = order['address'] ?? 'Unknown';
           double price = order['price'] ?? 0.0;
           String restaurantName = order['restaurantName'] ?? 'Unknown';
-          String customerName = order['customerFirstName'] ?? 'Jeff'; // Use dynamic customer name
+          String customerName = order['customerFirstName'] ?? 'Jeff';
           String dasher = order['delivererFirstName'] == ""
               ? "Waiting on a dasher..."
               : "${order['delivererFirstName']}";
-          // int itemCount = order['itemCount'] ?? 2; // Use dynamic item count
+          // int itemCount = order['itemCount'] ?? 2;
 
           String orderStatus = _getOrderStatus(order['status']);
           int statusInt = (order['status'] is String) ? int.tryParse(order['status']) ?? -1 : order['status'];
 
           if (statusInt == 3 || orderStatus == 'Delivered') {
-            // Navigate to another page when the order is delivered
             Future.delayed(Duration.zero, () {
               Navigator.pushReplacement(
                 context,
@@ -127,15 +124,25 @@ class _StatusState extends State<Status> {
                   customerName: dasher,
                   typeLabel: "Your dasher",
                   address: address,
-                  onCallTap: () {},  // TODO: add later
                   onDirectionsTap: () {},
                   onChatTap: () {
                     if (dasher == "Waiting on a dasher...") {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text("Chat not available yet."),
-                          duration: Duration(seconds: 2),
-                        ),
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            title: Text('Chat Unavailable'),
+                            content: Text('We are still waiting for a Dasher to accept your order. Hang tight!'),
+                            actions: [
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                                child: Text('OK'),
+                              ),
+                            ],
+                          );
+                        },
                       );
                     } else {
                       Navigator.pushReplacement(
@@ -152,10 +159,12 @@ class _StatusState extends State<Status> {
                         ),
                       );
                     }
+
                   },
                   title: restaurantName,
                   status: orderStatus,
-                  price: price, itemCount: 1, // TODO: add later
+                  price: price,
+                  itemCount: 1, // TODO: add later
                 ),
               ),
             ],

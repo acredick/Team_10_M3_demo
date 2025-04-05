@@ -70,11 +70,10 @@ class ChatManager {
 
       print("Setting deliverer info for chatID: $_chatID");
 
-      // Use _chatID as the document ID
       await _staticFirestore.collection('chats').doc(_chatID).set({
         'delivererID': UserUtils.getEmail(),
         'delivererFirstName': UserUtils.getFirstName(),
-      }, SetOptions(merge: true)); // Merge to prevent overwriting other fields
+      }, SetOptions(merge: true));
 
       print("Deliverer info set successfully for chat ID: $_chatID");
     } catch (e) {
@@ -103,10 +102,9 @@ class ChatManager {
           .doc(chatID)
           .collection('messages')
           .add({
-            // Add a new message
             'senderID': senderID,
             'text': messageText,
-            'timestamp': FieldValue.serverTimestamp(), // Store the time sent
+            'timestamp': FieldValue.serverTimestamp(),
             'senderType': senderType
           });
 
