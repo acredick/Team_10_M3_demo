@@ -6,7 +6,7 @@ import '/pages/deliverer_side/deliverer-chat.dart';
 import 'package:DormDash/widgets/bottom-nav-bar.dart';
 import '/pages/shared/chat_manager.dart';
 import 'package:DormDash/pages/shared/order_manager.dart';
-import '/pages/shared/status_manager.dart';
+import 'package:DormDash/pages/shared/status_manager.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class DeliverOrder extends StatefulWidget {
@@ -66,13 +66,13 @@ class _DeliverOrderState extends State<DeliverOrder> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'Deliver by 11:08 PM',
+          'Deliver by 11:08 PM', // todo remove hardcode
           style: const TextStyle(color: Colors.black),
         ),
         centerTitle: true,
         backgroundColor: Colors.white,
         elevation: 0,
-        leading: const BackButton(color: Colors.black),
+        automaticallyImplyLeading: false, // prevents back button
         actions: const [
           Padding(
             padding: EdgeInsets.only(right: 16),
@@ -80,36 +80,41 @@ class _DeliverOrderState extends State<DeliverOrder> {
           ),
         ],
       ),
-      body: Column(
+      body: Stack(
         children: [
-          SizedBox(height: 380, width: double.infinity, child: MapSection()),
-          Expanded(
-            child: DeliveryDetailsCard(
-              typeLabel: "Dropoff to",
-              address: orderData!['restaurantAddress'] ?? "Unknown Address",
-              customerName: orderData!['customerFirstName'] ?? "Unknown Customer",
-              itemCount: (orderData!['Items'] as List).length,
-              onCallTap: () {}, //TODO: add later
-              onDirectionsTap: () {}, // TODO: add later
-              onChatTap: () {
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => Scaffold(
-                      body: DelivererChatScreen(chatID: ChatManager.getRecentChatID()),
-                      bottomNavigationBar: CustomBottomNavigationBar(
-                        selectedIndex: 0,
-                        onItemTapped: (index) {},
-                        userType: "deliverer",
+          Positioned.fill(
+            child: MapSection(),
+          ),
+          Positioned(
+            left: 0,
+            right: 0,
+            bottom: 0,
+            child: Container(
+              color: Colors.white,
+              child: SingleChildScrollView(
+                child: DeliveryDetailsCard(
+                  typeLabel: "Dropoff to",
+                  address: orderData!['restaurantAddress'] ?? "Unknown Address",
+                  customerName: orderData!['customerFirstName'] ?? "Unknown Customer",
+                  itemCount: (orderData!['Items'] as List).length,
+                  onCallTap: () {}, //TODO: add later
+                  onDirectionsTap: () {}, // TODO: add later
+                  onChatTap: () {
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => Scaffold(
+                          body: DelivererChatScreen(chatID: ChatManager.getRecentChatID()),
+                        ),
                       ),
-                    ),
-                  ),
-                );
-              },
-              onSlideComplete: () async {
-                StatusManager.advanceStatus();
-                Navigator.pushNamed(context, "/dropoff-confirmation");
-              },
+                    );
+                  },
+                  onSlideComplete: () async {
+                    StatusManager.advanceStatus();
+                    Navigator.pushNamed(context, "/dropoff-confirmation");
+                  },
+                ),
+              ),
             ),
           ),
         ],

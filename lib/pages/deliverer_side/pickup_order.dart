@@ -56,7 +56,7 @@ class _OrdersPageState extends State<OrdersPage> {
         centerTitle: true,
         backgroundColor: Colors.white,
         elevation: 0,
-        // Removed the leading back button
+        automaticallyImplyLeading: false, // prevents back button
         actions: const [
           Padding(
             padding: EdgeInsets.only(right: 16),
