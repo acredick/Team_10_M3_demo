@@ -6,6 +6,7 @@ import '/pages/deliverer_side/deliverer-chat.dart';
 import 'package:DormDash/widgets/bottom-nav-bar.dart';
 import '/pages/shared/chat_manager.dart';
 import 'package:DormDash/pages/shared/order_manager.dart';
+import '/pages/shared/status_manager.dart';
 
 class DeliverOrder extends StatelessWidget {
   const DeliverOrder({super.key});
@@ -58,7 +59,7 @@ class DeliverOrder extends StatelessWidget {
                 );
               },
               onSlideComplete: () async {
-                OrderManager.advanceStatus();
+                StatusManager.advanceStatus();
                 Navigator.pushNamed(context, "/dropoff-confirmation");
               },
             ),

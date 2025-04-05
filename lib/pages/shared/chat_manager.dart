@@ -47,7 +47,7 @@ class ChatManager {
       await _staticFirestore
           .collection('chats')
           .doc(_chatID)
-          .update({'chatID': UserUtils.getFirstName()});
+          .update({'orderID': OrderManager.getOrderID()});
 
       await _staticFirestore
           .collection('chats')

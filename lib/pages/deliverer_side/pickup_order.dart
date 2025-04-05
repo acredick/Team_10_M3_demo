@@ -5,6 +5,7 @@ import 'package:DormDash/widgets/pickup_delivery_details_template.dart';
 import 'package:DormDash/widgets/bottom-nav-bar.dart';
 import '/pages/deliverer_side/deliverer-chat.dart';
 import '/pages/shared/chat_manager.dart';
+import '/pages/shared/status_manager.dart';
 
 class OrdersPage extends StatefulWidget {
   final String orderId;
@@ -80,7 +81,7 @@ class _OrdersPageState extends State<OrdersPage> {
               onCallTap: () {},  //TODO: Add call functionality
               onDirectionsTap: () {}, // TODO: Add navigation functionality
               onSlideComplete: () async {
-                OrderManager.advanceStatus();
+                StatusManager.advanceStatus();
                 Navigator.pushNamed(context, "/deliver-order");
               },
               onChatTap:  () {

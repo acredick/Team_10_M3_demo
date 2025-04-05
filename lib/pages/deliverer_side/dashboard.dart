@@ -7,6 +7,7 @@ import 'package:DormDash/pages/deliverer_side/pickup_order.dart';
 import '../shared/user_util.dart';
 import '../shared/order_manager.dart';
 import '/pages/shared/chat_manager.dart';
+import '/pages/shared/status_manager.dart';
 
 class DashboardPage extends StatefulWidget {
   const DashboardPage({super.key, this.user});
@@ -134,7 +135,7 @@ class _DashboardPageState extends State<DashboardPage> {
                               // Update Firestore when the order is accepted
                               OrderManager.updateOrder(orderId, "delivererID", UserUtils.getEmail());
                               OrderManager.updateOrder(orderId, "delivererFirstName", UserUtils.getFirstName());
-                              OrderManager.advanceStatus();
+                              StatusManager.advanceStatus();
                               String? chatid = await OrderManager.getChatIDFromOrder(orderId);
 
                               if (chatid != null) {

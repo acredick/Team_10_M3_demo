@@ -4,6 +4,7 @@ import '../shared/order_manager.dart';
 import 'package:uuid/uuid.dart';
 import '../shared/user_util.dart';
 import '/pages/shared/chat_manager.dart';
+import '/pages/shared/status_manager.dart';
 
 class EnterAddressPage extends StatefulWidget {
   final String orderID;
@@ -33,7 +34,7 @@ class _EnterAddressPageState extends State<EnterAddressPage> {
     OrderManager.updateOrder(widget.orderID, "customerFirstName", UserUtils.getFirstName());
     OrderManager.updateOrder(widget.orderID, "customerLastName", UserUtils.getLastName());
     OrderManager.setOrderID(widget.orderID);
-    OrderManager.initializeStatus();
+    StatusManager.initializeStatus();
 
     ChatManager.generateChatID();
     ChatManager.openChat();
