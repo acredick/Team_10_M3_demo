@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import '/pages/shared/order_manager.dart';
 
 class StatusManager {
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   static final FirebaseFirestore _staticFirestore = FirebaseFirestore.instance;
 
   static final StatusManager _instance = StatusManager._internal();
@@ -10,12 +9,12 @@ class StatusManager {
   factory StatusManager() => _instance;
   StatusManager._internal();
 
-  Future<int> getOrderStatus(bool isChatID, String id) async {
+  static Future<int> getOrderStatus(bool isChatID, String id) async {
     String orderID = "";
 
     if (isChatID) {
       try {
-        DocumentSnapshot chatDocSnapshot = await _firestore.collection('chats').doc(id).get();
+        DocumentSnapshot chatDocSnapshot = await _staticFirestore.collection('chats').doc(id).get();
 
         if (!chatDocSnapshot.exists) {
           print("Chat document not found.");
@@ -35,7 +34,7 @@ class StatusManager {
     }
 
     try {
-      DocumentSnapshot docSnapshot = await _firestore.collection('orders').doc(orderID).get();
+      DocumentSnapshot docSnapshot = await _staticFirestore.collection('orders').doc(orderID).get();
       if (!docSnapshot.exists) {
         print("Order document not found.");
         return -1;
@@ -50,7 +49,7 @@ class StatusManager {
     }
   }
 
-  Future<String> printStatus(bool isChatID, String id) async {
+  static Future<String> printStatus(bool isChatID, String id) async {
     int status = await getOrderStatus(isChatID, id);
 
     switch (status) {
@@ -132,5 +131,4 @@ class StatusManager {
       print("Error advancing order status: $e");
     }
   }
-
 }

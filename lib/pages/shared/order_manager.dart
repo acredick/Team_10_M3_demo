@@ -3,7 +3,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import '/pages/shared/chat_manager.dart';
 
 class OrderManager {
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   static final FirebaseFirestore _staticFirestore = FirebaseFirestore.instance;
   static final OrderManager _instance = OrderManager._internal();
   static String? _orderID;

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../shared/user_util.dart';
 import '/pages/customer_side/customer_chat.dart';
 import '/pages/deliverer_side/deliverer-chat.dart';
+import '/pages/shared/status_manager.dart';
 
 class ChatPage extends StatefulWidget {
   @override
@@ -12,6 +13,8 @@ class ChatPage extends StatefulWidget {
 class _ChatPageState extends State<ChatPage> {
   late Stream<QuerySnapshot> chatStream;
   String currentUserID = UserUtils.getEmail();
+  Map<String, String> chatStatuses = {}; // Store statuses for each chat
+  Map<String, String> lastMessages = {}; // Store last messages for each chat
 
   @override
   void initState() {
@@ -24,8 +27,20 @@ class _ChatPageState extends State<ChatPage> {
         .snapshots();
   }
 
+  Future<void> fetchStatus(String chatID) async {
+    if (!chatStatuses.containsKey(chatID)) {
+      String status = await StatusManager.printStatus(true, chatID);
+      setState(() {
+        chatStatuses[chatID] = status;
+      });
+    }
+  }
 
   Future<String> getLastMessage(String chatID) async {
+    if (lastMessages.containsKey(chatID)) {
+      return lastMessages[chatID] ?? 'No message available';
+    }
+
     CollectionReference messagesRef = FirebaseFirestore.instance
         .collection('chats')
         .doc(chatID)
@@ -38,21 +53,22 @@ class _ChatPageState extends State<ChatPage> {
           .get();
 
       if (querySnapshot.docs.isNotEmpty) {
-        return querySnapshot.docs.first['text'] ?? 'No message available';
+        lastMessages[chatID] = querySnapshot.docs.first['text'] ?? 'No message available';
       } else {
-        return 'No messages yet';
+        lastMessages[chatID] = 'No messages yet';
       }
+      return lastMessages[chatID] ?? 'No message available';
     } catch (e) {
+      lastMessages[chatID] = 'Error retrieving message';
       return 'Error retrieving message';
     }
   }
-
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(" Conversations"),
+        title: Text("Conversations"),
         backgroundColor: Color(0xFFDCB347),
         automaticallyImplyLeading: false, // prevents back button
       ),
@@ -90,6 +106,9 @@ class _ChatPageState extends State<ChatPage> {
                 }
               }
 
+              // Fetching the status here only if it's not already fetched
+              fetchStatus(chatID);
+
               return FutureBuilder<String>(
                 future: getLastMessage(chatID),
                 builder: (context, messageSnapshot) {
@@ -108,9 +127,26 @@ class _ChatPageState extends State<ChatPage> {
                   }
 
                   String lastMessage = messageSnapshot.data ?? 'No messages yet';
+                  String status = chatStatuses[chatID] ?? 'Unknown status';
 
                   return ListTile(
-                    title: Text('Chat with $partner'),
+                    title: RichText(
+                      text: TextSpan(
+                        text: 'Chat with $partner ',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black
+                        ),
+                        children: <TextSpan>[
+                          TextSpan(
+                            text: "  $status",
+                            style: TextStyle(
+                              color: Colors.grey,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
                     subtitle: Text(lastMessage),
                     onTap: () {
                       if (UserUtils.getUserType() == "deliverer") {
@@ -128,8 +164,6 @@ class _ChatPageState extends State<ChatPage> {
                           ),
                         );
                       }
-
-
                     },
                   );
                 },
