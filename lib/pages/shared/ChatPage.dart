@@ -6,6 +6,7 @@ import '/pages/deliverer_side/deliverer-chat.dart';
 import '/pages/shared/status_manager.dart';
 import '/pages/customer_side/disabled_customer_chat.dart';
 import '/pages/deliverer_side/disabled_deliverer_chat.dart';
+import 'package:intl/intl.dart';
 
 class ChatPage extends StatefulWidget {
   @override
@@ -15,8 +16,8 @@ class ChatPage extends StatefulWidget {
 class _ChatPageState extends State<ChatPage> {
   late Stream<QuerySnapshot> chatStream;
   String currentUserID = UserUtils.getEmail();
-  Map<String, String> chatStatuses = {}; // Store statuses for each chat
-  Map<String, String> lastMessages = {}; // Store last messages for each chat
+  Map<String, String> lastMessages = {};
+  Map<String, Timestamp> lastMessageTimestamps = {};
 
   @override
   void initState() {
@@ -29,18 +30,12 @@ class _ChatPageState extends State<ChatPage> {
         .snapshots();
   }
 
-  Future<void> fetchStatus(String chatID) async {
-    if (!chatStatuses.containsKey(chatID)) {
-      String status = await StatusManager.printStatus(true, chatID);
-      setState(() {
-        chatStatuses[chatID] = status;
-      });
-    }
-  }
-
-  Future<String> getLastMessage(String chatID) async {
-    if (lastMessages.containsKey(chatID)) {
-      return lastMessages[chatID] ?? 'No message available';
+  Future<Map<String, dynamic>> getLastMessageData(String chatID) async {
+    if (lastMessages.containsKey(chatID) && lastMessageTimestamps.containsKey(chatID)) {
+      return {
+        'text': lastMessages[chatID],
+        'timestamp': lastMessageTimestamps[chatID],
+      };
     }
 
     CollectionReference messagesRef = FirebaseFirestore.instance
@@ -49,20 +44,41 @@ class _ChatPageState extends State<ChatPage> {
         .collection('messages');
 
     try {
+      // First attempt to fetch the most recent message from the 'messages' subcollection
       QuerySnapshot querySnapshot = await messagesRef
           .orderBy('timestamp', descending: true)
           .limit(1)
           .get();
 
       if (querySnapshot.docs.isNotEmpty) {
-        lastMessages[chatID] = querySnapshot.docs.first['text'] ?? 'No message available';
+        var doc = querySnapshot.docs.first;
+        lastMessages[chatID] = doc['text'] ?? 'No message available';  // Store message text
+        lastMessageTimestamps[chatID] = doc['timestamp'];  // Store message timestamp
       } else {
-        lastMessages[chatID] = 'No messages yet';
+        // If no messages are found, fallback to the 'createdAt' timestamp in the chat document
+        DocumentSnapshot chatDoc = await FirebaseFirestore.instance
+            .collection('chats')
+            .doc(chatID)
+            .get();
+
+        if (chatDoc.exists) {
+          lastMessages[chatID] = 'No messages yet';  // Default message when no messages exist
+          lastMessageTimestamps[chatID] = chatDoc['createdAt'] ?? Timestamp(0, 0);  // Use 'createdAt' if available
+        } else {
+          lastMessages[chatID] = 'Error retrieving chat data';
+          lastMessageTimestamps[chatID] = Timestamp(0, 0);  // Default fallback timestamp
+        }
       }
-      return lastMessages[chatID] ?? 'No message available';
+
+      return {
+        'text': lastMessages[chatID],
+        'timestamp': lastMessageTimestamps[chatID],
+      };
     } catch (e) {
-      lastMessages[chatID] = 'Error retrieving message';
-      return 'Error retrieving message';
+      return {
+        'text': 'Error retrieving message',
+        'timestamp': Timestamp(0, 0),
+      };
     }
   }
 
@@ -72,7 +88,7 @@ class _ChatPageState extends State<ChatPage> {
       appBar: AppBar(
         title: Text("Conversations"),
         backgroundColor: Color(0xFFDCB347),
-        automaticallyImplyLeading: false, // prevents back button
+        automaticallyImplyLeading: false,
       ),
       body: StreamBuilder<QuerySnapshot>(
         stream: chatStream,
@@ -91,91 +107,123 @@ class _ChatPageState extends State<ChatPage> {
 
           var chats = snapshot.data!.docs;
 
-          return ListView.builder(
-            itemCount: chats.length,
-            itemBuilder: (context, index) {
-              var chat = chats[index];
-              String chatID = chat.id;
-              String partner;
+          List<Map<String, dynamic>> chatDataList = chats.map((chat) {
+            var data = chat.data() as Map<String, dynamic>;
+            data['chatID'] = chat.id;
+            data['timestamp'] = data['timestamp'] ?? Timestamp(0, 0);
+            return data;
+          }).toList();
 
-              if (UserUtils.getUserType() == 'deliverer') {
-                partner = chat['customerFirstName'] ?? 'Customer';
-              } else {
-                if ((chat.data() as Map<String, dynamic>)['delivererFirstName'] != null) {
-                  partner = (chat.data() as Map<String, dynamic>)['delivererFirstName'];
-                } else {
-                  partner = 'Unknown Deliverer';
-                }
+          return FutureBuilder(
+            future: Future.wait(chatDataList.map((chat) async {
+              String chatID = chat['chatID'];
+              String status = await StatusManager.printStatus(true, chatID);
+              chat['status'] = status;
+              return chat;
+            })),
+            builder: (context, AsyncSnapshot<List<Map<String, dynamic>>> asyncSnapshot) {
+              if (!asyncSnapshot.hasData) {
+                return Center(child: CircularProgressIndicator());
               }
 
-              // Fetching the status here only if it's not already fetched
-              fetchStatus(chatID);
+              List<Map<String, dynamic>> chatsWithStatus = asyncSnapshot.data!;
 
-              return FutureBuilder<String>(
-                future: getLastMessage(chatID),
-                builder: (context, messageSnapshot) {
-                  if (messageSnapshot.connectionState == ConnectionState.waiting) {
-                    return ListTile(
-                      title: Text('Chat with $partner'),
-                      subtitle: Text('Loading last message...'),
-                    );
-                  }
+              chatsWithStatus.sort((a, b) {
+                // sort by the status: non-completed orders should come first
+                if (a['status'] != 'Complete' && b['status'] == 'Complete') return -1;
+                if (a['status'] == 'Complete' && b['status'] != 'Complete') return 1;
 
-                  if (messageSnapshot.hasError) {
-                    return ListTile(
-                      title: Text('Chat with $partner'),
-                      subtitle: Text('Error loading last message'),
-                    );
-                  }
+                // sort by timestamp descending (newest first)
+                Timestamp aTime = a['timestamp'] as Timestamp;
+                Timestamp bTime = b['timestamp'] as Timestamp;
+                return bTime.compareTo(aTime);
+              });
 
-                  String lastMessage = messageSnapshot.data ?? 'No messages yet';
-                  String status = chatStatuses[chatID] ?? 'Unknown status';
+              return ListView.builder(
+                itemCount: chatsWithStatus.length,
+                itemBuilder: (context, index) {
+                  var chat = chatsWithStatus[index];
+                  String chatID = chat['chatID'];
+                  String status = chat['status'];
+                  String partner = UserUtils.getUserType() == 'deliverer'
+                      ? chat['customerFirstName'] ?? 'Customer'
+                      : chat['delivererFirstName'] ?? 'Unknown Deliverer';
 
-                  return Container(
-                    color: status == "Complete" ? Colors.grey[300] : null,
-                    child: ListTile(
-                      title: RichText(
-                        text: TextSpan(
-                          text: 'Chat with $partner ',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            color: Colors.black,
-                          ),
-                          children: <TextSpan>[
-                            TextSpan(
-                              text: "  $status",
-                              style: TextStyle(
-                                color: Colors.grey,
+                  return FutureBuilder<Map<String, dynamic>>(
+                    future: getLastMessageData(chatID),
+                    builder: (context, messageSnapshot) {
+                      String lastMessage = 'Loading...';
+                      String formattedTime = '';
+                      if (messageSnapshot.hasData) {
+                        lastMessage = messageSnapshot.data!['text'];
+                        Timestamp timestamp = messageSnapshot.data!['timestamp'];
+                        DateTime dateTime = timestamp.toDate();
+                        formattedTime = DateFormat('MMM d, h:mm a').format(dateTime);
+                      } else if (messageSnapshot.hasError) {
+                        lastMessage = 'Error retrieving message';
+                      }
+
+                      return Container(
+                        color: status == "Complete" ? Colors.grey[300] : null,
+                        child: ListTile(
+                          title: Row(
+                            children: [
+                              Expanded(
+                                child: RichText(
+                                  text: TextSpan(
+                                    text: 'Chat with $partner ',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black,
+                                    ),
+                                    children: [
+                                      TextSpan(
+                                        text: "  $status",
+                                        style: TextStyle(color: Colors.grey),
+                                      ),
+                                    ],
+                                  ),
+                                ),
                               ),
-                            ),
-                          ],
+                              if (formattedTime.isNotEmpty)
+                                Text(
+                                  formattedTime,
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                    color: Colors.grey[500],
+                                  ),
+                                ),
+                            ],
+                          ),
+                          subtitle: Text(lastMessage),
+                          onTap: () {
+                            if (UserUtils.getUserType() == "deliverer") {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      DisabledDelivererChatScreen(chatID: chatID),
+                                ),
+                              );
+                            } else {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      DisabledCustomerChatScreen(chatID: chatID),
+                                ),
+                              );
+                            }
+                          },
                         ),
-                      ),
-                      subtitle: Text(lastMessage),
-                      onTap: () {
-                        if (UserUtils.getUserType() == "deliverer") {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => DisabledDelivererChatScreen(chatID: chatID),
-                            ),
-                          );
-                        } else {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => DisabledCustomerChatScreen(chatID: chatID),
-                            ),
-                          );
-                        }
-                      },
-                    ),
+                      );
+                    },
                   );
                 },
               );
-
             },
           );
+
         },
       ),
     );
