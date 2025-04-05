@@ -56,7 +56,7 @@ class _OrdersPageState extends State<OrdersPage> {
         centerTitle: true,
         backgroundColor: Colors.white,
         elevation: 0,
-        leading: const BackButton(color: Colors.black),
+        // Removed the leading back button
         actions: const [
           Padding(
             padding: EdgeInsets.only(right: 16),
@@ -65,49 +65,49 @@ class _OrdersPageState extends State<OrdersPage> {
         ],
       ),
       body: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          SizedBox(
-            height: 350,
-            width: double.infinity,
-            child: Image.asset('assets/map_placeholder.png', fit: BoxFit.cover),
+          Flexible(
+            flex: 1,
+            child: Image.asset(
+              'assets/map_placeholder.png',
+              fit: BoxFit.cover,
+              width: double.infinity,
+            ),
           ),
-          Expanded(
-            child: DeliveryDetailsCard(
-              typeLabel: "Pickup From",
-              title: orderData!['restaurantName'] ?? "Unknown Restaurant",
-              address: orderData!['restaurantAddress'] ?? "Unknown Address",
-              customerName: orderData!['customerFirstName'] ?? "Unknown Customer",
-              itemCount: orderData!['itemCount'] ?? 1,
-              onCallTap: () {},  //TODO: Add call functionality
-              onDirectionsTap: () {}, // TODO: Add navigation functionality
-              onSlideComplete: () async {
-                StatusManager.advanceStatus();
-                Navigator.pushNamed(context, "/deliver-order");
-              },
-              onChatTap:  () {
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                    builder:
-                        (context) => Scaffold(
-                      body: DelivererChatScreen(chatID: ChatManager.getRecentChatID()),
-                      bottomNavigationBar: CustomBottomNavigationBar(
-                        selectedIndex: 0,
-                        onItemTapped: (index) {},
-                        userType: "deliverer",
-                      ),
+          DeliveryDetailsCard(
+            typeLabel: "Pickup From",
+            title: orderData!['restaurantName'] ?? "Unknown Restaurant",
+            address: orderData!['restaurantAddress'] ?? "Unknown Address",
+            customerName: orderData!['customerFirstName'] ?? "Unknown Customer",
+            itemCount: orderData!['itemCount'] ?? 1,
+            onCallTap: () {}, //TODO: Add call functionality
+            onDirectionsTap: () {}, // TODO: Add navigation functionality
+            onSlideComplete: () async {
+              StatusManager.advanceStatus();
+              Navigator.pushNamed(context, "/deliver-order");
+            },
+            onChatTap: () {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => Scaffold(
+                    body: DelivererChatScreen(chatID: ChatManager.getRecentChatID()),
+                    bottomNavigationBar: CustomBottomNavigationBar(
+                      selectedIndex: 0,
+                      onItemTapped: (index) {},
+                      userType: "deliverer",
                     ),
                   ),
-                );
-              }
-            ),
-          )
+                ),
+              );
+            },
+          ),
         ],
       ),
       bottomNavigationBar: CustomBottomNavigationBar(
-        selectedIndex: 1,
-        onItemTapped: (index) {
-      },
+        selectedIndex: 0,
+        onItemTapped: (index) {},
         userType: "deliverer",
       ),
     );

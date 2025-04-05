@@ -55,7 +55,7 @@ class _StatusState extends State<Status> {
           "Order Status",
           style: TextStyle(color: Colors.black),
         ),
-        automaticallyImplyLeading: false, // prevents back button
+        automaticallyImplyLeading: false,
         centerTitle: true,
         backgroundColor: Colors.white,
         elevation: 0,
@@ -89,7 +89,6 @@ class _StatusState extends State<Status> {
           String dasher = order['delivererFirstName'] == ""
               ? "Waiting on a dasher..."
               : "${order['delivererFirstName']}";
-          // int itemCount = order['itemCount'] ?? 2;
 
           String orderStatus = _getOrderStatus(order['status']);
           int statusInt = (order['status'] is String) ? int.tryParse(order['status']) ?? -1 : order['status'];
@@ -113,59 +112,60 @@ class _StatusState extends State<Status> {
           }
 
           return Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              SizedBox(
-                height: 380,
-                width: double.infinity,
-                child: Image.asset('assets/map_placeholder.png', fit: BoxFit.cover),
+              Flexible(
+                flex: 1,
+                child: Image.asset(
+                  'assets/map_placeholder.png',
+                  fit: BoxFit.cover,
+                  width: double.infinity,
+                ),
               ),
-              Expanded(
-                child: DeliveryDetailsCard(
-                  customerName: dasher,
-                  typeLabel: "Your dasher",
-                  address: address,
-                  onDirectionsTap: () {},
-                  onChatTap: () {
-                    if (dasher == "Waiting on a dasher...") {
-                      showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return AlertDialog(
-                            title: Text('Chat Unavailable'),
-                            content: Text('We are still waiting for a Dasher to accept your order. Hang tight!'),
-                            actions: [
-                              TextButton(
-                                onPressed: () {
-                                  Navigator.of(context).pop();
-                                },
-                                child: Text('OK'),
-                              ),
-                            ],
-                          );
-                        },
-                      );
-                    } else {
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => Scaffold(
-                            body: CustomerChatScreen(chatID: ChatManager.getRecentChatID()),
-                            bottomNavigationBar: CustomBottomNavigationBar(
-                              selectedIndex: 0,
-                              onItemTapped: (index) {},
-                              userType: "customer",
+              DeliveryDetailsCard(
+                customerName: dasher,
+                typeLabel: "Your dasher",
+                address: address,
+                onDirectionsTap: () {},
+                onChatTap: () {
+                  if (dasher == "Waiting on a dasher...") {
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          title: Text('Chat Unavailable'),
+                          content: Text('We are still waiting for a Dasher to accept your order. Hang tight!'),
+                          actions: [
+                            TextButton(
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                              child: Text('OK'),
                             ),
+                          ],
+                        );
+                      },
+                    );
+                  } else {
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => Scaffold(
+                          body: CustomerChatScreen(chatID: ChatManager.getRecentChatID()),
+                          bottomNavigationBar: CustomBottomNavigationBar(
+                            selectedIndex: 0,
+                            onItemTapped: (index) {},
+                            userType: "customer",
                           ),
                         ),
-                      );
-                    }
-
-                  },
-                  title: restaurantName,
-                  status: orderStatus,
-                  price: price,
-                  itemCount: 1, // TODO: add later
-                ),
+                      ),
+                    );
+                  }
+                },
+                title: restaurantName,
+                status: orderStatus,
+                price: price,
+                itemCount: 1, // TODO: add later
               ),
             ],
           );
