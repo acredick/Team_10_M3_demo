@@ -20,41 +20,42 @@ class DashboardPage extends StatefulWidget {
 class _DashboardPageState extends State<DashboardPage> {
   bool isOrderAccepted = false; 
 
-  @override
+@override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      body: Padding(
+      body: SafeArea(
+       child: Padding(
         padding: EdgeInsets.all(16.0),
         child: Column(
           children: [
             Container(
-              padding: EdgeInsets.all(16),
-              width: MediaQuery.of(context).size.width * 0.98,
+              padding: EdgeInsets.only(top: 10, left: 7, right: 7),
               height: 200,
               decoration: BoxDecoration(
                 color: Color(0xFF5B3184),
                 borderRadius: BorderRadius.circular(20),
               ),
               child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          "HELLO",
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 28,
-                            fontWeight: FontWeight.bold,
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 8.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            "HELLO",
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 28,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
-                        ),
-                        SizedBox(height: 5),
-                        Padding(
-                          padding: EdgeInsets.only(right: 10),
-                          child: FittedBox(
+                          SizedBox(height: 5),
+                          FittedBox(
                             fit: BoxFit.scaleDown,
                             child: Text(
                               UserUtils.getFullName(),
@@ -65,34 +66,54 @@ class _DashboardPageState extends State<DashboardPage> {
                               ),
                             ),
                           ),
-                        ),
-                        SizedBox(height: 40),
-                        Text("Earned Money", style: TextStyle(color: Colors.white70, fontSize: 12)),
-                        Text("\$000.000", style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold)),
-                      ],
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(right: 30),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(10),
-                      child: Container(
-                        height: MediaQuery.of(context).size.width * 0.3,
-                        width: MediaQuery.of(context).size.width * 0.4,
-                        color: Colors.white,
-                        child: Image.asset('assets/images/mapimage.png', fit: BoxFit.cover),
+                          SizedBox(height: 20),
+                          Text(
+                            "Earned Money",
+                            style: TextStyle(color: Colors.white70, fontSize: 12),
+                          ),
+                          Text(
+                            "\$000.000",
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   ),
+                  Align(
+                    alignment: Alignment.centerRight,
+                    child: Padding(
+                      padding: const EdgeInsets.only(right: 20),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(10),
+                        child: Container(
+                          height: MediaQuery.of(context).size.width * 0.35,
+                          width: MediaQuery.of(context).size.width * 0.4,
+                          color: Colors.white,
+                          child: Image.asset(
+                            'assets/images/mapimage.png',
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+              
                 ],
               ),
             ),
-            
+
             Padding(
               padding: EdgeInsets.all(16),
               child: Align(
                 alignment: Alignment.centerLeft,
-                child: Text("Orders Available", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                child: Text(
+                  "Orders Available",
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                ),
               ),
             ),
 
@@ -100,11 +121,11 @@ class _DashboardPageState extends State<DashboardPage> {
               child: StreamBuilder(
                 stream: FirebaseFirestore.instance
                     .collection('orders')
-                    .where('status', isEqualTo: 0) // Get only processing orders
+                    .where('status', isEqualTo: 0)
                     .snapshots(),
                 builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
-                    return Center(child: CircularProgressIndicator()); // Loading indicator
+                    return Center(child: CircularProgressIndicator());
                   }
                   if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
                     return Center(child: Text("No orders available"));
@@ -122,7 +143,8 @@ class _DashboardPageState extends State<DashboardPage> {
                           contentPadding: EdgeInsets.all(15),
                           title: Text(
                             doc['restaurantName'],
-                            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                            style: TextStyle(
+                                fontSize: 18, fontWeight: FontWeight.bold),
                           ),
                           subtitle: Text(
                             "Pickup: ${doc['restaurantAddress']}\nDropoff: ${doc['address']}\nPrice: \$${doc['price']}",
@@ -130,28 +152,26 @@ class _DashboardPageState extends State<DashboardPage> {
                           ),
                           trailing: ElevatedButton(
                             onPressed: () async {
-                              String orderId = doc.id;  // Get the orderId
+                              String orderId = doc.id;
 
-                              // Update Firestore when the order is accepted
                               OrderManager.updateOrder(orderId, "delivererID", UserUtils.getEmail());
                               OrderManager.updateOrder(orderId, "delivererFirstName", UserUtils.getFirstName());
                               StatusManager.advanceStatus();
-                              String? chatid = await OrderManager.getChatIDFromOrder(orderId);
 
+                              String? chatid = await OrderManager.getChatIDFromOrder(orderId);
                               if (chatid != null) {
                                 ChatManager.setDelivererInfo();
                               } else {
                                 print("Failed to retrieve chatID, skipping setDelivererInfo()");
                               }
 
-                              // Navigate to OrdersPage and pass the orderId
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => OrdersPage(orderId: orderId), // Pass orderId
+                                  builder: (context) => OrdersPage(orderId: orderId),
                                 ),
                               );
-                              },
+                            },
                             child: Text("Accept"),
                           ),
                         ),
@@ -163,14 +183,15 @@ class _DashboardPageState extends State<DashboardPage> {
             ),
           ],
         ),
+       ),
       ),
-
-      // Bottom Navigation Bar
       bottomNavigationBar: CustomBottomNavigationBar(
-        selectedIndex: 0,          
-        userType: "deliverer",     
-        onItemTapped: (index) {},  
+        selectedIndex: 0,
+        userType: "deliverer",
+        onItemTapped: (index) {},
       ),
+      
     );
   }
 }
+
