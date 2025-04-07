@@ -18,6 +18,7 @@ class Status extends StatefulWidget {
 
 class _StatusState extends State<Status> {
   late Stream<DocumentSnapshot> orderStream;
+  bool isDropdownVisible = false;
 
   @override
   void initState() {
@@ -84,6 +85,8 @@ class _StatusState extends State<Status> {
           var order = snapshot.data!;
           String address = order['address'] ?? 'Unknown';
           int itemCount = (order['Items'] as List).length;
+          List<dynamic> items = order['Items'] ?? [];
+
           double price = order['price'] ?? 0.0;
           String restaurantName = order['restaurantName'] ?? 'Unknown';
           String orderId = order['orderID'];
@@ -96,7 +99,7 @@ class _StatusState extends State<Status> {
 
           if (statusInt == 3 || orderStatus == 'Delivered') {
             Future.delayed(Duration.zero, () {
-             Navigator.pushReplacement(
+              Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
                   builder: (context) => Scaffold(
@@ -166,7 +169,14 @@ class _StatusState extends State<Status> {
                 title: restaurantName,
                 status: orderStatus,
                 price: price,
-                itemCount: itemCount, // TODO: add later
+                itemCount: itemCount,
+                isDropdownVisible: isDropdownVisible,
+                onExpandTap: () {
+                  setState(() {
+                    isDropdownVisible = !isDropdownVisible;
+                  });
+                },
+                orderItems: items, items: items,
               ),
             ],
           );

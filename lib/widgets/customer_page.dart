@@ -1,8 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:DormDash/pages/shared/order_manager.dart';
-import '/pages/customer_side/customer_chat.dart';
-import 'package:DormDash/pages/shared/chat_manager.dart';
-import '/widgets/bottom-nav-bar.dart';
 
 class DeliveryDetailsCard extends StatelessWidget {
   final String typeLabel;
@@ -16,6 +12,10 @@ class DeliveryDetailsCard extends StatelessWidget {
   final VoidCallback? onCallTap;
   final VoidCallback? onDirectionsTap;
   final VoidCallback? onChatTap;
+  final VoidCallback? onExpandTap;
+  final List<dynamic> items; // Updated to List<dynamic> to match order['Items']
+  final bool isDropdownVisible; // New parameter
+  final List<dynamic> orderItems; // New parameter to accept list of items
 
   const DeliveryDetailsCard({
     super.key,
@@ -30,6 +30,10 @@ class DeliveryDetailsCard extends StatelessWidget {
     this.onCallTap,
     this.onDirectionsTap,
     this.onChatTap,
+    this.onExpandTap,
+    required this.items, // Accepting dynamic items list
+    required this.isDropdownVisible, // Accepting isDropdownVisible
+    required this.orderItems, // Accepting orderItems
   });
 
   @override
@@ -61,12 +65,29 @@ class DeliveryDetailsCard extends StatelessWidget {
           const Divider(color: Colors.white24, thickness: 1),
 
           const SizedBox(height: 5),
-          _iconTextRow(
-            Icons.receipt_long,
-            "$itemCount ${itemCount == 1 ? 'item' : 'items'}",
-            Icons.expand_more,
+
+          GestureDetector(
+            onTap: onExpandTap,
+            child: _iconTextRow(
+              Icons.receipt_long,
+              "$itemCount ${itemCount == 1 ? 'item' : 'items'}",
+              Icons.expand_more,
+            ),
           ),
           const SizedBox(height: 5),
+
+
+          // Display the list of items here only if isDropdownVisible is true
+          if (isDropdownVisible && items.isNotEmpty)
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: items.map((item) {
+                return Text(
+                  item.toString(),
+                  style: const TextStyle(color: Colors.white),
+                );
+              }).toList(),
+            ),
           const Divider(color: Colors.white24, thickness: 1),
 
           const SizedBox(height: 15),
