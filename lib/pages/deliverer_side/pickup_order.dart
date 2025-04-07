@@ -20,6 +20,7 @@ class OrdersPage extends StatefulWidget {
 
 class _OrdersPageState extends State<OrdersPage> {
   Map<String, dynamic>? orderData;
+  bool isDropdownVisible = false;
 
   @override
   void initState() {
@@ -114,6 +115,13 @@ class _OrdersPageState extends State<OrdersPage> {
                 ),
               );
             },
+            isDropdownVisible: isDropdownVisible,
+            onExpandTap: () {
+              setState(() {
+                isDropdownVisible = !isDropdownVisible;
+              });
+            },
+            orderItems: orderData!['Items'] ?? [], items: orderData!['Items'] ?? [],
           ),
         ],
       ),

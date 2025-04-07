@@ -11,6 +11,10 @@ class DeliveryDetailsCard extends StatelessWidget {
   final VoidCallback? onDirectionsTap;
   final Future<void> Function()? onSlideComplete;
   final VoidCallback? onChatTap;
+  final VoidCallback? onExpandTap;
+  final List<dynamic> items;
+  final bool isDropdownVisible;
+  final List<dynamic> orderItems;
 
 
   const DeliveryDetailsCard({
@@ -24,6 +28,10 @@ class DeliveryDetailsCard extends StatelessWidget {
     this.onCallTap,
     this.onDirectionsTap,
     required this.onChatTap,
+    this.onExpandTap,
+    required this.items,
+    required this.isDropdownVisible,
+    required this.orderItems,
   });
 
   @override
@@ -48,8 +56,26 @@ class DeliveryDetailsCard extends StatelessWidget {
           const Divider(color: Colors.white24, thickness: 1),
 
           const SizedBox(height: 5),
-          _iconTextRow(Icons.receipt_long, "$itemCount items", Icons.expand_more),
+          GestureDetector(
+            onTap: onExpandTap,
+            child: _iconTextRow(
+              Icons.receipt_long,
+              "$itemCount ${itemCount == 1 ? 'item' : 'items'}",
+              Icons.expand_more,
+            ),
+          ),
           const SizedBox(height: 5),
+
+          if (isDropdownVisible && items.isNotEmpty)
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: items.map((item) {
+                return Text(
+                  item.toString(),
+                  style: const TextStyle(color: Colors.white),
+                );
+              }).toList(),
+            ),
           const Divider(color: Colors.white24, thickness: 1),
 
           const SizedBox(height: 15),

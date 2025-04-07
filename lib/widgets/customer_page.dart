@@ -13,9 +13,9 @@ class DeliveryDetailsCard extends StatelessWidget {
   final VoidCallback? onDirectionsTap;
   final VoidCallback? onChatTap;
   final VoidCallback? onExpandTap;
-  final List<dynamic> items; // Updated to List<dynamic> to match order['Items']
-  final bool isDropdownVisible; // New parameter
-  final List<dynamic> orderItems; // New parameter to accept list of items
+  final List<dynamic> items;
+  final bool isDropdownVisible;
+  final List<dynamic> orderItems;
 
   const DeliveryDetailsCard({
     super.key,
@@ -31,9 +31,9 @@ class DeliveryDetailsCard extends StatelessWidget {
     this.onDirectionsTap,
     this.onChatTap,
     this.onExpandTap,
-    required this.items, // Accepting dynamic items list
-    required this.isDropdownVisible, // Accepting isDropdownVisible
-    required this.orderItems, // Accepting orderItems
+    required this.items,
+    required this.isDropdownVisible,
+    required this.orderItems,
   });
 
   @override
@@ -76,8 +76,6 @@ class DeliveryDetailsCard extends StatelessWidget {
           ),
           const SizedBox(height: 5),
 
-
-          // Display the list of items here only if isDropdownVisible is true
           if (isDropdownVisible && items.isNotEmpty)
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,

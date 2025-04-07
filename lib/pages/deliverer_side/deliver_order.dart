@@ -19,6 +19,7 @@ class DeliverOrder extends StatefulWidget {
 
 class _DeliverOrderState extends State<DeliverOrder> {
   Map<String, dynamic>? orderData;
+  bool isDropdownVisible = false;
 
   @override
   void initState() {
@@ -99,6 +100,13 @@ class _DeliverOrderState extends State<DeliverOrder> {
                   itemCount: (orderData!['Items'] as List).length,
                   onCallTap: () {}, //TODO: add later
                   onDirectionsTap: () {}, // TODO: add later
+                  isDropdownVisible: isDropdownVisible,
+                  onExpandTap: () {
+                    setState(() {
+                      isDropdownVisible = !isDropdownVisible;
+                    });
+                  },
+                  orderItems: orderData!['Items'] ?? [], items: orderData!['Items'] ?? [],
                   onChatTap: () {
                     Navigator.pushReplacement(
                       context,
