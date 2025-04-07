@@ -78,7 +78,7 @@ class _StatusState extends State<Status> {
           }
 
           if (!snapshot.hasData || !snapshot.data!.exists) {
-            return Center(child: Text("No order found with that ID"));
+            return Center(child: Text("Place an order to see its status."));
           }
 
           var order = snapshot.data!;
@@ -86,7 +86,7 @@ class _StatusState extends State<Status> {
           int itemCount = (order['Items'] as List).length;
           double price = order['price'] ?? 0.0;
           String restaurantName = order['restaurantName'] ?? 'Unknown';
-          String customerName = order['customerFirstName'] ?? 'Jeff';
+          String orderId = order['orderID'];
           String dasher = order['delivererFirstName'] == ""
               ? "Waiting on a dasher..."
               : "${order['delivererFirstName']}";
@@ -96,11 +96,11 @@ class _StatusState extends State<Status> {
 
           if (statusInt == 3 || orderStatus == 'Delivered') {
             Future.delayed(Duration.zero, () {
-              Navigator.pushReplacement(
+             Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
                   builder: (context) => Scaffold(
-                    body: RateDeliverer(),
+                    body: RateDeliverer(orderId: orderId),
                     bottomNavigationBar: CustomBottomNavigationBar(
                       selectedIndex: 0,
                       onItemTapped: (index) {},
