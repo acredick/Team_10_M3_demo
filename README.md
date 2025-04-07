@@ -28,3 +28,12 @@
 
 ## Changing Navigation of the Navigation Bar
 Navigation is set up in `lib/widgets/bottom-nav-bar.dart` using routes. To define routes, navigate to `main.dart`.
+
+## Making sure maps work for you.
+Ensure that you have set your location on your emulator, to do so on adroid the steps are:
+1. Click the elipses in the bottom right
+2. Click Location
+3. Set your location appropriately.
+
+You make have to hot restart the app once the first time you set your location.
+You can also set a route to see the driver move.
