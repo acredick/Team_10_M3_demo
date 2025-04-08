@@ -146,7 +146,7 @@ class _DropoffConfirmationState extends State<DropoffConfirmation> {
     );
   }
 
-  //Image uploading
+  // Image uploading
   File? _selectedImage;
 
   Future<void> _pickImage() async {
