@@ -52,7 +52,7 @@ class _LoginState extends State<Login> {
   Future<void> redirect({required User user}) async {
     Navigator.pushReplacement(
       context,
-      MaterialPageRoute(builder: (context) => UserSelection(user: user)),
+      MaterialPageRoute(builder: (context) => UserSelectionRoute()),
     );
   }
 

@@ -12,11 +12,6 @@ import '../shared/user_util.dart';
 class UserSelectionRoute extends StatelessWidget {
   const UserSelectionRoute({super.key});
 
-const Color primaryPurple = Color(0xFF5B3184);
-
-class UserSelectionRoute extends StatelessWidget {
-  const UserSelectionRoute({super.key});
-
   @override
   Widget build(BuildContext context) {
     return CupertinoPageScaffold(
@@ -28,6 +23,8 @@ class UserSelectionRoute extends StatelessWidget {
   }
 }
 
+const Color primaryPurple = Color(0xFF5B3184);
+
 class UserSelection extends StatefulWidget {
   const UserSelection({super.key, this.user});
   final User? user;
@@ -37,7 +34,20 @@ class UserSelection extends StatefulWidget {
 }
 
 class _UserSelectionState extends State<UserSelection> {
-  Map userData = {};
+  String fullName = "";
+
+  @override
+  void initState() {
+    super.initState();
+    _loadUserFullName();
+  }
+
+  Future<void> _loadUserFullName() async {
+    final name = await UserUtils.getFullName();
+    setState(() {
+      fullName = name ?? "";
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -49,28 +59,27 @@ class _UserSelectionState extends State<UserSelection> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Column(
-        children: [
-          const Text(
-            "Welcome,",
-            style: TextStyle(
-              fontSize: 24,
-              fontWeight: FontWeight.bold,
-              color: primaryPurple,
+              children: [
+                const Text(
+                  "Welcome,",
+                  style: TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                    color: primaryPurple,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                Text(
+                  fullName,
+                  style: const TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                    color: primaryPurple,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ],
             ),
-            textAlign: TextAlign.center,
-          ),
-          Text(
-            UserUtils.getFullName() ?? "",
-            style: const TextStyle(
-              fontSize: 24,
-              fontWeight: FontWeight.bold,
-              color: primaryPurple,
-            ),
-            textAlign: TextAlign.center,
-          ),
-        ],
-      ),
-
             const SizedBox(height: 20),
             const Text(
               "Are you here as a customer or a deliverer?",
