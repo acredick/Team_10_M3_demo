@@ -1,6 +1,9 @@
+import 'package:DormDash/pages/deliverer_side/dashboard.dart';
 import 'package:flutter/material.dart';
 import 'package:DormDash/widgets/feedback_buttons.dart';
 import 'package:DormDash/widgets/star_rating.dart';
+import 'dart:io';
+import 'package:image_picker/image_picker.dart';
 
 class DropoffConfirmation extends StatefulWidget {
   const DropoffConfirmation({super.key});
@@ -31,12 +34,18 @@ class _DropoffConfirmationState extends State<DropoffConfirmation> {
           children: [
             Row(
               children: [
-                Container(
-                  width: 120,
-                  height: 150,
-                  color: Colors.grey.shade300,
-                  child: const Center(
-                    child: Icon(Icons.add, color: Colors.purple, size: 40),
+                GestureDetector(
+                  onTap: _pickImage,
+                  child: Container(
+                    width: 120,
+                    height: 150,
+                    color: Colors.grey.shade300,
+                    child: _selectedImage == null
+                        ? const Center(
+                            child: Icon(Icons.add, color: Colors.purple, size: 40),
+                          )
+                          // TODO: could maybe add crop functionality in the future?
+                        : Image.file(_selectedImage!, fit: BoxFit.cover),
                   ),
                 ),
                 const SizedBox(width: 20),
@@ -103,7 +112,9 @@ class _DropoffConfirmationState extends State<DropoffConfirmation> {
                   ),
                 ),
               ),
-              onPressed: () {}, // TODO: link to page
+              onPressed: () {
+                Navigator.push(context, MaterialPageRoute(builder: (context) => DashboardPage()));
+              },
               child: Text('Delivered'),
             ),
           )
@@ -113,20 +124,34 @@ class _DropoffConfirmationState extends State<DropoffConfirmation> {
     );    
   }
       
-static Widget _earningsRow(String label, String amount, {Color? color, bool bold = false}) {
-  final style = TextStyle(
-    color: color ?? Colors.grey,
-    fontWeight: bold ? FontWeight.bold : FontWeight.normal,
-  );        
-  return Padding(
-    padding: const EdgeInsets.symmetric(vertical: 2),      
-    child: Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Text(label, style: style),
-        Text(amount, style: style),
-      ],
+  static Widget _earningsRow(String label, String amount, {Color? color, bool bold = false}) {
+    final style = TextStyle(
+      color: color ?? Colors.grey,
+      fontWeight: bold ? FontWeight.bold : FontWeight.normal,
+    );        
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 2),      
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(label, style: style),
+          Text(amount, style: style),
+        ],
     ),
     );
+  }
+
+  //Image uploading
+  File? _selectedImage;
+
+  Future<void> _pickImage() async {
+    final picker = ImagePicker();
+    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+
+    if (pickedFile != null) {
+      setState(() {
+        _selectedImage = File(pickedFile.path);
+      });
+    }
   }
 }

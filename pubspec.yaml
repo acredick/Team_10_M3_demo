@@ -49,6 +49,11 @@ dependencies:
   slide_to_act: ^2.0.1
   uuid: ^4.5.1
 
+  image_picker: ^1.0.4 
+  permission_handler: ^10.4.5
+  get_it: ^7.1.1
+  flutter_image_compress: ^2.4.0
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
