@@ -52,10 +52,13 @@ class _DropoffConfirmationState extends State<DropoffConfirmation> {
                 const Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    // TODO: remove hard code
                     Text("Karissa M.", style: TextStyle(fontSize: 16)),
                     SizedBox(height: 4),
+                    // TODO: remove hard code
                     Text("1400 Washington Ave", style: TextStyle(fontWeight: FontWeight.bold)),
                     SizedBox(height: 2),
+                    // TODO: remove hard code
                     Text("State Quad Cooper Hall"),
                     Text("Albany, NY, 12222"),
                   ],
@@ -65,10 +68,12 @@ class _DropoffConfirmationState extends State<DropoffConfirmation> {
          const SizedBox(height: 20),
             const Text("Earnings breakdown", style: TextStyle(fontSize: 18)),
             const SizedBox(height: 10),
+            // TODO: come up with fee system & remove hard coded numbers
             _earningsRow("Base", "\$3.00"),
             _earningsRow("Tip", "\$1.50"),
             _earningsRow("Total", "\$4.50", color: Colors.black),
             const SizedBox(height: 20),
+            // TODO: replace hard code with customer name
             const Text("How was your drop off with Josh?", style: TextStyle(fontSize: 18)),
             const SizedBox(height: 10),
             Row(

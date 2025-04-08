@@ -77,6 +77,7 @@ class _DeliverOrderState extends State<DeliverOrder> {
         actions: const [
           Padding(
             padding: EdgeInsets.only(right: 16),
+            // TODO: make widget for help icons for status pages. these would allow people to troubleshoot stuff
             child: Icon(Icons.help_outline, color: Colors.black),
           ),
         ],
