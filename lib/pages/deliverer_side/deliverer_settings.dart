@@ -71,12 +71,14 @@ class _DelivererSettingsPageState extends State<DelivererSettingsPage> {
                     if (isDeliverer) {
                       setState(() {
                         isDeliverer = value;
+                        UserUtils.setProfile("customer");
                         Navigator.pushNamed(context, "/customer-settings");
                         UserUtils.setUserType("customer");
                       });
                     } else {
                       setState(() {
                         isDeliverer = value;
+                        UserUtils.setProfile("deliverer");
                         Navigator.pushNamed(context, "/deliverer-settings");
                         UserUtils.setUserType("deliverer");
                       });

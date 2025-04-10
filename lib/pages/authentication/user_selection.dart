@@ -98,6 +98,7 @@ class _UserSelectionState extends State<UserSelection> {
               ),
               onPressed: () async {
                 UserUtils.setUserType("customer");
+                UserUtils.setProfile("customer"); // makes profile in database
                 Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
@@ -130,6 +131,7 @@ class _UserSelectionState extends State<UserSelection> {
               ),
               onPressed: () async {
                 UserUtils.setUserType("deliverer");
+                UserUtils.setProfile("deliverer"); // makes profile in database
                 Navigator.pushNamed(context, '/dashboard');
               },
               label: const Text(
