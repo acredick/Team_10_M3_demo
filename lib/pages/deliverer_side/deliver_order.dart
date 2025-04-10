@@ -3,9 +3,7 @@ import 'package:DormDash/widgets/dropoff_delivery_details_template.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
 import '/pages/deliverer_side/deliverer-chat.dart';
-import 'package:DormDash/widgets/bottom-nav-bar.dart';
 import '/pages/shared/chat_manager.dart';
-import 'package:DormDash/pages/shared/order_manager.dart';
 import 'package:DormDash/pages/shared/status_manager.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 

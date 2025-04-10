@@ -1,8 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import '../shared/user_util.dart';
-import '/pages/customer_side/customer_chat.dart';
-import '/pages/deliverer_side/deliverer-chat.dart';
 import '/pages/shared/status_manager.dart';
 import '/pages/customer_side/disabled_customer_chat.dart';
 import '/pages/deliverer_side/disabled_deliverer_chat.dart';

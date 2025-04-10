@@ -1,4 +1,3 @@
-import 'package:DormDash/pages/shared/status_manager.dart';
 import 'package:DormDash/pages/shared/user_util.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '/pages/shared/chat_manager.dart';

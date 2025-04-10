@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import '/pages/authentication/user_selection.dart';
 import 'package:flutter/material.dart';
 import 'package:DormDash/widgets/bottom-nav-bar.dart';
 import 'package:DormDash/pages/deliverer_side/pickup_order.dart';

@@ -4,21 +4,16 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'services/firebase_options.dart';
 import 'package:DormDash/pages/customer_side/status.dart';
-import '/pages/shared/status_manager.dart';
 
 
 // Import pages
 import 'pages/authentication/login.dart';
 import 'pages/customer_side/customer-settings.dart';
-import 'pages/customer_side/status.dart';
 import 'widgets/bottom-nav-bar.dart';
 import 'pages/customer_side/order_selection.dart';
 import 'pages/deliverer_side/dashboard.dart';
-import 'pages/home.dart';
 import 'pages/welcome.dart';
 import '/pages/authentication/user_selection.dart';
-import 'pages/deliverer_side/pickup_order.dart';
-import 'pages/deliverer_side/deliver_order.dart';
 import 'pages/deliverer_side/deliverer_settings.dart';
 import 'pages/shared/order_manager.dart';
 import '/pages/shared/ChatPage.dart';
