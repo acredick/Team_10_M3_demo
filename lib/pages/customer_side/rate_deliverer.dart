@@ -232,7 +232,7 @@ class _RateDelivererState extends State<RateDeliverer> {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.fromLTRB(0, 20, 0, 10), // Adjust padding as needed
+                padding: const EdgeInsets.fromLTRB(0, 20, 0, 10),
                 child: Center(
                   child: Text(
                     "Thank you for using DormDash!",

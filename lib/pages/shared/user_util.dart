@@ -60,31 +60,51 @@ class UserUtils {
     try {
       String email = getEmail();
       DocumentReference userRef = _staticFirestore.collection("${userType}s").doc(email);
-
-      // Check if the user already exists
       DocumentSnapshot userSnapshot = await userRef.get();
 
-      // Only proceed if the user document does not exist
       if (!userSnapshot.exists) {
-        // Create the user document with the 'createdAt' timestamp
         await userRef.set({
           'createdAt': FieldValue.serverTimestamp(),
         });
 
-        // Set other user data
         await userRef.set({
           'firstName': firstName,
           'lastName': lastName,
-        }, SetOptions(merge: true)); // Merge to avoid overwriting existing fields
+        }, SetOptions(merge: true));
 
-        // Add a 'reviews' collection
-        await userRef.collection('reviews').add({
-          'content': "",
+        await _staticFirestore
+            .collection("${userType}s")
+            .doc(getEmail())
+            .collection('reviews_given')
+            .add({
+              'content': "",
+              'timestamp': FieldValue.serverTimestamp(),
         });
 
-        // Add a 'ratings' collection
-        await userRef.collection('ratings').add({
-          'rating': 5,
+        await _staticFirestore
+            .collection("${userType}s")
+            .doc(getEmail())
+            .collection('ratings_given')
+            .add({
+              'rating': 5,
+              'timestamp': FieldValue.serverTimestamp(),
+        });
+
+        await _staticFirestore
+            .collection("${userType}s")
+            .doc(getEmail())
+            .collection('reviews_received')
+            .add({
+              'content': "",
+              'timestamp': FieldValue.serverTimestamp(),
+        });
+        await _staticFirestore
+            .collection("${userType}s")
+            .doc(getEmail())
+            .collection('ratings_received')
+            .add({
+              'rating': 5,
+              'timestamp': FieldValue.serverTimestamp(),
         });
       } else {
         print("User already exists in the database.");

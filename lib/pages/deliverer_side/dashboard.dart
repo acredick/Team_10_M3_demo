@@ -71,7 +71,7 @@ class _DashboardPageState extends State<DashboardPage> {
                             style: TextStyle(color: Colors.white70, fontSize: 12),
                           ),
                           Text(
-                            "\$000.000",
+                            "\$000.00",
                             style: TextStyle(
                               color: Colors.white,
                               fontSize: 20,
