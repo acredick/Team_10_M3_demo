@@ -46,8 +46,7 @@ class _OrdersPageState extends State<OrdersPage> {
   Widget build(BuildContext context) {
     if (orderData == null) {
       return Scaffold(
-        appBar: AppBar(title: Text('Loading...')),
-        body: Center(child: CircularProgressIndicator()),
+        body: Center(child: Text("Please select an order to deliver.", style: TextStyle(fontSize: 18))),
       );
     }
 
