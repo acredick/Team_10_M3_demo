@@ -156,6 +156,7 @@ class _DashboardPageState extends State<DashboardPage> {
 
                               OrderManager.updateOrder(orderId, "delivererID", UserUtils.getEmail());
                               OrderManager.updateOrder(orderId, "delivererFirstName", UserUtils.getFirstName());
+                              OrderManager.setOrderID(orderId);
                               StatusManager.advanceStatus();
 
                               String? chatid = await OrderManager.getChatIDFromOrder(orderId);

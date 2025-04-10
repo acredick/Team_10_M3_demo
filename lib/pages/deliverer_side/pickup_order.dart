@@ -88,7 +88,7 @@ class _OrdersPageState extends State<OrdersPage> {
                       (context) => Scaffold(
                         body: DeliverOrder(orderId: widget.orderId),
                         bottomNavigationBar: CustomBottomNavigationBar(
-                          selectedIndex: 0,
+                          selectedIndex: 1,
                           onItemTapped: (index) {},
                           userType: "deliverer",
                         ),
@@ -125,7 +125,7 @@ class _OrdersPageState extends State<OrdersPage> {
         ],
       ),
       bottomNavigationBar: CustomBottomNavigationBar(
-        selectedIndex: 0,
+        selectedIndex: 1,
         onItemTapped: (index) {},
         userType: "deliverer",
       ),

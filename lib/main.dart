@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'services/firebase_options.dart';
-import 'package:DormDash/pages/customer_side/status.dart'; 
+import 'package:DormDash/pages/customer_side/status.dart';
+import '/pages/shared/status_manager.dart';
 
 
 // Import pages
@@ -21,6 +22,7 @@ import 'pages/deliverer_side/deliver_order.dart';
 import 'pages/deliverer_side/deliverer_settings.dart';
 import 'pages/shared/order_manager.dart';
 import '/pages/shared/ChatPage.dart';
+import '/pages/deliverer_side/order_status_router.dart';
 
 Future <void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -51,14 +53,7 @@ class MyApp extends StatelessWidget {
         '/welcome': (context) => WelcomePage(),
         '/login': (context) => const LoginRoute(),
         '/dashboard': (context) => DashboardPage(),
-        '/orders': (context) => Scaffold(
-            body: OrdersPage(orderId: ''),
-            bottomNavigationBar: CustomBottomNavigationBar(
-              selectedIndex: 1,
-              onItemTapped: (index) {},
-              userType: "deliverer",
-              ),
-            ),
+        '/orders': (context) => const OrderStatusRouter(),
         '/deliverer-chat-page': (context) => Scaffold(
           body: ChatPage(),
           bottomNavigationBar: CustomBottomNavigationBar(
