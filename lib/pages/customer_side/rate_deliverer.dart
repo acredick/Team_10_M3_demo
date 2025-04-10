@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-
+import '/pages/shared/review_manager.dart';
 import '../shared/order_manager.dart';
 import '../shared/status_manager.dart';
+import '/pages/shared/user_util.dart';
 
 class RateDeliverer extends StatefulWidget {
   final String orderId; // Pass the orderId to fetch the correct order
@@ -24,7 +25,8 @@ class _RateDelivererState extends State<RateDeliverer> {
   int? itemCount;
   double? taxRate = .08; // for new york
   double? fee = 4.99; // example fee
-  bool _showCustomTipInput = false; // Flag to control visibility of custom tip input
+  bool _showCustomTipInput = false;
+  String? dasherID;
 
   @override
   void initState() {
@@ -45,6 +47,7 @@ class _RateDelivererState extends State<RateDeliverer> {
         orderPrice = orderData!['price'] ?? 0.0;
         restaurantName = orderData!['restaurantName'] ?? 'Unknown Restaurant';
         itemCount = (orderData!['Items'] as List).length ?? 0;
+        dasherID = orderData!['delivererID'] ?? "";
       });
     }
   }
@@ -215,9 +218,14 @@ class _RateDelivererState extends State<RateDeliverer> {
               Center(
                 child: ElevatedButton(
                   onPressed: () async {
-                    // todo add reviews
-                    print("Tip and review submitted, advancing status...");
+                    if (_rating != 0) {
+                      ReviewManager.addRating(_rating, UserUtils.getEmail(), dasherID!, true);
+                    }
+                    if (_review != "") {
+                      ReviewManager.addReview(_review, UserUtils.getEmail(), dasherID!, true);
+                    }
 
+                    print("Tip and review submitted, advancing status...");
                     await StatusManager.advanceStatus();
                     OrderManager.setOrderID("-1"); // removes "active" order status
                     Navigator.pushNamed(context, "/customer-order");
