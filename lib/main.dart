@@ -87,6 +87,7 @@ class MyApp extends StatelessWidget {
               ),
             ),
         "/customer-home": (context){
+          print("Calling customer home. order id: ${OrderManager.getOrderID()}");
           return Scaffold(
               body: Status(orderID: OrderManager.getOrderID()),
               bottomNavigationBar: CustomBottomNavigationBar(

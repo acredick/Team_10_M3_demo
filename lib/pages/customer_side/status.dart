@@ -8,7 +8,7 @@ import '/pages/shared/chat_manager.dart';
 import '/pages/customer_side/rate_deliverer.dart';
 
 class Status extends StatefulWidget {
-  final String? orderID;
+  String? orderID;
 
   Status({required this.orderID});
 
@@ -96,6 +96,7 @@ class _StatusState extends State<Status> {
 
           String orderStatus = _getOrderStatus(order['status']);
           int statusInt = (order['status'] is String) ? int.tryParse(order['status']) ?? -1 : order['status'];
+          print("current status (from inside status): $statusInt");
 
           if (statusInt == 3 || orderStatus == 'Delivered') {
             Future.delayed(Duration.zero, () {
@@ -104,11 +105,6 @@ class _StatusState extends State<Status> {
                 MaterialPageRoute(
                   builder: (context) => Scaffold(
                     body: RateDeliverer(orderId: orderId),
-                    bottomNavigationBar: CustomBottomNavigationBar(
-                      selectedIndex: 0,
-                      onItemTapped: (index) {},
-                      userType: "customer",
-                    ),
                   ),
                 ),
               );

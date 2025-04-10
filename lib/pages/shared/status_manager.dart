@@ -2,13 +2,13 @@ import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '/pages/shared/order_manager.dart';
 
-
 class StatusManager {
   static final FirebaseFirestore _staticFirestore = FirebaseFirestore.instance;
-
+  static bool ignoreTimer = false;
   static final StatusManager _instance = StatusManager._internal();
   static int? currentStatus;
   factory StatusManager() => _instance;
+
   StatusManager._internal();
 
   static Future<int> getOrderStatus(bool isChatID, String id) async {
@@ -120,41 +120,29 @@ class StatusManager {
 
       StatusManager.currentStatus = nextStatus;
       print("Order status advanced to: $nextStatus");
-
-      if (nextStatus == 3) {
-        watchForDeliveryCompletion(_orderID);
-      }
     } catch (e) {
       print("Error advancing order status: $e");
     }
   }
 
-  static void watchForDeliveryCompletion(String orderID) async {
+  static Future<void> manualStatusUpdate(String orderID) async {
     try {
       DocumentSnapshot docSnapshot =
       await _staticFirestore.collection('orders').doc(orderID).get();
 
-      int currentStatus = docSnapshot.get('status');
-      if (currentStatus == 3) {
-        print("Status is 'Delivered'. Starting 1-minute timer...");
-
-        Timer(const Duration(minutes: 1), () async {
-          DocumentSnapshot updatedSnapshot =
-          await _staticFirestore.collection('orders').doc(orderID).get();
-
-          int latestStatus = updatedSnapshot.get('status');
-          if (latestStatus == 3) {
-            await _staticFirestore.collection('orders').doc(orderID).update({
-              'status': 4,
-            });
-            print("Status automatically updated to 'Complete'.");
-          } else {
-            print("Status changed manually before timer completed.");
-          }
-        });
+      if (!docSnapshot.exists) {
+        print("Order document not found.");
+        return;
       }
+
+      await _staticFirestore.collection('orders').doc(orderID).update({
+        'status': 4, // Mark as complete
+      });
+
+      ignoreTimer = true;
+      print("Status updated manually to 'Complete' (4).");
     } catch (e) {
-      print("Error in delivery completion timer: $e");
+      print("Error in manual status update: $e");
     }
   }
 }

@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+import '../shared/order_manager.dart';
+import '../shared/status_manager.dart';
+
 class RateDeliverer extends StatefulWidget {
   final String orderId; // Pass the orderId to fetch the correct order
   const RateDeliverer({super.key, required this.orderId});
@@ -19,7 +22,7 @@ class _RateDelivererState extends State<RateDeliverer> {
   double? orderPrice;
   String? restaurantName;
   int? itemCount;
-  double? taxRate = .08; //for new york
+  double? taxRate = .08; // for new york
   double? fee = 4.99; // example fee
   bool _showCustomTipInput = false; // Flag to control visibility of custom tip input
 
@@ -180,7 +183,6 @@ class _RateDelivererState extends State<RateDeliverer> {
                         hintText: 'Enter your custom tip amount',
                       ),
                       onChanged: (value) {
-                        // Automatically update the selected tip based on custom input
                         if (value.isNotEmpty) {
                           setState(() {
                             _selectedTip = double.tryParse(value);
@@ -202,10 +204,10 @@ class _RateDelivererState extends State<RateDeliverer> {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  _priceDetailRow("DormDasher Tip", '\$${_selectedTip?.toStringAsFixed(2) ?? '0.00'}'),  // Fallback to '0.00' if _selectedTip is null
-                  _priceDetailRow("DormDash Fee", '\$${fee?.toStringAsFixed(2) ?? '0.00'}'),  // Fallback to '0.00' if fee is null
-                  _priceDetailRow("Subtotal", '\$${((_selectedTip ?? 0.0) + (fee ?? 0.0)).toStringAsFixed(2)}'),  // Handle null for _selectedTip and fee
-                  _priceDetailRow("Taxes", '\$${(( (fee ?? 0.0)) * (taxRate ?? 0.08)).toStringAsFixed(2)}'),  // Default taxRate if null
+                  _priceDetailRow("DormDasher Tip", '\$${_selectedTip?.toStringAsFixed(2) ?? '0.00'}'),
+                  _priceDetailRow("DormDash Fee", '\$${fee?.toStringAsFixed(2) ?? '0.00'}'),
+                  _priceDetailRow("Subtotal", '\$${((_selectedTip ?? 0.0) + (fee ?? 0.0)).toStringAsFixed(2)}'),
+                  _priceDetailRow("Taxes", '\$${(( (fee ?? 0.0)) * (taxRate ?? 0.08)).toStringAsFixed(2)}'),
                   _priceDetailRow("Total", '\$${((( (_selectedTip ?? 0.0) + (fee ?? 0.0)) * (1 + (taxRate ?? 0.08))).toStringAsFixed(2))}', bold: true),
                 ],
               ),
@@ -213,17 +215,9 @@ class _RateDelivererState extends State<RateDeliverer> {
               Center(
                 child: ElevatedButton(
                   onPressed: () {
-                    // Handle the review and tip submission
-                    double tipAmount = 0.0;
-                    if (_selectedTip != null) {
-                      tipAmount = _selectedTip!;
-                    }
-
-                    // Submit the review, rating, and tip (in real app, save this data to database)
-                    // For now, we'll print them to the console
-                    print('Rating: $_rating stars');
-                    print('Review: $_review');
-                    print('Tip: \$${tipAmount.toStringAsFixed(2)}');
+                    // todo add reviews
+                    StatusManager.advanceStatus();
+                    Navigator.pushNamed(context, "/customer-home");
                   },
                   style: ElevatedButton.styleFrom(
                     minimumSize: Size(double.infinity, 40), // Ensure full width and similar height
@@ -261,7 +255,7 @@ class _RateDelivererState extends State<RateDeliverer> {
           onPressed: () {
             setState(() {
               _selectedTip = (orderPrice! * percentage);
-              _showCustomTipInput = false;  // Hide custom tip input if a predefined tip is selected
+              _showCustomTipInput = false;
             });
           },
           style: ElevatedButton.styleFrom(
