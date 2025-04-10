@@ -52,6 +52,16 @@ class ChatManager {
       await _staticFirestore
           .collection('chats')
           .doc(_chatID)
+          .update({'visibleToCustomer': true});
+
+      await _staticFirestore
+          .collection('chats')
+          .doc(_chatID)
+          .update({'visibleToDeliverer': true});
+
+      await _staticFirestore
+          .collection('chats')
+          .doc(_chatID)
           .collection('messages')
           .doc("Begin of conversation.")
           .set({'message': "Begin of conversation."});
@@ -105,7 +115,7 @@ class ChatManager {
             'senderID': senderID,
             'text': messageText,
             'timestamp': FieldValue.serverTimestamp(),
-            'senderType': senderType
+            'senderType': senderType,
           });
 
       print("Message added successfully!");
@@ -113,4 +123,23 @@ class ChatManager {
       print("Failed to add message: $e");
     }
   }
+
+  static Future<void> hideChat(String chatID, String userType) async {
+    try {
+      if (userType == 'customer') {
+        await _staticFirestore.collection('chats').doc(chatID).update({
+          'visibleToCustomer': false,
+        });
+      } else if (userType == 'deliverer') {
+        await _staticFirestore.collection('chats').doc(chatID).update({
+          'visibleToDeliverer': false,
+        });
+      }
+      print("Chat visibility updated for chat ID: $chatID, userType: $userType");
+    } catch (e) {
+      print("Failed to hide chat: $e");
+    }
+  }
+
+
 }

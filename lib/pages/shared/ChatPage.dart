@@ -7,6 +7,7 @@ import '/pages/shared/status_manager.dart';
 import '/pages/customer_side/disabled_customer_chat.dart';
 import '/pages/deliverer_side/disabled_deliverer_chat.dart';
 import 'package:intl/intl.dart';
+import '/pages/shared/chat_manager.dart';
 
 class ChatPage extends StatefulWidget {
   @override
@@ -20,15 +21,20 @@ class _ChatPageState extends State<ChatPage> {
   Map<String, Timestamp> lastMessageTimestamps = {};
 
   @override
+  @override
   void initState() {
     super.initState();
-    String field = UserUtils.getUserType() == 'deliverer' ? 'delivererID' : 'customerID';
+    String userType = UserUtils.getUserType();
+    String field = userType == 'deliverer' ? 'delivererID' : 'customerID';
+    String visibilityField = userType == 'deliverer' ? 'visibleToDeliverer' : 'visibleToCustomer';
 
     chatStream = FirebaseFirestore.instance
         .collection('chats')
         .where(field, isEqualTo: currentUserID)
+        .where(visibilityField, isEqualTo: true)
         .snapshots();
   }
+
 
   Future<Map<String, dynamic>> getLastMessageData(String chatID) async {
     if (lastMessages.containsKey(chatID) && lastMessageTimestamps.containsKey(chatID)) {
@@ -161,60 +167,119 @@ class _ChatPageState extends State<ChatPage> {
                         lastMessage = 'Error retrieving message';
                       }
 
-                      return Container(
-                        color: status == "Complete" ? Colors.grey[300] : null,
-                        child: ListTile(
-                          title: Row(
-                            children: [
-                              Expanded(
-                                child: RichText(
-                                  text: TextSpan(
-                                    text: 'Chat with $partner ',
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.black,
-                                    ),
-                                    children: [
-                                      TextSpan(
-                                        text: "  $status",
-                                        style: TextStyle(color: Colors.grey),
+                      return Dismissible(
+                        key: Key(chatID),
+                        direction: DismissDirection.endToStart,
+                        background: Container(
+                          color: Colors.red,
+                          alignment: Alignment.centerRight,
+                          padding: EdgeInsets.symmetric(horizontal: 20),
+                          child: Icon(Icons.delete, color: Colors.white),
+                        ),
+                        confirmDismiss: (direction) async {
+                          bool confirm = await showDialog(
+                              context: context,
+                              builder: (context) {
+                                // Check if the order status is not 3
+                                if (StatusManager.getOrderStatus != 3) {
+                                  // Display an alert dialog informing the user
+                                  return AlertDialog(
+                                    title: Text("Delivery still active"),
+                                    content: Text("You can't delete active chats! Please wait until your order is complete."),
+                                    actions: [
+                                      TextButton(
+                                        onPressed: () {
+                                          Navigator.of(context).pop(false); // Return false to cancel the action
+                                        },
+                                        child: Text('OK'),
                                       ),
                                     ],
+                                  );
+                                } else {
+                                  // Proceed with the original confirmation dialog
+                                  return AlertDialog(
+                                    title: Text('Delete Chat'),
+                                    content: Text('Are you sure you want to hide this chat?'),
+                                    actions: [
+                                      TextButton(
+                                        onPressed: () => Navigator.of(context).pop(false), // Cancel action
+                                        child: Text('Cancel'),
+                                      ),
+                                      TextButton(
+                                        onPressed: () => Navigator.of(context).pop(true), // Confirm delete action
+                                        child: Text('Delete'),
+                                      ),
+                                    ],
+                                  );
+                                }
+                              }
+                          );
+
+                          return confirm; // Return the result of the dialog
+                        },
+
+                        onDismissed: (direction) async {
+                          await ChatManager.hideChat(chatID, UserUtils.userType);
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(content: Text('Chat hidden')),
+                          );
+                        },
+                        child: Container(
+                          color: status == "Complete" ? Colors.grey[300] : null,
+                          child: ListTile(
+                            title: Row(
+                              children: [
+                                Expanded(
+                                  child: RichText(
+                                    text: TextSpan(
+                                      text: 'Chat with $partner ',
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.black,
+                                      ),
+                                      children: [
+                                        TextSpan(
+                                          text: "  $status",
+                                          style: TextStyle(color: Colors.grey),
+                                        ),
+                                      ],
+                                    ),
                                   ),
                                 ),
-                              ),
-                              if (formattedTime.isNotEmpty)
-                                Text(
-                                  formattedTime,
-                                  style: TextStyle(
-                                    fontSize: 12,
-                                    color: Colors.grey[500],
+                                if (formattedTime.isNotEmpty)
+                                  Text(
+                                    formattedTime,
+                                    style: TextStyle(
+                                      fontSize: 12,
+                                      color: Colors.grey[500],
+                                    ),
                                   ),
-                                ),
-                            ],
+                              ],
+                            ),
+                            subtitle: Text(lastMessage),
+                            onTap: () {
+                              if (UserUtils.getUserType() == "deliverer") {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        DisabledDelivererChatScreen(chatID: chatID),
+                                  ),
+                                );
+                              } else {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        DisabledCustomerChatScreen(chatID: chatID),
+                                  ),
+                                );
+                              }
+                            },
                           ),
-                          subtitle: Text(lastMessage),
-                          onTap: () {
-                            if (UserUtils.getUserType() == "deliverer") {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) =>
-                                      DisabledDelivererChatScreen(chatID: chatID),
-                                ),
-                              );
-                            } else {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) =>
-                                      DisabledCustomerChatScreen(chatID: chatID),
-                                ),
-                              );
-                            }
-                          },
                         ),
                       );
+
                     },
                   );
                 },
