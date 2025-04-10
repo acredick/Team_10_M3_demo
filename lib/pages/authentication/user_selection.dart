@@ -15,9 +15,6 @@ class UserSelectionRoute extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CupertinoPageScaffold(
-      navigationBar: const CupertinoNavigationBar(
-        middle: Text('User Type Selection'),
-      ),
       child: const Center(child: UserSelection()),
     );
   }

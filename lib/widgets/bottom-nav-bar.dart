@@ -59,17 +59,17 @@ class CustomBottomNavigationBar extends StatelessWidget {
       items = [
         BottomNavigationBarItem(
           icon: Icon(
-            Icons.dashboard,
+            Icons.list,
             color: selectedIndex == 0 ? purple : Colors.white,
           ),
-          label: "Dashboard",
+          label: "Orders",
         ),
         BottomNavigationBarItem(
           icon: Icon(
-            Icons.list,
+            Icons.dashboard,
             color: selectedIndex == 1 ? purple : Colors.white,
           ),
-          label: "Orders",
+          label: "Dashboard",
         ),
         BottomNavigationBarItem(
           icon: Icon(
