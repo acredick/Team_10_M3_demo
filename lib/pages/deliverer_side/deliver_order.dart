@@ -119,6 +119,7 @@ class _DeliverOrderState extends State<DeliverOrder> {
                     );
                   },
                   onSlideComplete: () async {
+                    print("Order delivered. Advancing status...");
                     StatusManager.advanceStatus();
                     Navigator.pushNamed(context, "/dropoff-confirmation");
                   },

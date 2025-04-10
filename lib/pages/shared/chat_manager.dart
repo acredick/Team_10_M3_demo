@@ -62,6 +62,11 @@ class ChatManager {
       await _staticFirestore
           .collection('chats')
           .doc(_chatID)
+          .update({'status': 0});
+
+      await _staticFirestore
+          .collection('chats')
+          .doc(_chatID)
           .collection('messages')
           .doc("Begin of conversation.")
           .set({'message': "Begin of conversation."});
@@ -141,5 +146,20 @@ class ChatManager {
     }
   }
 
+  static Future<void> advanceChatStatus() async {
+    try {
+      DocumentSnapshot docSnapshot =
+      await _staticFirestore.collection('orders').doc(OrderManager.getOrderID()).get();
 
+      int currentStatus = docSnapshot.get('status');
+
+      await _staticFirestore.collection('chats').doc(_chatID).update({
+        "status": currentStatus,
+      });
+
+      print("Chat status updated to $currentStatus");
+    } catch (e) {
+      print("Error advancing order status: $e");
+    }
+  }
 }

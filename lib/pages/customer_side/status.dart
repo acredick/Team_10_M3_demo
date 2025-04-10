@@ -19,6 +19,8 @@ class Status extends StatefulWidget {
 class _StatusState extends State<Status> {
   late Stream<DocumentSnapshot> orderStream;
   bool isDropdownVisible = false;
+  int statusInt = -1; // <-- moved here from build()
+  bool hasNavigatedToRating = false;
 
   @override
   void initState() {
@@ -30,9 +32,9 @@ class _StatusState extends State<Status> {
   }
 
   String _getOrderStatus(dynamic status) {
-    int statusInt = (status is String) ? int.tryParse(status) ?? -1 : status;
+    int localStatusInt = (status is String) ? int.tryParse(status) ?? -1 : status;
 
-    switch (statusInt) {
+    switch (localStatusInt) {
       case 0:
         return 'Placed';
       case 1:
@@ -78,7 +80,7 @@ class _StatusState extends State<Status> {
             return Center(child: Text("Error loading order status"));
           }
 
-          if (!snapshot.hasData || !snapshot.data!.exists) {
+          if (!snapshot.hasData || !snapshot.data!.exists || (_getOrderStatus(snapshot.data!['status'])) == "4") {
             return Center(child: Text("Place an order to see its status."));
           }
 
@@ -94,11 +96,21 @@ class _StatusState extends State<Status> {
               ? "Waiting on a dasher..."
               : "${order['delivererFirstName']}";
 
-          String orderStatus = _getOrderStatus(order['status']);
-          int statusInt = (order['status'] is String) ? int.tryParse(order['status']) ?? -1 : order['status'];
-          print("current status (from inside status): $statusInt");
+          int newStatusInt = (order['status'] is String) ? int.tryParse(order['status']) ?? -1 : order['status'];
+          if (newStatusInt != statusInt) {
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              if (mounted) {
+                setState(() {
+                  statusInt = newStatusInt;
+                });
+              }
+            });
+          }
 
-          if (statusInt == 3 || orderStatus == 'Delivered') {
+          String orderStatus = _getOrderStatus(order['status']);
+
+          if (statusInt == 3 && !hasNavigatedToRating) {
+            hasNavigatedToRating = true; // prevent repeat navigation
             Future.delayed(Duration.zero, () {
               Navigator.pushReplacement(
                 context,
@@ -172,7 +184,8 @@ class _StatusState extends State<Status> {
                     isDropdownVisible = !isDropdownVisible;
                   });
                 },
-                orderItems: items, items: items,
+                orderItems: items,
+                items: items,
               ),
             ],
           );

@@ -80,6 +80,7 @@ class _OrdersPageState extends State<OrdersPage> {
             onCallTap: () {}, //TODO: Add call functionality
             onDirectionsTap: () {}, // TODO: Add navigation functionality
             onSlideComplete: () async {
+              print("Order picked up. Advancing status...");
               StatusManager.advanceStatus();
               Navigator.pushReplacement(
                 context,

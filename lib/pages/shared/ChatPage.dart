@@ -21,7 +21,6 @@ class _ChatPageState extends State<ChatPage> {
   Map<String, Timestamp> lastMessageTimestamps = {};
 
   @override
-  @override
   void initState() {
     super.initState();
     String userType = UserUtils.getUserType();
@@ -34,7 +33,6 @@ class _ChatPageState extends State<ChatPage> {
         .where(visibilityField, isEqualTo: true)
         .snapshots();
   }
-
 
   Future<Map<String, dynamic>> getLastMessageData(String chatID) async {
     if (lastMessages.containsKey(chatID) && lastMessageTimestamps.containsKey(chatID)) {
@@ -120,9 +118,7 @@ class _ChatPageState extends State<ChatPage> {
 
           return FutureBuilder(
             future: Future.wait(chatDataList.map((chat) async {
-              String chatID = chat['chatID'];
-              String status = await StatusManager.printStatus(true, chatID);
-              chat['status'] = status;
+              chat['status'] = chat['status'] ?? 'Unknown';
               return chat;
             })),
             builder: (context, AsyncSnapshot<List<Map<String, dynamic>>> asyncSnapshot) {
@@ -148,7 +144,7 @@ class _ChatPageState extends State<ChatPage> {
                 itemBuilder: (context, index) {
                   var chat = chatsWithStatus[index];
                   String chatID = chat['chatID'];
-                  String status = chat['status'];
+                  String status = chat['status'].toString();
                   String partner = UserUtils.getUserType() == 'deliverer'
                       ? chat['customerFirstName'] ?? 'Customer'
                       : chat['delivererFirstName'] ?? 'Unknown Deliverer';
@@ -178,54 +174,57 @@ class _ChatPageState extends State<ChatPage> {
                         ),
                         confirmDismiss: (direction) async {
                           bool confirm = await showDialog(
-                              context: context,
-                              builder: (context) {
-                                // Check if the order status is not 3
-                                if (StatusManager.getOrderStatus != 3) {
-                                  // Display an alert dialog informing the user
-                                  return AlertDialog(
-                                    title: Text("Delivery still active"),
-                                    content: Text("You can't delete active chats! Please wait until your order is complete."),
-                                    actions: [
-                                      TextButton(
-                                        onPressed: () {
-                                          Navigator.of(context).pop(false); // Return false to cancel the action
-                                        },
-                                        child: Text('OK'),
-                                      ),
-                                    ],
-                                  );
-                                } else {
-                                  // Proceed with the original confirmation dialog
-                                  return AlertDialog(
-                                    title: Text('Delete Chat'),
-                                    content: Text('Are you sure you want to hide this chat?'),
-                                    actions: [
-                                      TextButton(
-                                        onPressed: () => Navigator.of(context).pop(false), // Cancel action
-                                        child: Text('Cancel'),
-                                      ),
-                                      TextButton(
-                                        onPressed: () => Navigator.of(context).pop(true), // Confirm delete action
-                                        child: Text('Delete'),
-                                      ),
-                                    ],
-                                  );
-                                }
+                            context: context,
+                            builder: (context) {
+                              if (chat['status'] != 4) {
+                                return AlertDialog(
+                                  title: Text("Delivery still active"),
+                                  content: Text("You can't delete active chats! Please wait until your order is complete."),
+                                  actions: [
+                                    TextButton(
+                                      onPressed: () {
+                                        Navigator.of(context).pop(false);
+                                      },
+                                      child: Text('OK'),
+                                    ),
+                                  ],
+                                );
+                              } else {
+                                return AlertDialog(
+                                  title: Text('Delete Chat'),
+                                  content: Text('Are you sure you want to hide this chat?'),
+                                  actions: [
+                                    TextButton(
+                                      onPressed: () => Navigator.of(context).pop(false),
+                                      child: Text('Cancel'),
+                                    ),
+                                    TextButton(
+                                      onPressed: () => Navigator.of(context).pop(true),
+                                      child: Text('Delete'),
+                                    ),
+                                  ],
+                                );
                               }
+                            },
                           );
 
-                          return confirm; // Return the result of the dialog
+                          return confirm;
                         },
-
                         onDismissed: (direction) async {
                           await ChatManager.hideChat(chatID, UserUtils.userType);
+
+                          // Remove the dismissed chat from the stream
+                          setState(() {
+                            // Manually remove the dismissed chat from the list of chats
+                            chatDataList.removeWhere((chat) => chat['chatID'] == chatID);
+                          });
+
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(content: Text('Chat hidden')),
                           );
                         },
                         child: Container(
-                          color: status == "Complete" ? Colors.grey[300] : null,
+                          color: status == "4" ? Colors.grey[300] : null,
                           child: ListTile(
                             title: Row(
                               children: [
@@ -239,7 +238,7 @@ class _ChatPageState extends State<ChatPage> {
                                       ),
                                       children: [
                                         TextSpan(
-                                          text: "  $status",
+                                          text: "  ${StatusManager.getStatus(status)}",
                                           style: TextStyle(color: Colors.grey),
                                         ),
                                       ],
@@ -279,14 +278,12 @@ class _ChatPageState extends State<ChatPage> {
                           ),
                         ),
                       );
-
                     },
                   );
                 },
               );
             },
           );
-
         },
       ),
     );

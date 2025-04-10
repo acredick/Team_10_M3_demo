@@ -22,7 +22,6 @@ class OrderManager {
   }
 
   static String? getOrderID() {
-    print("order ID = ${_orderID}");
     if (_orderID != null) {
       return _orderID;
     } else {

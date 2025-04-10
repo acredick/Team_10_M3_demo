@@ -214,11 +214,15 @@ class _RateDelivererState extends State<RateDeliverer> {
               const SizedBox(height: 20),
               Center(
                 child: ElevatedButton(
-                  onPressed: () {
+                  onPressed: () async {
                     // todo add reviews
-                    StatusManager.advanceStatus();
-                    Navigator.pushNamed(context, "/customer-home");
+                    print("Tip and review submitted, advancing status...");
+
+                    await StatusManager.advanceStatus();
+                    OrderManager.setOrderID("-1"); // removes "active" order status
+                    Navigator.pushNamed(context, "/customer-order");
                   },
+
                   style: ElevatedButton.styleFrom(
                     minimumSize: Size(double.infinity, 40), // Ensure full width and similar height
                     backgroundColor: Colors.purple[700],

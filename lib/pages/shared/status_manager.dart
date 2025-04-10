@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:DormDash/pages/shared/chat_manager.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '/pages/shared/order_manager.dart';
 
@@ -111,7 +112,13 @@ class StatusManager {
         return;
       }
 
+      if (StatusManager.currentStatus == 4) {
+        print("Status is already 4. Returning...");
+        return;
+      }
+
       int currentStatus = docSnapshot.get('status');
+
       int nextStatus = currentStatus + 1;
 
       await _staticFirestore.collection('orders').doc(_orderID).update({
@@ -119,30 +126,28 @@ class StatusManager {
       });
 
       StatusManager.currentStatus = nextStatus;
+
+      ChatManager.advanceChatStatus();
       print("Order status advanced to: $nextStatus");
     } catch (e) {
       print("Error advancing order status: $e");
     }
   }
 
-  static Future<void> manualStatusUpdate(String orderID) async {
-    try {
-      DocumentSnapshot docSnapshot =
-      await _staticFirestore.collection('orders').doc(orderID).get();
-
-      if (!docSnapshot.exists) {
-        print("Order document not found.");
-        return;
-      }
-
-      await _staticFirestore.collection('orders').doc(orderID).update({
-        'status': 4, // Mark as complete
-      });
-
-      ignoreTimer = true;
-      print("Status updated manually to 'Complete' (4).");
-    } catch (e) {
-      print("Error in manual status update: $e");
+  static String getStatus(String statusInt) {
+    switch (statusInt) {
+      case "0":
+        return 'Placed';
+      case "1":
+        return 'Waiting for pickup';
+      case "2":
+        return 'Out for delivery';
+      case "3":
+        return 'Delivered';
+      case "4":
+        return 'Complete';
+      default:
+        return 'Unknown Status';
     }
   }
 }
