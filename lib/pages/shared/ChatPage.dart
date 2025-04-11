@@ -127,15 +127,11 @@ class _ChatPageState extends State<ChatPage> {
               List<Map<String, dynamic>> chatsWithStatus = asyncSnapshot.data!;
 
               chatsWithStatus.sort((a, b) {
-                // sort by the status: non-completed orders should come first
-                if (a['status'] != 'Complete' && b['status'] == 'Complete') return -1;
-                if (a['status'] == 'Complete' && b['status'] != 'Complete') return 1;
-
-                // sort by timestamp descending (newest first)
                 Timestamp aTime = a['timestamp'] as Timestamp;
                 Timestamp bTime = b['timestamp'] as Timestamp;
                 return bTime.compareTo(aTime);
               });
+
 
               return ListView.builder(
                 itemCount: chatsWithStatus.length,
