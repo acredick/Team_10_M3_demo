@@ -6,7 +6,7 @@ import '../shared/status_manager.dart';
 import '/pages/shared/user_util.dart';
 
 class RateDeliverer extends StatefulWidget {
-  final String orderId; // Pass the orderId to fetch the correct order
+  final String orderId;
   const RateDeliverer({super.key, required this.orderId});
 
   @override

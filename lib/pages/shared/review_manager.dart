@@ -132,7 +132,7 @@ class ReviewManager {
           'timestamp': FieldValue.serverTimestamp(),
         });
       }
-      print("Message added successfully!");
+      print("Rating added successfully!");
     } catch (e) {
       print("Failed to add message: $e");
     }
