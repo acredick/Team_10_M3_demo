@@ -6,6 +6,7 @@ import '/pages/deliverer_side/deliverer-chat.dart';
 import '/pages/shared/chat_manager.dart';
 import 'package:DormDash/pages/shared/status_manager.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import '/widgets/bottom-nav-bar.dart';
 
 class DeliverOrder extends StatefulWidget {
   final String orderId;
@@ -126,6 +127,11 @@ class _DeliverOrderState extends State<DeliverOrder> {
             ),
           ),
         ],
+      ),
+      bottomNavigationBar: CustomBottomNavigationBar(
+        selectedIndex: 1,
+        onItemTapped: (index) {},
+        userType: "deliverer",
       ),
     );
   }

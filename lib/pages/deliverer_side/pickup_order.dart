@@ -87,11 +87,6 @@ class _OrdersPageState extends State<OrdersPage> {
                   builder:
                       (context) => Scaffold(
                         body: DeliverOrder(orderId: widget.orderId),
-                        bottomNavigationBar: CustomBottomNavigationBar(
-                          selectedIndex: 1,
-                          onItemTapped: (index) {},
-                          userType: "deliverer",
-                        ),
                       ),
                 ),
               );
