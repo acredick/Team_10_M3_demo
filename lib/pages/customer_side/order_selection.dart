@@ -76,37 +76,54 @@ class _OrderSelectionState extends State<OrderSelection> {
                   bool isDeliverable = order["isDeliverable"] == true;
 
                   return Card(
-                    margin: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-                    color: isDeliverable ? null : Colors.grey,
+                    margin: EdgeInsets.symmetric(horizontal: 15, vertical: 8),
+                    elevation: 3,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    color: isDeliverable ? null : Colors.grey[300],
                     child: ListTile(
+                      contentPadding: EdgeInsets.all(15),
                       onTap: isDeliverable
                           ? () {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) =>
-                                EnterAddressPage(orderID: order.id),
+                            builder: (context) => EnterAddressPage(orderID: order.id),
                           ),
                         );
                       }
                           : null,
-                      title: Text(
-                        order["restaurantName"],
-                        style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                      ),
-                      subtitle: Text(
-                        "Items: ${order["Items"]} \nPrice: \$${order["price"]}",
-                        style: TextStyle(fontSize: 16),
+                      title: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            order["restaurantName"],
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          SizedBox(height: 4),
+                          Text(
+                            "\$${order["price"]}",
+                            style: TextStyle(fontSize: 16),
+                          ),
+                          SizedBox(height: 2),
+                          Text(
+                            order["Items"].join(", "),
+                            style: TextStyle(fontSize: 16),
+                          ),
+                        ],
                       ),
                       trailing: Icon(
                         Icons.arrow_forward,
-                        color: isDeliverable ? Colors.blue : Colors.grey,
+                        color: isDeliverable ? Colors.purple[700] : Colors.grey,
                       ),
                     ),
                   );
                 },
               );
-
             },
           );
         },
