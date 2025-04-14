@@ -233,7 +233,7 @@ class _DropoffConfirmationState extends State<DropoffConfirmation> {
                     }
 
                     OrderManager.setOrderID("-1"); // removes "active" order status
-                    Navigator.pushNamed(context, "/orders");
+                    Navigator.pushNamed(context, "/dashboard");
                   },
                   child: Text('Delivered'),
                 ),

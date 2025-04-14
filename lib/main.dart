@@ -68,7 +68,7 @@ class MyApp extends StatelessWidget {
           '/dropoff-confirmation' : (context) => Scaffold(
             body: DropoffConfirmation(orderId: OrderManager.getOrderID()!,),
             bottomNavigationBar: CustomBottomNavigationBar (
-              selectedIndex: 0,
+              selectedIndex: 1,
               onItemTapped: (index) {},
               userType: "deliverer",
             ),
