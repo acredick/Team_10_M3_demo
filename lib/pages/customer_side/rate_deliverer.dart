@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import '/pages/shared/review_manager.dart';
-import '../shared/order_manager.dart';
-import '../shared/status_manager.dart';
-import '/pages/shared/user_util.dart';
+import '../../widgets/review_manager.dart';
+import '../../widgets/order_manager.dart';
+import '../../widgets/status_manager.dart';
+import '../../widgets/user_util.dart';
 
 class RateDeliverer extends StatefulWidget {
   final String orderId;

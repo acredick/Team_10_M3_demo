@@ -3,7 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import '/widgets/customer_page.dart';
 import '/pages/customer_side/customer_chat.dart';
 import 'package:DormDash/widgets/bottom-nav-bar.dart';
-import '/pages/shared/chat_manager.dart';
+import '../../widgets/chat_manager.dart';
 import '/pages/customer_side/rate_deliverer.dart';
 
 class Status extends StatefulWidget {

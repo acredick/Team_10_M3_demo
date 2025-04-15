@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart'; // Import for date formatting
-import '/pages/shared/chat_manager.dart';
-import '../shared/user_util.dart';
+import '../../widgets/chat_manager.dart';
+import '../../widgets/user_util.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 void main() {

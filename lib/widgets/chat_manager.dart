@@ -1,7 +1,7 @@
-import 'package:DormDash/pages/shared/user_util.dart';
+import 'package:DormDash/widgets/user_util.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:uuid/uuid.dart';
-import '/pages/shared/order_manager.dart';
+import 'order_manager.dart';
 
 class ChatManager {
   static final FirebaseFirestore _staticFirestore = FirebaseFirestore.instance;

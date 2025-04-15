@@ -1,8 +1,8 @@
 // saves snapshot of user info on login
-import 'package:DormDash/pages/shared/user_util.dart';
+import 'package:DormDash/widgets/user_util.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:uuid/uuid.dart';
-import '/pages/shared/order_manager.dart';
+import 'order_manager.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class UserUtils {

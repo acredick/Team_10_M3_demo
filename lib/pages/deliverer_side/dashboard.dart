@@ -3,10 +3,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:DormDash/widgets/bottom-nav-bar.dart';
 import 'package:DormDash/pages/deliverer_side/pickup_order.dart';
-import '../shared/user_util.dart';
-import '../shared/order_manager.dart';
-import '/pages/shared/chat_manager.dart';
-import '/pages/shared/status_manager.dart';
+import '../../widgets/user_util.dart';
+import '../../widgets/order_manager.dart';
+import '../../widgets/chat_manager.dart';
+import '../../widgets/status_manager.dart';
 
 class DashboardPage extends StatefulWidget {
   const DashboardPage({super.key, this.user});

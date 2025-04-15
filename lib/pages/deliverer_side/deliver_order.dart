@@ -3,9 +3,10 @@ import 'package:DormDash/widgets/dropoff_delivery_details_template.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
 import '/pages/deliverer_side/deliverer-chat.dart';
-import '/pages/shared/chat_manager.dart';
-import 'package:DormDash/pages/shared/status_manager.dart';
+import '../../widgets/chat_manager.dart';
+import 'package:DormDash/widgets/status_manager.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:intl/intl.dart'; // Import intl package for date formatting
 import '/widgets/bottom-nav-bar.dart';
 
 class DeliverOrder extends StatefulWidget {
@@ -63,10 +64,16 @@ class _DeliverOrderState extends State<DeliverOrder> {
       );
     }
 
+    // Calculate the deliver by time (45 minutes after orderTime)
+    final Timestamp orderTimestamp = orderData!['orderTime'];
+    final DateTime orderTime = orderTimestamp.toDate();
+    final DateTime deliverByTime = orderTime.add(Duration(minutes: 45));
+    final deliverByTimeFormatted = DateFormat('h:mm a').format(deliverByTime);
+
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'Deliver by 11:08 PM', // todo remove hardcode
+          'Deliver by $deliverByTimeFormatted', // Display the calculated deliver by time
           style: const TextStyle(color: Colors.black),
         ),
         centerTitle: true,
@@ -76,7 +83,6 @@ class _DeliverOrderState extends State<DeliverOrder> {
         actions: const [
           Padding(
             padding: EdgeInsets.only(right: 16),
-            // TODO: make widget for help icons for status pages. these would allow people to troubleshoot stuff
             child: Icon(Icons.help_outline, color: Colors.black),
           ),
         ],

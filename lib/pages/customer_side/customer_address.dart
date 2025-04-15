@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import '../shared/order_manager.dart';
+import '../../widgets/order_manager.dart';
 import 'package:uuid/uuid.dart';
-import '../shared/user_util.dart';
-import '/pages/shared/chat_manager.dart';
-import '/pages/shared/status_manager.dart';
+import '../../widgets/user_util.dart';
+import '../../widgets/chat_manager.dart';
+import '../../widgets/status_manager.dart';
 
 class EnterAddressPage extends StatefulWidget {
   final String orderID;

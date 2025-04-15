@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import '/pages/authentication/user_selection.dart';
 import '/widgets/bottom-nav-bar.dart';
-import '/pages/shared/user_util.dart';
+import 'user_util.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key, this.user});

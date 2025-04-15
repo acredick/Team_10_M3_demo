@@ -1,6 +1,6 @@
-import 'package:DormDash/pages/shared/user_util.dart';
+import 'package:DormDash/widgets/user_util.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import '/pages/shared/chat_manager.dart';
+import 'chat_manager.dart';
 
 class OrderManager {
   static final FirebaseFirestore _staticFirestore = FirebaseFirestore.instance;
@@ -25,6 +25,25 @@ class OrderManager {
       return _orderID;
     } else {
       return "-1"; // no order
+    }
+  }
+
+  // used for static testing
+  static Future<void> updateAllOrderTimesToNow() async {
+    try {
+      final now = Timestamp.now(); // Firestore-compatible timestamp
+      final ordersSnapshot = await _staticFirestore.collection('orders').get();
+
+      for (var doc in ordersSnapshot.docs) {
+        await _staticFirestore.collection('orders').doc(doc.id).update({
+          'orderTime': now,
+        });
+        print("Updated orderTime for order: ${doc.id}");
+      }
+
+      print("All orderTimes updated successfully.");
+    } catch (e) {
+      print("Error updating orderTimes: $e");
     }
   }
 

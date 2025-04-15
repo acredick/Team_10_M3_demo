@@ -16,7 +16,7 @@ import 'pages/deliverer_side/dashboard.dart';
 import 'pages/welcome.dart';
 import '/pages/authentication/user_selection.dart';
 import 'pages/deliverer_side/deliverer_settings.dart';
-import 'pages/shared/order_manager.dart';
+import 'widgets/order_manager.dart';
 import '/pages/shared/ChatPage.dart';
 import '/pages/deliverer_side/order_status_router.dart';
 

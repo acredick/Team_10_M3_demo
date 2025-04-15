@@ -1,7 +1,7 @@
 import 'dart:async';
-import 'package:DormDash/pages/shared/chat_manager.dart';
+import 'package:DormDash/widgets/chat_manager.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import '/pages/shared/order_manager.dart';
+import 'order_manager.dart';
 
 class StatusManager {
   static final FirebaseFirestore _staticFirestore = FirebaseFirestore.instance;

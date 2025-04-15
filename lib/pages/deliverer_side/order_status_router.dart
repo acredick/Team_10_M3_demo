@@ -1,6 +1,6 @@
-import '/pages/shared/status_manager.dart';
+import '../../widgets/status_manager.dart';
 import 'package:flutter/material.dart';
-import '/pages/shared/order_manager.dart';
+import '../../widgets/order_manager.dart';
 import '/pages/deliverer_side/pickup_order.dart';
 import '/widgets/bottom-nav-bar.dart';
 import '/pages/deliverer_side/deliver_order.dart';

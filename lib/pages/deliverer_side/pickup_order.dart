@@ -3,11 +3,13 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:DormDash/widgets/pickup_delivery_details_template.dart';
 import 'package:DormDash/widgets/bottom-nav-bar.dart';
 import '/pages/deliverer_side/deliverer-chat.dart';
-import '/pages/shared/chat_manager.dart';
-import '/pages/shared/status_manager.dart';
+import '../../widgets/chat_manager.dart';
+import '../../widgets/status_manager.dart';
 import '/pages/deliverer_side/deliver_order.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
+import 'package:intl/intl.dart';
+
 
 class OrdersPage extends StatefulWidget {
   final String orderId;
@@ -29,30 +31,36 @@ class _OrdersPageState extends State<OrdersPage> {
 
   void fetchOrderDetails() async {
     DocumentSnapshot orderSnapshot =
-        await FirebaseFirestore.instance
-            .collection('orders')
-            .doc(widget.orderId)
-            .get();
+    await FirebaseFirestore.instance
+        .collection('orders')
+        .doc(widget.orderId)
+        .get();
 
     if (orderSnapshot.exists) {
       setState(() {
-        orderData = orderSnapshot.data() as Map<String, dynamic>;
+        orderData = orderSnapshot.data() as Map<String, dynamic>?;
       });
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    // Ensure orderData is not null
     if (orderData == null) {
       return Scaffold(
         body: Center(child: Text("Please select an order to deliver.", style: TextStyle(fontSize: 18))),
       );
     }
 
+    // Safely get the orderTime and calculate pickupTime if orderData is not null
+    final Timestamp orderTimestamp = orderData!['orderTime'] as Timestamp;
+    final DateTime pickupTime = orderTimestamp.toDate().add(Duration(minutes: 20));
+    final pickupTimeFormatted = DateFormat('h:mm a').format(pickupTime);
+
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'Pickup by ${orderData!['pickupTime'] ?? 'Unknown'}',
+          'Pickup by $pickupTimeFormatted',
           style: TextStyle(color: Colors.black),
         ),
         centerTitle: true,
@@ -76,7 +84,7 @@ class _OrdersPageState extends State<OrdersPage> {
             address: orderData!['restaurantAddress'] ?? "Unknown Address",
             customerName: orderData!['customerFirstName'] ?? "Unknown Customer",
             itemCount: (orderData!['Items'] as List).length,
-            onCallTap: () {}, //TODO: Add call functionality
+            onCallTap: () {}, // TODO: Add call functionality
             onDirectionsTap: () {}, // TODO: Add navigation functionality
             onSlideComplete: () async {
               print("Order picked up. Advancing status...");
@@ -86,8 +94,8 @@ class _OrdersPageState extends State<OrdersPage> {
                 MaterialPageRoute(
                   builder:
                       (context) => Scaffold(
-                        body: DeliverOrder(orderId: widget.orderId),
-                      ),
+                    body: DeliverOrder(orderId: widget.orderId),
+                  ),
                 ),
               );
             },
@@ -97,15 +105,15 @@ class _OrdersPageState extends State<OrdersPage> {
                 MaterialPageRoute(
                   builder:
                       (context) => Scaffold(
-                        body: DelivererChatScreen(
-                          chatID: ChatManager.getRecentChatID(),
-                        ),
-                        bottomNavigationBar: CustomBottomNavigationBar(
-                          selectedIndex: 0,
-                          onItemTapped: (index) {},
-                          userType: "deliverer",
-                        ),
-                      ),
+                    body: DelivererChatScreen(
+                      chatID: ChatManager.getRecentChatID(),
+                    ),
+                    bottomNavigationBar: CustomBottomNavigationBar(
+                      selectedIndex: 0,
+                      onItemTapped: (index) {},
+                      userType: "deliverer",
+                    ),
+                  ),
                 ),
               );
             },
