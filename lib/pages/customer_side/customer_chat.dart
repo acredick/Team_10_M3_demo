@@ -104,7 +104,7 @@ class _CustomerChatScreenState extends State<CustomerChatScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Chat with Dasher'),
+        title: const Text('Chat with DormDasher'),
         backgroundColor: const Color(0xFFDCB347),
       ),
       body: Column(

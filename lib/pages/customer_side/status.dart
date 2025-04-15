@@ -92,7 +92,7 @@ class _StatusState extends State<Status> {
           String restaurantName = order['restaurantName'] ?? 'Unknown';
           String orderId = order['orderID'];
           String dasher = order['delivererFirstName'] == ""
-              ? "Waiting on a dasher..."
+              ? "Waiting on a DormDasher..."
               : "${order['delivererFirstName']}";
 
           int newStatusInt = (order['status'] is String) ? int.tryParse(order['status']) ?? -1 : order['status'];
@@ -135,11 +135,11 @@ class _StatusState extends State<Status> {
               ),
               DeliveryDetailsCard(
                 customerName: dasher,
-                typeLabel: "Your dasher",
+                typeLabel: "Your DormDasher",
                 address: address,
                 onDirectionsTap: () {},
                 onChatTap: () {
-                  if (dasher == "Waiting on a dasher...") {
+                  if (dasher == "Waiting on a DormDasher...") {
                     showDialog(
                       context: context,
                       builder: (BuildContext context) {
