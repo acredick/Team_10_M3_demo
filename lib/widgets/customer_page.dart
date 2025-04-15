@@ -60,7 +60,7 @@ class DeliveryDetailsCard extends StatelessWidget {
           const Divider(color: Colors.white24, thickness: 1),
 
           const SizedBox(height: 5),
-          _iconTextRow(Icons.home, address, Icons.directions),
+          _iconTextRow(Icons.home, address),
           const SizedBox(height: 5),
           const Divider(color: Colors.white24, thickness: 1),
 

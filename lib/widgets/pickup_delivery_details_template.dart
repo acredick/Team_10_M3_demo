@@ -49,7 +49,10 @@ class DeliveryDetailsCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const SizedBox(height: 5),
-            _infoRow(typeLabel, title, primaryActionIcon),
+            GestureDetector(
+              onTap: onCallTap,
+              child: _infoRow(typeLabel, title, primaryActionIcon),
+            ),
             const SizedBox(height: 5),
             const Divider(color: Colors.white24, thickness: 1),
 

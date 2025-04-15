@@ -84,7 +84,21 @@ class _OrdersPageState extends State<OrdersPage> {
             address: orderData!['restaurantAddress'] ?? "Unknown Address",
             customerName: orderData!['customerFirstName'] ?? "Unknown Customer",
             itemCount: (orderData!['Items'] as List).length,
-            onCallTap: () {}, // TODO: Add call functionality
+            onCallTap: () {
+              showDialog(
+                context: context,
+                builder: (context) => AlertDialog(
+                  title: const Text("Phone Number Unavailable"),
+                  content: const Text("The restaurant's number has not been set up yet."),
+                  actions: [
+                    TextButton(
+                      onPressed: () => Navigator.of(context).pop(),
+                      child: const Text("OK"),
+                    ),
+                  ],
+                ),
+              );
+            },
             onDirectionsTap: () {}, // TODO: Add navigation functionality
             onSlideComplete: () async {
               print("Order picked up. Advancing status...");

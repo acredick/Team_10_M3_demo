@@ -104,7 +104,6 @@ class _DeliverOrderState extends State<DeliverOrder> {
                   address: orderData!['restaurantAddress'] ?? "Unknown Address",
                   customerName: orderData!['customerFirstName'] ?? "Unknown Customer",
                   itemCount: (orderData!['Items'] as List).length,
-                  onCallTap: () {}, //TODO: add later
                   onDirectionsTap: () {}, // TODO: add later
                   isDropdownVisible: isDropdownVisible,
                   onExpandTap: () {

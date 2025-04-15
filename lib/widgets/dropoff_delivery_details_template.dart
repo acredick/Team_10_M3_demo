@@ -47,7 +47,7 @@ class DeliveryDetailsCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const SizedBox(height: 5),
-          _infoRow(typeLabel, customerName, Icons.phone, Icons.message),
+          _infoRow(typeLabel, customerName, Icons.message),
           const Divider(color: Colors.white24, thickness: 1),
 
           const SizedBox(height: 5),
@@ -102,23 +102,27 @@ class DeliveryDetailsCard extends StatelessWidget {
     );
   }
 
-  Widget _infoRow(String label, String customerName, IconData actionIcon1, IconData actionIcon2) {
+  Widget _infoRow(String label, String title, [IconData? actionIcon1, IconData? actionIcon2]) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
           Text(label, style: const TextStyle(color: Colors.white70, fontSize: 12)),
           const SizedBox(height: 5),
-          Text(customerName, style: const TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold)),
+          Text(title, style: const TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold)),
         ]),
-        const Spacer(),
-        Icon(actionIcon1, color: Colors.white),
-        const SizedBox(width: 10), 
-        Icon(actionIcon2, color: Colors.white),
-
+        Row(
+          children: [
+            if (actionIcon1 != null) Icon(actionIcon1, color: Colors.white),
+            if (actionIcon1 != null && actionIcon2 != null) const SizedBox(width: 10),
+            if (actionIcon2 != null) Icon(actionIcon2, color: Colors.white),
+          ],
+        ),
       ],
     );
   }
+
+
 
   Widget _iconTextRow(IconData icon, String text, IconData trailing, {IconData? trailing2}) {
     return Row(
