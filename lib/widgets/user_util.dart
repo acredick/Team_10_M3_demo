@@ -38,7 +38,6 @@ class UserUtils {
 
   static String getFirstName() {
     return firstName;
-
   }
 
   static String getLastName() {
