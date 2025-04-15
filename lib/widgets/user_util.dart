@@ -26,7 +26,6 @@ class UserUtils {
     fullName = "$firstAndMiddle $lastName";
 
     email = user?.email ?? '';
-
   }
 
   static void setUserType(String type) {
