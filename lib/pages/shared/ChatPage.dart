@@ -127,10 +127,11 @@ class _ChatPageState extends State<ChatPage> {
               List<Map<String, dynamic>> chatsWithStatus = asyncSnapshot.data!;
 
               chatsWithStatus.sort((a, b) {
-                Timestamp aTime = a['timestamp'] as Timestamp;
-                Timestamp bTime = b['timestamp'] as Timestamp;
-                return bTime.compareTo(aTime);
+                Timestamp aTime = lastMessageTimestamps[a['chatID']] ?? Timestamp(0, 0);
+                Timestamp bTime = lastMessageTimestamps[b['chatID']] ?? Timestamp(0, 0);
+                return bTime.compareTo(aTime); // reverse chronological (newest first)
               });
+
 
 
               return ListView.builder(
