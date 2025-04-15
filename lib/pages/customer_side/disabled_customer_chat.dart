@@ -96,13 +96,6 @@ class _DisabledCustomerChatScreenState
     );
   }
 
-  void _onSendTap() {
-    String messageText = _controller.text.trim();
-    if (messageText.isNotEmpty) {
-      _sendMessage(messageText);
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(

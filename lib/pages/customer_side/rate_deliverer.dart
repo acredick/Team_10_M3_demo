@@ -46,7 +46,7 @@ class _RateDelivererState extends State<RateDeliverer> {
         dasherName = orderData!['delivererFirstName'] ?? 'Unknown DormDasher';
         orderPrice = orderData!['price'] ?? 0.0;
         restaurantName = orderData!['restaurantName'] ?? 'Unknown Restaurant';
-        itemCount = (orderData!['Items'] as List).length ?? 0;
+        itemCount = (orderData!['Items'] as List).length;
         dasherID = orderData!['delivererID'] ?? "";
       });
     }

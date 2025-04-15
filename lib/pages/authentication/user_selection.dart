@@ -1,11 +1,8 @@
 /* Where a user selects "customer" or "deliverer" status */
-
-import 'package:DormDash/pages/deliverer_side/dashboard.dart';
 import 'package:DormDash/widgets/order_manager.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import '../customer_side/order_selection.dart';
-import './login.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import '/widgets/bottom-nav-bar.dart';
 import '../../widgets/user_util.dart';
@@ -43,7 +40,7 @@ class _UserSelectionState extends State<UserSelection> {
   Future<void> _loadUserFullName() async {
     final name = await UserUtils.getFullName();
     setState(() {
-      fullName = name ?? "";
+      fullName = name;
     });
   }
 

@@ -2,7 +2,6 @@ import 'package:DormDash/pages/authentication/user_selection.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import '/widgets/main_screen.dart';
 import '../../widgets/user_util.dart';
 
 class LoginRoute extends StatelessWidget {

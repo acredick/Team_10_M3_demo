@@ -6,10 +6,7 @@ import 'package:image_picker/image_picker.dart';
 import '../../widgets/feedback_buttons.dart';
 import '../../widgets/review_manager.dart';
 import '../../widgets/order_manager.dart';
-import '../../widgets/status_manager.dart';
 import '../../widgets/user_util.dart';
-import 'package:DormDash/pages/deliverer_side/dashboard.dart';
-
 
 class DropoffConfirmation extends StatefulWidget {
   final String orderId;

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:slide_to_act/slide_to_act.dart';
-import 'order_manager.dart';
 
 class DeliveryDetailsCard extends StatelessWidget {
   final String typeLabel;

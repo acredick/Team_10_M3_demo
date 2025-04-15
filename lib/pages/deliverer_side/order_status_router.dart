@@ -26,7 +26,7 @@ class OrderStatusRouter extends StatelessWidget {
     }
 
     return FutureBuilder<int>(
-      future: StatusManager.getOrderStatus(false, orderId!),
+      future: StatusManager.getOrderStatus(false, orderId),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return Scaffold(

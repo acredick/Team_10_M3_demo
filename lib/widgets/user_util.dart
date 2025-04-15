@@ -1,17 +1,15 @@
 // saves snapshot of user info on login
-import 'package:DormDash/widgets/user_util.dart';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:uuid/uuid.dart';
-import 'order_manager.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class UserUtils {
   static final FirebaseFirestore _staticFirestore = FirebaseFirestore.instance;
-  static late final fullName;
-  static late final firstName;
-  static late final lastName;
-  static late final email;
-  static late final userSnapshot;
+  static late final String fullName;
+  static late final String firstName;
+  static late final String lastName;
+  static late final String email;
+  static late final User? userSnapshot;
   static var userType = "";
 
   static void saveSnapshot(User? user) {
