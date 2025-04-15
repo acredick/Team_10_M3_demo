@@ -4,6 +4,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'services/firebase_options.dart';
 import 'package:DormDash/pages/customer_side/status.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 
 // Import pages
@@ -42,6 +43,7 @@ class MyApp extends StatelessWidget {
             error: Colors.red,
             tertiary: Color (0xFF4CAF50), // previously "success"
             ),
+        fontFamily: GoogleFonts.publicSans().fontFamily,
       ),
       initialRoute: '/welcome',
       routes: {
