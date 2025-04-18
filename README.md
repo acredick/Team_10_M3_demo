@@ -1,15 +1,39 @@
-## DormDash
+# Logging In
+1. Login as normal.
+2. It will not redirect you back to the app. Perform a restart on the app in your IDE.
+3. Once the app has restarted, press "Sign In To Your Institution."
+4. You should now be automatically signed in.  
 
-Repository now reflects just one app rather than two apps (MobileID and dummy app).
+# Utilizing the Navigation Bar
+## Adding the Navigation Bar
+1. Import `lib/widgets/bottom-nav-bar.dart` to your file.
+2. When using `Navigator.push()` in your file, use this to include a bottom navigation bar:
+   ```
+     Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => Scaffold(
+          body: DESTINATION_PAGE
+          bottomNavigationBar: CustomBottomNavigationBar(
+            selectedIndex: 0,
+            onItemTapped: (index) {
+            },
+            userType: USER_TYPE,
+          ),
+        ),
+      ),
+    );
+ Change `DESTINATION_PAGE` and `USER_TYPE` accordingly. 
+ > Note: `USER_TYPE` can be either `"customer"` or `"deliverer"`.
 
-## Getting Started
+## Changing Navigation of the Navigation Bar
+Navigation is set up in `lib/widgets/bottom-nav-bar.dart` using routes. To define routes, navigate to `main.dart`.
 
-## Download the dependencies for each app
-1. Open a terminal window.
-2. Change directories to where you downloaded this repository in your system.
-4. Run `flutter pub get`
+## Making sure maps work for you.
+Ensure that you have set your location on your emulator, to do so on adroid the steps are:
+1. Click the elipses in the bottom right
+2. Click Location
+3. Set your location appropriately.
 
-## Running
-
-1. Navigate to `lib/main.dart` in the emulator.
-2. Run `main()`.
+You make have to hot restart the app once the first time you set your location.
+You can also set a route to see the driver move.
