@@ -35,8 +35,9 @@ class _LoginState extends State<Login> {
     print("Attempting sign-in...");
     try {
       final provider = OAuthProvider("microsoft.com");
-      provider.setCustomParameters(
-          {"tenant": "b5d22194-31d5-473f-9e1d-804fdcbd88ac"});
+      provider.setCustomParameters({
+        "tenant": "b5d22194-31d5-473f-9e1d-804fdcbd88ac",
+      });
       print("Provider set with custom parameters");
 
       await FirebaseAuth.instance.signInWithProvider(provider);
@@ -58,6 +59,7 @@ class _LoginState extends State<Login> {
 
   Future<void> redirect({required User user}) async {
     print("Redirecting user...");
+    UserUtils.saveSnapshot(user);
     if (context.mounted) {
       Navigator.pushReplacement(
         context,
@@ -71,10 +73,6 @@ class _LoginState extends State<Login> {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      body: Center(
-        child: CircularProgressIndicator(),
-      ),
-    );
+    return const Scaffold(body: Center(child: CircularProgressIndicator()));
   }
 }
