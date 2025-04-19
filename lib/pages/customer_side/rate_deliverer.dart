@@ -24,7 +24,7 @@ class _RateDelivererState extends State<RateDeliverer> {
   String? restaurantName;
   int? itemCount;
   double? taxRate = .08; // for new york
-  double? fee = 4.99; // example fee
+  double? fee = 4.99; // github fee
   bool _showCustomTipInput = false;
   String? dasherID;
 

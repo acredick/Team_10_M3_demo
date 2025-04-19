@@ -25,7 +25,7 @@ class _DropoffConfirmationState extends State<DropoffConfirmation> {
   String? restaurantName;
   String? address;
   int? itemCount;
-  double? commissionRate = .3; // example commission
+  double? commissionRate = .3; // github commission
   String? customerID;
   Set<String> selectedFeedback = {};
   final List<String> feedbackOptions = [

@@ -10,7 +10,7 @@ class LoginRoute extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const CupertinoPageScaffold(
-      navigationBar: CupertinoNavigationBar(middle: Text('Login')),
+      navigationBar: CupertinoNavigationBar(middle: Text('TEST TEST')),
       child: Center(child: Login()),
     );
   }
@@ -27,21 +27,29 @@ class _LoginState extends State<Login> {
   @override
   void initState() {
     super.initState();
+    print("Login screen initialized");
     _signIn();
   }
 
   Future<void> _signIn() async {
+    print("Attempting sign-in...");
     try {
       final provider = OAuthProvider("microsoft.com");
       provider.setCustomParameters(
           {"tenant": "b5d22194-31d5-473f-9e1d-804fdcbd88ac"});
+      print("Provider set with custom parameters");
 
       await FirebaseAuth.instance.signInWithProvider(provider);
+      print("Sign-in with provider successful");
+
       User? user = FirebaseAuth.instance.currentUser;
-      UserUtils.saveSnapshot(user);
+      print("User fetched: $user");
 
       if (user != null) {
+        print("User is not null, redirecting...");
         await redirect(user: user);
+      } else {
+        print("User is null, unable to redirect");
       }
     } catch (e) {
       print("Sign-in failed: $e");
@@ -49,10 +57,16 @@ class _LoginState extends State<Login> {
   }
 
   Future<void> redirect({required User user}) async {
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(builder: (context) => UserSelectionRoute()),
-    );
+    print("Redirecting user...");
+    if (context.mounted) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => UserSelectionRoute()),
+      );
+      print("Redirect successful");
+    } else {
+      print("Context is unmounted, unable to redirect");
+    }
   }
 
   @override
