@@ -54,8 +54,7 @@ class _DashboardPageState extends State<DashboardPage> {
                             ),
                           ),
                           SizedBox(height: 5),
-                          FittedBox(
-                            fit: BoxFit.scaleDown,
+                          Flexible(
                             child: Text(
                               UserUtils.getFullName(),
                               style: TextStyle(
@@ -63,6 +62,9 @@ class _DashboardPageState extends State<DashboardPage> {
                                 fontSize: 25,
                                 fontWeight: FontWeight.bold,
                               ),
+                              softWrap: true,
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 2,
                             ),
                           ),
                           SizedBox(height: 20),
