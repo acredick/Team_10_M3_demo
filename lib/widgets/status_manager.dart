@@ -17,7 +17,8 @@ class StatusManager {
 
     if (isChatID) {
       try {
-        DocumentSnapshot chatDocSnapshot = await _staticFirestore.collection('chats').doc(id).get();
+        DocumentSnapshot chatDocSnapshot =
+            await _staticFirestore.collection('chats').doc(id).get();
 
         if (!chatDocSnapshot.exists) {
           print("Chat document not found.");
@@ -34,7 +35,8 @@ class StatusManager {
     }
 
     try {
-      DocumentSnapshot docSnapshot = await _staticFirestore.collection('orders').doc(orderID).get();
+      DocumentSnapshot docSnapshot =
+          await _staticFirestore.collection('orders').doc(orderID).get();
       if (!docSnapshot.exists) {
         print("Order document not found.");
         return -1;
@@ -77,7 +79,7 @@ class StatusManager {
 
     try {
       DocumentSnapshot docSnapshot =
-      await _staticFirestore.collection('orders').doc(_orderID).get();
+          await _staticFirestore.collection('orders').doc(_orderID).get();
 
       if (!docSnapshot.exists) {
         print("Order document not found.");
@@ -105,7 +107,7 @@ class StatusManager {
 
     try {
       DocumentSnapshot docSnapshot =
-      await _staticFirestore.collection('orders').doc(_orderID).get();
+          await _staticFirestore.collection('orders').doc(_orderID).get();
 
       if (!docSnapshot.exists) {
         print("Order document not found.");
@@ -114,6 +116,10 @@ class StatusManager {
 
       if (StatusManager.currentStatus == 4) {
         print("Status is already 4. Returning...");
+        await FirebaseFirestore.instance
+            .collection('orders')
+            .doc(_orderID)
+            .update({'status': 0});
         return;
       }
 

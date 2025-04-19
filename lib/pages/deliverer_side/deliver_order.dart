@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:DormDash/widgets/dropoff_delivery_details_template.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:location/location.dart';
+import 'package:location/location.dart' as loc;
+import 'package:geocoding/geocoding.dart';
 import '/pages/deliverer_side/deliverer-chat.dart';
 import '../../widgets/chat_manager.dart';
 import 'package:DormDash/widgets/status_manager.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:intl/intl.dart'; // Import intl package for date formatting
+import 'package:intl/intl.dart';
 import '/widgets/bottom-nav-bar.dart';
+import 'package:DormDash/widgets/order_manager.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class DeliverOrder extends StatefulWidget {
   final String orderId;
@@ -20,23 +23,48 @@ class DeliverOrder extends StatefulWidget {
 class _DeliverOrderState extends State<DeliverOrder> {
   Map<String, dynamic>? orderData;
   bool isDropdownVisible = false;
+  LatLng? dropoffLatLng;
+  LatLng? currentLatLng;
 
   @override
   void initState() {
     super.initState();
     fetchOrderDetails();
+    OrderManager.getChatIDFromOrder(widget.orderId);
+    print("Chat ID in DeliverOrder: \${ChatManager.getRecentChatID()}");
   }
 
   void fetchOrderDetails() async {
-    DocumentSnapshot orderSnapshot = await FirebaseFirestore.instance
-        .collection('orders')
-        .doc(widget.orderId)
-        .get();
+    DocumentSnapshot orderSnapshot =
+        await FirebaseFirestore.instance
+            .collection('orders')
+            .doc(widget.orderId)
+            .get();
 
     if (orderSnapshot.exists) {
       setState(() {
         orderData = orderSnapshot.data() as Map<String, dynamic>;
       });
+    }
+  }
+
+  void _launchDirections(
+    double originLat,
+    double originLng,
+    double destLat,
+    double destLng,
+  ) async {
+    final Uri url = Uri.parse(
+      "https://www.google.com/maps/dir/?api=1"
+      "&origin=$originLat,$originLng"
+      "&destination=$destLat,$destLng"
+      "&travelmode=driving",
+    );
+
+    if (await canLaunchUrl(url)) {
+      await launchUrl(url, mode: LaunchMode.externalApplication);
+    } else {
+      throw 'Could not launch $url';
     }
   }
 
@@ -64,22 +92,23 @@ class _DeliverOrderState extends State<DeliverOrder> {
       );
     }
 
-    // Calculate the deliver by time (45 minutes after orderTime)
     final Timestamp orderTimestamp = orderData!['orderTime'];
     final DateTime orderTime = orderTimestamp.toDate();
     final DateTime deliverByTime = orderTime.add(Duration(minutes: 45));
     final deliverByTimeFormatted = DateFormat('h:mm a').format(deliverByTime);
 
+    final String deliveryAddress = orderData!['address'] ?? "Unknown Address";
+
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'Deliver by $deliverByTimeFormatted', // Display the calculated deliver by time
+          'Deliver by $deliverByTimeFormatted',
           style: const TextStyle(color: Colors.black),
         ),
         centerTitle: true,
         backgroundColor: Colors.white,
         elevation: 0,
-        automaticallyImplyLeading: false, // prevents back button
+        automaticallyImplyLeading: false,
         actions: const [
           Padding(
             padding: EdgeInsets.only(right: 16),
@@ -87,49 +116,66 @@ class _DeliverOrderState extends State<DeliverOrder> {
           ),
         ],
       ),
-      body: Stack(
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Positioned.fill(
-            child: MapSection(),
+          Flexible(
+            flex: 1,
+            child: MapSection(
+              destinationAddress: deliveryAddress,
+              orderId: widget.orderId,
+              onLocationLoaded: (latLng, currentLoc) {
+                dropoffLatLng = latLng;
+                currentLatLng = currentLoc;
+              },
+            ),
           ),
-          Positioned(
-            left: 0,
-            right: 0,
-            bottom: 0,
-            child: Container(
-              color: Colors.white,
-              child: SingleChildScrollView(
-                child: DeliveryDetailsCard(
-                  typeLabel: "Dropoff to",
-                  address: orderData!['restaurantAddress'] ?? "Unknown Address",
-                  customerName: orderData!['customerFirstName'] ?? "Unknown Customer",
-                  itemCount: (orderData!['Items'] as List).length,
-                  onDirectionsTap: () {}, // TODO: add later
-                  isDropdownVisible: isDropdownVisible,
-                  onExpandTap: () {
-                    setState(() {
-                      isDropdownVisible = !isDropdownVisible;
-                    });
-                  },
-                  orderItems: orderData!['Items'] ?? [], items: orderData!['Items'] ?? [],
-                  onChatTap: () {
-                    Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => Scaffold(
-                          body: DelivererChatScreen(chatID: ChatManager.getRecentChatID()),
+          DeliveryDetailsCard(
+            typeLabel: "Dropoff to",
+            address: deliveryAddress,
+            customerName: orderData!['customerFirstName'] ?? "Unknown Customer",
+            itemCount: (orderData!['Items'] as List).length,
+            onDirectionsTap: () {
+              if (currentLatLng != null && dropoffLatLng != null) {
+                _launchDirections(
+                  currentLatLng!.latitude,
+                  currentLatLng!.longitude,
+                  dropoffLatLng!.latitude,
+                  dropoffLatLng!.longitude,
+                );
+              }
+            },
+            isDropdownVisible: isDropdownVisible,
+            onExpandTap: () {
+              setState(() {
+                isDropdownVisible = !isDropdownVisible;
+              });
+            },
+            orderItems: orderData!['Items'] ?? [],
+            items: orderData!['Items'] ?? [],
+            onChatTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder:
+                      (context) => Scaffold(
+                        body: DelivererChatScreen(
+                          chatID: ChatManager.getRecentChatID(),
+                        ),
+                        bottomNavigationBar: CustomBottomNavigationBar(
+                          selectedIndex: 0,
+                          onItemTapped: (index) {},
+                          userType: "deliverer",
                         ),
                       ),
-                    );
-                  },
-                  onSlideComplete: () async {
-                    print("Order delivered. Advancing status...");
-                    StatusManager.advanceStatus();
-                    Navigator.pushNamed(context, "/dropoff-confirmation");
-                  },
                 ),
-              ),
-            ),
+              );
+            },
+            onSlideComplete: () async {
+              print("Order delivered. Advancing status...");
+              StatusManager.advanceStatus();
+              Navigator.pushNamed(context, "/dropoff-confirmation");
+            },
           ),
         ],
       ),
@@ -142,47 +188,32 @@ class _DeliverOrderState extends State<DeliverOrder> {
   }
 }
 
-// Map widget using google maps API
 class MapSection extends StatefulWidget {
+  final String destinationAddress;
+  final String orderId;
+  final Function(LatLng, LatLng) onLocationLoaded;
+  const MapSection({
+    super.key,
+    required this.destinationAddress,
+    required this.orderId,
+    required this.onLocationLoaded,
+  });
+
   @override
   State<MapSection> createState() => _MapSectionState();
 }
 
 class _MapSectionState extends State<MapSection> {
-  Location _location = Location();
+  loc.Location _location = loc.Location();
   LatLng? _currentLocation;
-
-  final LatLng _dropoffLocation = const LatLng(42.6864, -73.8236); // University Library
+  LatLng? _dropoffLocation;
+  GoogleMapController? _mapController;
 
   @override
   void initState() {
     super.initState();
     _getLocationUpdates();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    if (_currentLocation == null) {
-      return const Center(child: CircularProgressIndicator());
-    }
-
-    return GoogleMap(
-      initialCameraPosition: CameraPosition(target: _dropoffLocation, zoom: 15),
-      markers: {
-        Marker(
-          markerId: const MarkerId("userLocation"),
-          position: _currentLocation!,
-          icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueBlue),
-        ),
-        Marker(
-          markerId: const MarkerId("dropoffLocation"),
-          position: _dropoffLocation,
-          icon: BitmapDescriptor.defaultMarker,
-        ),
-      },
-      myLocationButtonEnabled: false,
-      zoomControlsEnabled: false,
-    );
+    _geocodeDestination();
   }
 
   void _getLocationUpdates() async {
@@ -192,21 +223,83 @@ class _MapSectionState extends State<MapSection> {
       if (!serviceEnabled) return;
     }
 
-    PermissionStatus permissionGranted = await _location.hasPermission();
-    if (permissionGranted == PermissionStatus.denied) {
+    loc.PermissionStatus permissionGranted = await _location.hasPermission();
+    if (permissionGranted == loc.PermissionStatus.denied) {
       permissionGranted = await _location.requestPermission();
-      if (permissionGranted != PermissionStatus.granted) return;
+      if (permissionGranted != loc.PermissionStatus.granted) return;
     }
 
     _location.onLocationChanged.listen((locationData) {
       if (locationData.latitude != null && locationData.longitude != null) {
-        setState(() {
-          _currentLocation = LatLng(
-            locationData.latitude!,
-            locationData.longitude!,
-          );
-        });
+        final lat = locationData.latitude!;
+        final lng = locationData.longitude!;
+        final updatedLatLng = LatLng(lat, lng);
+        if (mounted) {
+          setState(() {
+            _currentLocation = updatedLatLng;
+          });
+          _mapController?.animateCamera(CameraUpdate.newLatLng(updatedLatLng));
+          if (_dropoffLocation != null) {
+            widget.onLocationLoaded(_dropoffLocation!, updatedLatLng);
+          }
+        }
+        FirebaseFirestore.instance
+            .collection('orders')
+            .doc(widget.orderId)
+            .update({'delivererLat': lat, 'delivererLng': lng});
       }
     });
+  }
+
+  void _geocodeDestination() async {
+    try {
+      List<Location> locations = await locationFromAddress(
+        widget.destinationAddress,
+      );
+      if (locations.isNotEmpty) {
+        setState(() {
+          _dropoffLocation = LatLng(
+            locations.first.latitude,
+            locations.first.longitude,
+          );
+        });
+        if (_currentLocation != null) {
+          widget.onLocationLoaded(_dropoffLocation!, _currentLocation!);
+        }
+      }
+    } catch (e) {
+      print("Geocoding failed: \$e");
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (_currentLocation == null || _dropoffLocation == null) {
+      return const Center(child: CircularProgressIndicator());
+    }
+
+    return GoogleMap(
+      initialCameraPosition: CameraPosition(
+        target: _currentLocation!,
+        zoom: 15,
+      ),
+      markers: {
+        Marker(
+          markerId: const MarkerId("userLocation"),
+          position: _currentLocation!,
+          icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueBlue),
+        ),
+        Marker(
+          markerId: const MarkerId("dropoffLocation"),
+          position: _dropoffLocation!,
+          icon: BitmapDescriptor.defaultMarker,
+        ),
+      },
+      myLocationButtonEnabled: false,
+      zoomControlsEnabled: false,
+      onMapCreated: (controller) {
+        _mapController = controller;
+      },
+    );
   }
 }

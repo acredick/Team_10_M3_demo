@@ -56,7 +56,10 @@ class DeliveryDetailsCard extends StatelessWidget {
             const Divider(color: Colors.white24, thickness: 1),
 
             const SizedBox(height: 5),
-            _iconTextRow(Icons.restaurant, address, Icons.directions),
+            GestureDetector(
+              onTap: onDirectionsTap,
+              child: _iconTextRow(Icons.restaurant, address, Icons.directions),
+            ),
             const SizedBox(height: 5),
             const Divider(color: Colors.white24, thickness: 1),
 
@@ -73,12 +76,13 @@ class DeliveryDetailsCard extends StatelessWidget {
             if (isDropdownVisible && items.isNotEmpty)
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: items.map((item) {
-                  return Text(
-                    item.toString(),
-                    style: const TextStyle(color: Colors.white),
-                  );
-                }).toList(),
+                children:
+                    items.map((item) {
+                      return Text(
+                        item.toString(),
+                        style: const TextStyle(color: Colors.white),
+                      );
+                    }).toList(),
               ),
             const Divider(color: Colors.white24, thickness: 1),
 
@@ -91,20 +95,25 @@ class DeliveryDetailsCard extends StatelessWidget {
 
             const SizedBox(height: 15),
             Builder(
-              builder: (context) => SlideAction(
-                text: "Slide After Arrival",
-                textStyle: const TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 14),
-                outerColor: Colors.white,
-                innerColor: const Color.fromARGB(255, 0, 0, 0),
-                elevation: 2,
-                height: 50,
-                sliderButtonIcon: const Icon(
-                  Icons.arrow_forward_ios,
-                  size: 12,
-                  color: Color.fromARGB(255, 255, 255, 255),
-                ),
-                onSubmit: onSlideComplete,
-              ),
+              builder:
+                  (context) => SlideAction(
+                    text: "Slide After Arrival",
+                    textStyle: const TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 14,
+                    ),
+                    outerColor: Colors.white,
+                    innerColor: const Color.fromARGB(255, 0, 0, 0),
+                    elevation: 2,
+                    height: 50,
+                    sliderButtonIcon: const Icon(
+                      Icons.arrow_forward_ios,
+                      size: 12,
+                      color: Color.fromARGB(255, 255, 255, 255),
+                    ),
+                    onSubmit: onSlideComplete,
+                  ),
             ),
           ],
         ),
@@ -116,28 +125,48 @@ class DeliveryDetailsCard extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          Text(label, style: const TextStyle(color: Colors.white70, fontSize: 12)),
-          const SizedBox(height: 5),
-          Text(title, style: const TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold)),
-        ]),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              label,
+              style: const TextStyle(color: Colors.white70, fontSize: 12),
+            ),
+            const SizedBox(height: 5),
+            Text(
+              title,
+              style: const TextStyle(
+                color: Colors.white,
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ],
+        ),
         Icon(actionIcon, color: Colors.white),
       ],
     );
   }
 
-  Widget _iconTextRow(IconData icon, String text, IconData trailing, {IconData? trailing2}) {
+  Widget _iconTextRow(
+    IconData icon,
+    String text,
+    IconData trailing, {
+    IconData? trailing2,
+  }) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Icon(icon, color: Colors.white),
         const SizedBox(width: 12),
-        Expanded(child: Text(text, style: const TextStyle(color: Colors.white))),
+        Expanded(
+          child: Text(text, style: const TextStyle(color: Colors.white)),
+        ),
         Icon(trailing, color: Colors.white),
         if (trailing2 != null) ...[
           const SizedBox(width: 12),
           Icon(trailing2, color: Colors.white),
-        ]
+        ],
       ],
     );
   }
