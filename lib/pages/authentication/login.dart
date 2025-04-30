@@ -10,7 +10,7 @@ class LoginRoute extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const CupertinoPageScaffold(
-      navigationBar: CupertinoNavigationBar(middle: Text('TEST TEST')),
+      navigationBar: CupertinoNavigationBar(middle: Text('Login')),
       child: Center(child: Login()),
     );
   }
