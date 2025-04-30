@@ -221,12 +221,27 @@ class _PickupMapSectionState extends State<PickupMapSection> {
   LatLng? _currentLocation;
   LatLng? _destinationLocation;
   GoogleMapController? _mapController;
+  BitmapDescriptor? _deliverIcon;
+  BitmapDescriptor? _foodIcon;
 
   @override
   void initState() {
     super.initState();
     _getLocationUpdates();
     _geocodeDestination();
+    _loadCustomMarkers();
+  }
+
+  void _loadCustomMarkers() async {
+    _foodIcon = await BitmapDescriptor.fromAssetImage(
+      const ImageConfiguration(size: Size(64, 64)),
+      'assets/icons/food_icon.png',
+    );
+    _deliverIcon = await BitmapDescriptor.fromAssetImage(
+      const ImageConfiguration(size: Size(64, 64)),
+      'assets/icons/delivery_icon.png',
+    );
+    setState(() {}); // Refresh the map when icon is loaded
   }
 
   void _getLocationUpdates() async {
@@ -300,12 +315,14 @@ class _PickupMapSectionState extends State<PickupMapSection> {
         Marker(
           markerId: const MarkerId("userLocation"),
           position: _currentLocation!,
-          icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueBlue),
+          icon:
+              _deliverIcon ??
+              BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueBlue),
         ),
         Marker(
           markerId: const MarkerId("pickupLocation"),
           position: _destinationLocation!,
-          icon: BitmapDescriptor.defaultMarker,
+          icon: _foodIcon ?? BitmapDescriptor.defaultMarker,
         ),
       },
       myLocationButtonEnabled: false,

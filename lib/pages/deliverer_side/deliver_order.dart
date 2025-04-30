@@ -208,12 +208,27 @@ class _MapSectionState extends State<MapSection> {
   LatLng? _currentLocation;
   LatLng? _dropoffLocation;
   GoogleMapController? _mapController;
+  BitmapDescriptor? _homeIcon;
+  BitmapDescriptor? _deliverIcon;
 
   @override
   void initState() {
     super.initState();
     _getLocationUpdates();
     _geocodeDestination();
+    _loadCustomMarkers();
+  }
+
+  void _loadCustomMarkers() async {
+    _homeIcon = await BitmapDescriptor.fromAssetImage(
+      const ImageConfiguration(size: Size(64, 64)),
+      'assets/icons/home_icon.png',
+    );
+    _deliverIcon = await BitmapDescriptor.fromAssetImage(
+      const ImageConfiguration(size: Size(64, 64)),
+      'assets/icons/delivery_icon.png',
+    );
+    setState(() {}); // Refresh the map when icon is loaded
   }
 
   void _getLocationUpdates() async {
@@ -287,12 +302,18 @@ class _MapSectionState extends State<MapSection> {
         Marker(
           markerId: const MarkerId("userLocation"),
           position: _currentLocation!,
-          icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueBlue),
+          icon:
+              _deliverIcon ??
+              BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueBlue),
         ),
         Marker(
           markerId: const MarkerId("dropoffLocation"),
           position: _dropoffLocation!,
-          icon: BitmapDescriptor.defaultMarker,
+          icon:
+              _homeIcon ??
+              BitmapDescriptor.defaultMarkerWithHue(
+                BitmapDescriptor.hueMagenta,
+              ),
         ),
       },
       myLocationButtonEnabled: false,

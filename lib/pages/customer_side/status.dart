@@ -228,11 +228,31 @@ class _CustomerMapSectionState extends State<CustomerMapSection> {
     42.6864,
     -73.8236,
   ); // UAlbany Campus Center
+  BitmapDescriptor? _foodIcon;
+  BitmapDescriptor? _deliverIcon;
+  BitmapDescriptor? _homeIcon;
 
   @override
   void initState() {
     super.initState();
     _geocodeCustomerAddress();
+    _loadCustomMarkers();
+  }
+
+  void _loadCustomMarkers() async {
+    _foodIcon = await BitmapDescriptor.fromAssetImage(
+      const ImageConfiguration(size: Size(64, 64)),
+      'assets/icons/food_icon.png',
+    );
+    _deliverIcon = await BitmapDescriptor.fromAssetImage(
+      const ImageConfiguration(size: Size(64, 64)),
+      'assets/icons/delivery_icon.png',
+    );
+    _homeIcon = await BitmapDescriptor.fromAssetImage(
+      const ImageConfiguration(size: Size(64, 64)),
+      'assets/icons/home_icon.png',
+    );
+    setState(() {}); // Refresh the map when icon is loaded
   }
 
   void _geocodeCustomerAddress() async {
@@ -274,15 +294,19 @@ class _CustomerMapSectionState extends State<CustomerMapSection> {
         Marker(
           markerId: const MarkerId("customerLocation"),
           position: _customerLatLng!,
-          icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRed),
+          icon:
+              _homeIcon ??
+              BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRed),
         ),
         if (_delivererLatLng != null)
           Marker(
             markerId: const MarkerId("delivererLocation"),
             position: _delivererLatLng!,
-            icon: BitmapDescriptor.defaultMarkerWithHue(
-              BitmapDescriptor.hueAzure,
-            ),
+            icon:
+                _deliverIcon ??
+                BitmapDescriptor.defaultMarkerWithHue(
+                  BitmapDescriptor.hueAzure,
+                ),
           ),
         Marker(
           markerId: const MarkerId("restaurant"),
@@ -290,6 +314,9 @@ class _CustomerMapSectionState extends State<CustomerMapSection> {
           infoWindow: InfoWindow(
             title: widget.orderData['restaurantName'] ?? "Restaurant",
           ),
+          icon:
+              _foodIcon ??
+              BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueAzure),
         ),
       },
       myLocationButtonEnabled: false,
