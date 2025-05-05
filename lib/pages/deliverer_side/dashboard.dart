@@ -18,6 +18,32 @@ class DashboardPage extends StatefulWidget {
 
 class _DashboardPageState extends State<DashboardPage> {
   bool isOrderAccepted = false; 
+  double totalEarnings = 0.0;
+
+Future<void> fetchTotalEarnings() async {
+  final email = UserUtils.getEmail();
+
+  final snapshot = await FirebaseFirestore.instance
+      .collection('orders')
+      .where('delivererID', isEqualTo: email)
+      .where('status', isEqualTo: 3) 
+      .get();
+
+  double total = 0.0;
+  for (var doc in snapshot.docs) {
+    total += (doc['price'] as num).toDouble();
+  }
+
+
+  setState(() {
+    totalEarnings = total;
+  });
+}
+
+  setState(() {
+    totalEarnings = total;
+  });
+}
 
 @override
   Widget build(BuildContext context) {
@@ -73,7 +99,7 @@ class _DashboardPageState extends State<DashboardPage> {
                             style: TextStyle(color: Colors.white70, fontSize: 12),
                           ),
                           Text(
-                            "\$000.00",
+                            "\$${totalEarnings.toStringAsFixed(2)}",
                             style: TextStyle(
                               color: Colors.white,
                               fontSize: 20,
