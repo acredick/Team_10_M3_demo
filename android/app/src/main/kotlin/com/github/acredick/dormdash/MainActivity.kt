@@ -1,4 +1,4 @@
-package com.example.team_10_m3_demo
+package com.github.acredick.dormdash
 
 import io.flutter.embedding.android.FlutterActivity
 

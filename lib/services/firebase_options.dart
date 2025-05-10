@@ -64,7 +64,7 @@ class DefaultFirebaseOptions {
     messagingSenderId: '576447832285',
     projectId: 'dormdash-v3',
     storageBucket: 'dormdash-v3.firebasestorage.app',
-    iosBundleId: 'com.example.team10M3Demo',
+    iosBundleId: 'com.github.team10M3Demo',
   );
 
   static const FirebaseOptions macos = FirebaseOptions(
